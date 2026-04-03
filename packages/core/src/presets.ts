@@ -1,4 +1,4 @@
-import type { Preset } from "./types";
+import type { Preset } from "@/types";
 
 export interface PresetConfig {
 	/** Canvas width in pixels */

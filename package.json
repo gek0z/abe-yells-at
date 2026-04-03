@@ -7,11 +7,14 @@
     "format": "biome format --write .",
     "check": "biome check --write .",
     "ci": "biome ci .",
+    "test": "bun test --cwd packages/core",
     "typecheck": "tsgo --build",
-    "build": "bun run --filter '*' build"
+    "build": "bun run --filter '*' build",
+    "prepare": "lefthook install"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.10",
-    "@typescript/native-preview": "^7.0.0-dev"
+    "@typescript/native-preview": "^7.0.0-dev",
+    "lefthook": "^2.1.4"
   }
 }

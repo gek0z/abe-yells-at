@@ -1,0 +1,12 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: lint
+      glob: "*.{ts,tsx,css,json}"
+      run: npx biome check --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
+
+    - name: typecheck
+      run: npx tsgo --noEmit -p packages/core/tsconfig.json && npx tsgo --noEmit -p apps/web/tsconfig.json
+
+    - name: test
+      run: bun test --cwd packages/core

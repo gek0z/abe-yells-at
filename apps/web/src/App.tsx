@@ -6,7 +6,7 @@ import {
 	PRESET_SIZES,
 	type Preset,
 	renderPreviewFrame,
-} from "./sticker-engine";
+} from "@/sticker-engine";
 
 // ---------------------------------------------------------------------------
 // Constants

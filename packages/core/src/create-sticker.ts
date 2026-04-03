@@ -1,12 +1,12 @@
-import { encodeGif, type GifFrame } from "./gif-encoder";
-import { type PresetConfig, presets } from "./presets";
-import type { Format, Preset, StickerOptions, StickerResult } from "./types";
+import { encodeGif, type GifFrame } from "@/gif-encoder";
+import { type PresetConfig, presets } from "@/presets";
+import type { Format, Preset, StickerOptions, StickerResult } from "@/types";
 import {
 	encodeAnimatedWebP,
 	encodeWebPFrameBrowser,
 	encodeWebPFrameNode,
 	type WebPFrame,
-} from "./webp-encoder";
+} from "@/webp-encoder";
 
 const FRAME_COUNT = 9;
 const FRAME_DELAY_MS = 100; // 10 fps

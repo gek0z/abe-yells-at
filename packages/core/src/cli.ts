@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { createSticker } from "./create-sticker";
-import type { Format, Preset } from "./types";
+import { createSticker } from "@/create-sticker";
+import type { Format, Preset } from "@/types";
 
 // ── ANSI helpers ─────────────────────────────────────────────────────
 
@@ -39,18 +39,24 @@ ${bold("EXAMPLES")}
 `);
 }
 
-interface CliArgs {
+export interface CliArgs {
 	imagePath: string;
 	preset: Preset;
 	format: "gif" | "webp" | "all";
 	output: string;
 }
 
-function parseArgs(argv: string[]): CliArgs | null {
+export class CliParseError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = "CliParseError";
+	}
+}
+
+export function parseArgs(argv: string[]): CliArgs | null {
 	const args = argv.slice(2);
 
 	if (args.length === 0 || args.includes("--help") || args.includes("-h")) {
-		printUsage();
 		return null;
 	}
 
@@ -65,37 +71,30 @@ function parseArgs(argv: string[]): CliArgs | null {
 		if (arg === "--preset" || arg === "-p") {
 			const val = args[++i];
 			if (!val || !["whatsapp", "slack", "discord"].includes(val)) {
-				console.error(red(`Error: Invalid preset "${val}". Use whatsapp, slack, or discord.`));
-				process.exit(1);
+				throw new CliParseError(`Invalid preset "${val}". Use whatsapp, slack, or discord.`);
 			}
 			preset = val as Preset;
 		} else if (arg === "--format" || arg === "-f") {
 			const val = args[++i];
 			if (!val || !["gif", "webp", "all"].includes(val)) {
-				console.error(red(`Error: Invalid format "${val}". Use gif, webp, or all.`));
-				process.exit(1);
+				throw new CliParseError(`Invalid format "${val}". Use gif, webp, or all.`);
 			}
 			format = val as "gif" | "webp" | "all";
 		} else if (arg === "--output" || arg === "-o") {
 			const val = args[++i];
 			if (!val) {
-				console.error(red("Error: --output requires a directory path."));
-				process.exit(1);
+				throw new CliParseError("--output requires a directory path.");
 			}
 			output = val;
 		} else if (!arg.startsWith("-")) {
 			imagePath = arg;
 		} else {
-			console.error(red(`Error: Unknown option "${arg}"`));
-			printUsage();
-			process.exit(1);
+			throw new CliParseError(`Unknown option "${arg}"`);
 		}
 	}
 
 	if (!imagePath) {
-		console.error(red("Error: No image path provided."));
-		printUsage();
-		process.exit(1);
+		throw new CliParseError("No image path provided.");
 	}
 
 	return { imagePath, preset, format, output };
@@ -104,8 +103,21 @@ function parseArgs(argv: string[]): CliArgs | null {
 // ── Main ─────────────────────────────────────────────────────────────
 
 async function main(): Promise<void> {
-	const parsed = parseArgs(process.argv);
-	if (!parsed) return;
+	let parsed: CliArgs | null;
+	try {
+		parsed = parseArgs(process.argv);
+	} catch (err) {
+		if (err instanceof CliParseError) {
+			console.error(red(`Error: ${err.message}`));
+			printUsage();
+			process.exit(1);
+		}
+		throw err;
+	}
+	if (!parsed) {
+		printUsage();
+		return;
+	}
 
 	const { imagePath, preset, format, output } = parsed;
 

@@ -23,6 +23,7 @@
   "scripts": {
     "build": "bun build src/index.ts --outdir dist --format esm --target node --external @napi-rs/canvas && bun build src/index.ts --outfile dist/index.cjs --format cjs --target node --external @napi-rs/canvas && bun build src/cli.ts --outfile dist/cli.js --format esm --target node --external @napi-rs/canvas && tsgo --emitDeclarationOnly",
     "typecheck": "tsgo --noEmit",
+    "test": "bun test",
     "lint": "biome check src/",
     "format": "biome format --write src/"
   },
@@ -31,7 +32,8 @@
     "@napi-rs/canvas": "^0.1.65"
   },
   "devDependencies": {
-    "@types/node": "^22"
+    "@types/node": "^22",
+    "bun-types": "^1.3.11"
   },
   "keywords": [
     "sticker",
