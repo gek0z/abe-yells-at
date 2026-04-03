@@ -1,0 +1,432 @@
+/* ---------------------------------------------------------------------------
+   Reset & base
+--------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+:root {
+	--bg: #1a1a2e;
+	--bg-surface: #16213e;
+	--bg-card: #1f2b47;
+	--yellow: #ffd521;
+	--yellow-hover: #ffe366;
+	--yellow-dim: rgba(255, 213, 33, 0.15);
+	--text: #e8e8f0;
+	--text-muted: #9a9ab8;
+	--border: rgba(255, 255, 255, 0.08);
+	--radius: 12px;
+	--radius-sm: 8px;
+	--transition: 0.2s ease;
+	--max-w: 820px;
+
+	font-family:
+		-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	color: var(--text);
+	background: var(--bg);
+	min-height: 100dvh;
+}
+
+body {
+	min-height: 100dvh;
+	-webkit-font-smoothing: antialiased;
+}
+
+#root {
+	display: flex;
+	flex-direction: column;
+	min-height: 100dvh;
+}
+
+/* ---------------------------------------------------------------------------
+   Layout
+--------------------------------------------------------------------------- */
+.app {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 2rem 1.25rem 4rem;
+	flex: 1;
+}
+
+.container {
+	width: 100%;
+	max-width: var(--max-w);
+}
+
+/* ---------------------------------------------------------------------------
+   Hero
+--------------------------------------------------------------------------- */
+.hero {
+	text-align: center;
+	margin-bottom: 2.5rem;
+}
+
+.hero-gif {
+	width: 200px;
+	height: 200px;
+	object-fit: contain;
+	border-radius: var(--radius);
+	margin-bottom: 1.25rem;
+	filter: drop-shadow(0 4px 24px rgba(255, 213, 33, 0.25));
+}
+
+.hero h1 {
+	font-size: 2.4rem;
+	font-weight: 800;
+	letter-spacing: 0.03em;
+	color: var(--yellow);
+	line-height: 1.15;
+	margin-bottom: 0.5rem;
+}
+
+.hero h1 .logo-name {
+	display: inline-block;
+	border-bottom: 3px solid var(--yellow);
+	min-width: 3ch;
+	padding: 0 0.15em;
+}
+
+.hero p {
+	font-size: 1.05rem;
+	color: var(--text-muted);
+	max-width: 480px;
+	margin: 0 auto;
+	line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------------------
+   Drop zone
+--------------------------------------------------------------------------- */
+.dropzone {
+	border: 2px dashed rgba(255, 213, 33, 0.35);
+	border-radius: var(--radius);
+	padding: 3rem 2rem;
+	text-align: center;
+	cursor: pointer;
+	transition:
+		background var(--transition),
+		border-color var(--transition);
+	background: var(--bg-surface);
+	position: relative;
+}
+
+.dropzone:hover,
+.dropzone.drag-over {
+	border-color: var(--yellow);
+	background: var(--yellow-dim);
+}
+
+.dropzone-icon {
+	font-size: 2.5rem;
+	margin-bottom: 0.75rem;
+	display: block;
+	opacity: 0.7;
+}
+
+.dropzone-label {
+	font-size: 1.05rem;
+	color: var(--text);
+	margin-bottom: 0.35rem;
+}
+
+.dropzone-hint {
+	font-size: 0.85rem;
+	color: var(--text-muted);
+}
+
+.dropzone input[type="file"] {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+	cursor: pointer;
+}
+
+/* ---------------------------------------------------------------------------
+   Editor (post-upload)
+--------------------------------------------------------------------------- */
+.editor {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 2rem;
+	animation: fadeIn 0.35s ease;
+}
+
+@media (max-width: 640px) {
+	.editor {
+		grid-template-columns: 1fr;
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* ---------------------------------------------------------------------------
+   Preview card
+--------------------------------------------------------------------------- */
+.preview-card {
+	background: var(--bg-card);
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	padding: 1.25rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.preview-card canvas {
+	width: 100%;
+	max-width: 320px;
+	height: auto;
+	aspect-ratio: 1;
+	border-radius: var(--radius-sm);
+	background: #111;
+	image-rendering: auto;
+}
+
+.preview-label {
+	font-size: 0.8rem;
+	color: var(--text-muted);
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+}
+
+/* ---------------------------------------------------------------------------
+   Controls panel
+--------------------------------------------------------------------------- */
+.controls {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+.control-group {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.control-group label {
+	font-size: 0.8rem;
+	font-weight: 600;
+	color: var(--text-muted);
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+}
+
+/* Pill buttons (presets) */
+.pills {
+	display: flex;
+	gap: 0.5rem;
+	flex-wrap: wrap;
+}
+
+.pill {
+	padding: 0.5rem 1rem;
+	border: 1px solid var(--border);
+	border-radius: 999px;
+	background: var(--bg-surface);
+	color: var(--text);
+	font-size: 0.85rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all var(--transition);
+	outline: none;
+}
+
+.pill:hover {
+	border-color: var(--yellow);
+	color: var(--yellow);
+}
+
+.pill.active {
+	background: var(--yellow);
+	color: #1a1a2e;
+	border-color: var(--yellow);
+	font-weight: 700;
+}
+
+/* Segmented control (format) */
+.segmented {
+	display: flex;
+	background: var(--bg-surface);
+	border-radius: var(--radius-sm);
+	overflow: hidden;
+	border: 1px solid var(--border);
+}
+
+.segmented button {
+	flex: 1;
+	padding: 0.55rem 1rem;
+	border: none;
+	background: transparent;
+	color: var(--text-muted);
+	font-size: 0.85rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all var(--transition);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.segmented button:hover {
+	color: var(--text);
+}
+
+.segmented button.active {
+	background: var(--yellow);
+	color: #1a1a2e;
+}
+
+/* Download button */
+.download-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 0.85rem 1.5rem;
+	border: none;
+	border-radius: var(--radius-sm);
+	background: var(--yellow);
+	color: #1a1a2e;
+	font-size: 1rem;
+	font-weight: 700;
+	cursor: pointer;
+	transition: all var(--transition);
+	width: 100%;
+	letter-spacing: 0.02em;
+}
+
+.download-btn:hover:not(:disabled) {
+	background: var(--yellow-hover);
+	transform: translateY(-1px);
+	box-shadow: 0 4px 16px rgba(255, 213, 33, 0.35);
+}
+
+.download-btn:active:not(:disabled) {
+	transform: translateY(0);
+}
+
+.download-btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+/* Progress bar */
+.progress-wrap {
+	width: 100%;
+	height: 6px;
+	background: var(--bg-surface);
+	border-radius: 3px;
+	overflow: hidden;
+}
+
+.progress-bar {
+	height: 100%;
+	background: var(--yellow);
+	border-radius: 3px;
+	transition: width 0.15s ease;
+}
+
+/* File size badge */
+.file-size {
+	font-size: 0.85rem;
+	color: var(--text-muted);
+	text-align: center;
+}
+
+/* Reset button */
+.reset-btn {
+	padding: 0.55rem 1rem;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-sm);
+	background: transparent;
+	color: var(--text-muted);
+	font-size: 0.85rem;
+	cursor: pointer;
+	transition: all var(--transition);
+	width: 100%;
+}
+
+.reset-btn:hover {
+	border-color: #e74c3c;
+	color: #e74c3c;
+}
+
+/* Logo thumbnail in controls */
+.logo-info {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.75rem;
+	background: var(--bg-surface);
+	border-radius: var(--radius-sm);
+	border: 1px solid var(--border);
+}
+
+.logo-thumb {
+	width: 40px;
+	height: 40px;
+	object-fit: contain;
+	border-radius: 4px;
+	background: rgba(255, 255, 255, 0.05);
+}
+
+.logo-info-text {
+	display: flex;
+	flex-direction: column;
+	gap: 0.1rem;
+	overflow: hidden;
+}
+
+.logo-name-text {
+	font-size: 0.9rem;
+	font-weight: 600;
+	color: var(--text);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.logo-size-text {
+	font-size: 0.75rem;
+	color: var(--text-muted);
+}
+
+/* ---------------------------------------------------------------------------
+   Footer
+--------------------------------------------------------------------------- */
+.footer {
+	text-align: center;
+	padding: 1.5rem 1rem;
+	font-size: 0.8rem;
+	color: var(--text-muted);
+	opacity: 0.6;
+}
+
+/* ---------------------------------------------------------------------------
+   Utilities
+--------------------------------------------------------------------------- */
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
+}

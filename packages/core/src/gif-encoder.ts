@@ -1,0 +1,41 @@
+import { applyPalette, GIFEncoder, quantize } from "gifenc";
+
+export interface GifFrame {
+	data: Uint8Array | Uint8ClampedArray;
+	width: number;
+	height: number;
+}
+
+/**
+ * Encode an array of RGBA image frames into an animated GIF.
+ *
+ * @param frames  Array of objects with raw RGBA `data`, `width`, and `height`.
+ * @param delay   Delay between frames in milliseconds (default 100 = 10 fps).
+ * @returns       Uint8Array of the complete GIF binary.
+ */
+export function encodeGif(frames: GifFrame[], delay = 100): Uint8Array {
+	if (frames.length === 0) {
+		throw new Error("At least one frame is required");
+	}
+
+	const { width, height } = frames[0];
+	const gif = GIFEncoder();
+
+	for (let i = 0; i < frames.length; i++) {
+		const frame = frames[i];
+		const palette = quantize(frame.data, 256, { format: "rgba4444" });
+		const index = applyPalette(frame.data, palette, "rgba4444");
+
+		gif.writeFrame(index, width, height, {
+			palette,
+			delay,
+			repeat: 0, // loop infinitely
+			transparent: true,
+			transparentIndex: 0,
+			dispose: 2, // restore to background
+		});
+	}
+
+	gif.finish();
+	return gif.bytes();
+}

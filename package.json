@@ -1,0 +1,17 @@
+{
+  "name": "abe-yells",
+  "private": true,
+  "workspaces": ["packages/*", "apps/*"],
+  "scripts": {
+    "lint": "biome lint .",
+    "format": "biome format --write .",
+    "check": "biome check --write .",
+    "ci": "biome ci .",
+    "typecheck": "tsgo --build",
+    "build": "bun run --filter '*' build"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.10",
+    "@typescript/native-preview": "^7.0.0-dev"
+  }
+}
