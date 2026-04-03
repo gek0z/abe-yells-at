@@ -58,9 +58,10 @@ export function LogoShowcase({ onLogoChange }: { onLogoChange?: (name: string) =
 	const logo = logos[currentIndex];
 
 	return (
-		<div className="logo-showcase">
+		<div className="logo-showcase" aria-live="polite" aria-atomic="true">
 			<div className={`logo-showcase-item${visible ? " visible" : ""}`}>
 				<img src={getLogoUrl(logo)} alt={logo.title} />
+				<span className="sr-only">Abe yells at {logo.title}</span>
 			</div>
 		</div>
 	);

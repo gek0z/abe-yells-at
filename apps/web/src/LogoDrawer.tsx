@@ -113,14 +113,42 @@ export function LogoDrawer({
 		};
 	}, [query, category, fetchLogos]);
 
-	// Auto-focus search input when opened
+	const drawerRef = useRef<HTMLDivElement | null>(null);
+
+	// Auto-focus search input when opened, handle Escape, trap focus
 	useEffect(() => {
-		if (open) {
-			// Small delay to wait for transition
-			const t = setTimeout(() => searchRef.current?.focus(), 350);
-			return () => clearTimeout(t);
-		}
-	}, [open]);
+		if (!open) return;
+
+		const t = setTimeout(() => searchRef.current?.focus(), 350);
+
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === "Escape") {
+				onClose();
+				return;
+			}
+			if (e.key === "Tab" && drawerRef.current) {
+				const focusable = drawerRef.current.querySelectorAll<HTMLElement>(
+					'button, input, a[href], [tabindex]:not([tabindex="-1"])',
+				);
+				if (focusable.length === 0) return;
+				const first = focusable[0];
+				const last = focusable[focusable.length - 1];
+				if (e.shiftKey && document.activeElement === first) {
+					e.preventDefault();
+					last.focus();
+				} else if (!e.shiftKey && document.activeElement === last) {
+					e.preventDefault();
+					first.focus();
+				}
+			}
+		};
+
+		document.addEventListener("keydown", handleKeyDown);
+		return () => {
+			clearTimeout(t);
+			document.removeEventListener("keydown", handleKeyDown);
+		};
+	}, [open, onClose]);
 
 	const handleSelect = useCallback(
 		async (logo: SvglLogo) => {
@@ -162,7 +190,13 @@ export function LogoDrawer({
 					if (e.key === "Escape") onClose();
 				}}
 			/>
-			<div className={`drawer${open ? " open" : ""}`}>
+			<div
+				ref={drawerRef}
+				className={`drawer${open ? " open" : ""}`}
+				role="dialog"
+				aria-modal="true"
+				aria-label="Search brand logos"
+			>
 				<div className="drawer-header">
 					<span className="drawer-title">Brand Logos</span>
 					<button
@@ -179,6 +213,7 @@ export function LogoDrawer({
 					ref={searchRef}
 					className="drawer-search"
 					type="text"
+					aria-label="Search brand logos"
 					placeholder="Search 500+ brand logos..."
 					value={query}
 					onChange={(e) => {
