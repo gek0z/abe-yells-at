@@ -6,7 +6,7 @@
 
 <p align="center">
   Create animated stickers of Grandpa Abe Simpson yelling at your logo.<br/>
-  Download as GIF or WebP for WhatsApp, Slack, or Discord.
+  Upload your own or pick from 500+ brand logos. Download as GIF or WebP for WhatsApp, Slack, or Discord.
 </p>
 
 ## What's in the box
@@ -27,7 +27,7 @@ bun install
 cd apps/web && bun run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173), upload a logo, pick a size, download your sticker.
+Open [http://localhost:5173](http://localhost:5173), upload a logo or search 500+ brand logos via [svgl](https://svgl.app), pick a size, download your sticker.
 
 ### CLI
 
@@ -100,6 +100,32 @@ bun run check
 
 # Type check (uses tsgo)
 bun run typecheck
+
+# Run tests
+bun run test
+```
+
+Pre-commit hooks (via [lefthook](https://github.com/evilmartians/lefthook)) automatically run lint, typecheck, and tests on every commit.
+
+## Project Structure
+
+```
+abe-yells/
+├── packages/core/          # npm package "abe-yells-at"
+│   ├── src/                # library + CLI source
+│   ├── tests/              # bun tests
+│   └── frames/             # animation frame PNGs
+├── apps/web/               # Vite + React web app
+│   ├── src/
+│   │   ├── App.tsx         # main app shell
+│   │   ├── DropZone.tsx    # file upload component
+│   │   ├── LogoPicker.tsx  # searchable brand logo browser (svgl.app)
+│   │   ├── Preview.tsx     # animated canvas preview
+│   │   ├── PresetSelector.tsx
+│   │   ├── FormatSelector.tsx
+│   │   └── sticker-engine.ts  # client-side compositing + encoding
+│   └── public/frames/      # animation frames served statically
+└── assets/                 # original source assets
 ```
 
 ## Tech Stack
@@ -107,7 +133,9 @@ bun run typecheck
 - **Runtime & package manager**: [Bun](https://bun.sh) workspaces
 - **Type checking**: [tsgo](https://github.com/nicolo-ribaudo/tsgo) (`@typescript/native-preview`)
 - **Linting & formatting**: [Biome](https://biomejs.dev)
+- **Git hooks**: [Lefthook](https://github.com/evilmartians/lefthook)
 - **Web app**: [Vite](https://vite.dev) + [React](https://react.dev)
+- **Logo library**: [svgl](https://svgl.app) API (500+ brand SVGs)
 - **GIF encoding**: [gifenc](https://github.com/mattdesl/gifenc)
 - **WebP encoding**: Custom animated WebP RIFF muxer
 - **Deployment**: [Cloudflare Pages](https://pages.cloudflare.com)
