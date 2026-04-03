@@ -27,7 +27,7 @@ bun install
 cd apps/web && bun run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173), upload a logo or search 500+ brand logos via [svgl](https://svgl.app), pick a size, download your sticker.
+Open [http://localhost:5173](http://localhost:5173) -- drop a logo anywhere on the page, or search 500+ brand logos via the built-in [svgl](https://svgl.app)-powered drawer. Pick a size, download your sticker.
 
 ### CLI
 
@@ -117,10 +117,11 @@ abe-yells/
 │   └── frames/             # animation frame PNGs
 ├── apps/web/               # Vite + React web app
 │   ├── src/
-│   │   ├── App.tsx         # main app shell
-│   │   ├── DropZone.tsx    # file upload component
-│   │   ├── LogoPicker.tsx  # searchable brand logo browser (svgl.app)
+│   │   ├── App.tsx         # main app shell (landing + result views)
+│   │   ├── LogoDrawer.tsx  # slide-up drawer for svgl logo search
+│   │   ├── LogoMarquee.tsx # rotating logo showcase on landing page
 │   │   ├── Preview.tsx     # animated canvas preview
+│   │   ├── PlatformInstructions.tsx  # WhatsApp/Slack/Discord usage guides
 │   │   ├── PresetSelector.tsx
 │   │   ├── FormatSelector.tsx
 │   │   └── sticker-engine.ts  # client-side compositing + encoding
@@ -131,7 +132,7 @@ abe-yells/
 ## Tech Stack
 
 - **Runtime & package manager**: [Bun](https://bun.sh) workspaces
-- **Type checking**: [tsgo](https://github.com/nicolo-ribaudo/tsgo) (`@typescript/native-preview`)
+- **Type checking**: [tsgo](https://github.com/microsoft/typescript-go) (`@typescript/native-preview`)
 - **Linting & formatting**: [Biome](https://biomejs.dev)
 - **Git hooks**: [Lefthook](https://github.com/evilmartians/lefthook)
 - **Web app**: [Vite](https://vite.dev) + [React](https://react.dev)
@@ -151,6 +152,10 @@ cd apps/web
 bun run build
 npx wrangler pages deploy dist
 ```
+
+## Author
+
+Created by [riccardo.lol](https://riccardo.lol)
 
 ## License
 

@@ -13,7 +13,7 @@ interface SvglLogo {
 	url?: string;
 }
 
-function getLogoUrl(logo: SvglLogo): string {
+export function getLogoUrl(logo: SvglLogo): string {
 	if (typeof logo.route === "string") return logo.route;
 	return logo.route.light;
 }
@@ -21,7 +21,7 @@ function getLogoUrl(logo: SvglLogo): string {
 const SVGL_PREFIX = "https://svgl.app/library/";
 const RAW_GH_PREFIX = "https://raw.githubusercontent.com/pheralb/svgl/main/static/library/";
 
-function getCorsUrl(url: string): string {
+export function getCorsUrl(url: string): string {
 	if (url.startsWith(SVGL_PREFIX)) {
 		return url.replace(SVGL_PREFIX, RAW_GH_PREFIX);
 	}
@@ -74,9 +74,13 @@ const CATEGORIES = [
 // Component
 // ---------------------------------------------------------------------------
 
-export function LogoPicker({
+export function LogoDrawer({
+	open,
+	onClose,
 	onSelect,
 }: {
+	open: boolean;
+	onClose: () => void;
 	onSelect: (name: string, img: HTMLImageElement) => void;
 }) {
 	const [query, setQuery] = useState("");
@@ -84,6 +88,7 @@ export function LogoPicker({
 	const [logos, setLogos] = useState<SvglLogo[]>([]);
 	const [loading, setLoading] = useState(false);
 	const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const searchRef = useRef<HTMLInputElement | null>(null);
 
 	const fetchLogos = useCallback(async (q: string, cat: string) => {
 		setLoading(true);
@@ -108,6 +113,15 @@ export function LogoPicker({
 		};
 	}, [query, category, fetchLogos]);
 
+	// Auto-focus search input when opened
+	useEffect(() => {
+		if (open) {
+			// Small delay to wait for transition
+			const t = setTimeout(() => searchRef.current?.focus(), 350);
+			return () => clearTimeout(t);
+		}
+	}, [open]);
+
 	const handleSelect = useCallback(
 		async (logo: SvglLogo) => {
 			const corsUrl = getCorsUrl(getLogoUrl(logo));
@@ -122,23 +136,48 @@ export function LogoPicker({
 				const img = new Image();
 				img.onload = () => {
 					onSelect(logo.title, img);
+					onClose();
 				};
 				img.onerror = () => URL.revokeObjectURL(blobUrl);
 				img.src = blobUrl;
 			} catch {
 				const img = new Image();
-				img.onload = () => onSelect(logo.title, img);
+				img.onload = () => {
+					onSelect(logo.title, img);
+					onClose();
+				};
 				img.src = getLogoUrl(logo);
 			}
 		},
-		[onSelect],
+		[onSelect, onClose],
 	);
 
 	return (
-		<div className="logo-picker">
-			<div className="logo-picker-header">
+		<>
+			{/* biome-ignore lint/a11y/noStaticElementInteractions: backdrop click to close */}
+			<div
+				className={`drawer-backdrop${open ? " open" : ""}`}
+				onClick={onClose}
+				onKeyDown={(e) => {
+					if (e.key === "Escape") onClose();
+				}}
+			/>
+			<div className={`drawer${open ? " open" : ""}`}>
+				<div className="drawer-header">
+					<span className="drawer-title">Brand Logos</span>
+					<button
+						className="drawer-close"
+						onClick={onClose}
+						type="button"
+						aria-label="Close drawer"
+					>
+						&#x2715;
+					</button>
+				</div>
+
 				<input
-					className="logo-picker-search"
+					ref={searchRef}
+					className="drawer-search"
 					type="text"
 					placeholder="Search 500+ brand logos..."
 					value={query}
@@ -147,48 +186,48 @@ export function LogoPicker({
 						setCategory("All");
 					}}
 				/>
+
 				<a
-					className="logo-picker-credit"
+					className="drawer-credit"
 					href="https://svgl.app"
 					target="_blank"
 					rel="noopener noreferrer"
 				>
 					powered by svgl
 				</a>
-			</div>
 
-			<div className="logo-picker-categories">
-				{CATEGORIES.map((cat) => (
-					<button
-						key={cat}
-						className={`logo-picker-cat${category === cat ? " active" : ""}`}
-						onClick={() => {
-							setCategory(cat);
-							setQuery("");
-						}}
-						type="button"
-					>
-						{cat}
-					</button>
-				))}
-			</div>
+				<div className="drawer-categories">
+					{CATEGORIES.map((cat) => (
+						<button
+							key={cat}
+							className={`drawer-cat${category === cat ? " active" : ""}`}
+							onClick={() => {
+								setCategory(cat);
+								setQuery("");
+							}}
+							type="button"
+						>
+							{cat}
+						</button>
+					))}
+				</div>
 
-			<div className="logo-picker-grid">
-				{loading && <p className="logo-picker-status">Searching...</p>}
-				{!loading && logos.length === 0 && <p className="logo-picker-status">No logos found</p>}
-				{logos.map((logo) => (
-					<button
-						key={logo.id}
-						className="logo-picker-item"
-						onClick={() => handleSelect(logo)}
-						title={logo.title}
-						type="button"
-					>
-						<img src={getLogoUrl(logo)} alt={logo.title} loading="lazy" />
-						<span>{logo.title}</span>
-					</button>
-				))}
+				<div className="drawer-grid">
+					{loading && <p className="drawer-status">Searching...</p>}
+					{!loading && logos.length === 0 && <p className="drawer-status">No logos found</p>}
+					{logos.map((logo) => (
+						<button
+							key={logo.id}
+							className="drawer-item"
+							onClick={() => handleSelect(logo)}
+							type="button"
+						>
+							<img src={getLogoUrl(logo)} alt={logo.title} loading="lazy" />
+							<span>{logo.title}</span>
+						</button>
+					))}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 }
