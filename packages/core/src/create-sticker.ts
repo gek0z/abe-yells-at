@@ -9,7 +9,7 @@ import {
 } from "@/webp-encoder";
 
 const FRAME_COUNT = 9;
-const FRAME_DELAY_MS = 100; // 10 fps
+const FRAME_DELAY_MS = 50; // 20 fps
 
 // ── Environment detection ────────────────────────────────────────────
 
@@ -25,7 +25,7 @@ async function createStickerNode(options: StickerOptions): Promise<StickerResult
 	const { createCanvas, loadImage } = await import("@napi-rs/canvas");
 	const path = await import("node:path");
 
-	const preset: Preset = options.preset ?? "whatsapp";
+	const preset: Preset = options.preset ?? "large";
 	const format: Format = options.format ?? "gif";
 	const config: PresetConfig = presets[preset];
 	const { width, height } = config;
@@ -147,7 +147,7 @@ export interface BrowserStickerOptions {
 	frames: (HTMLImageElement | ImageBitmap)[];
 	/** Pre-loaded logo image. */
 	logo: HTMLImageElement | ImageBitmap;
-	/** Target platform preset (default: 'whatsapp'). */
+	/** Target size preset (default: 'large'). */
 	preset?: Preset;
 	/** Output format (default: 'gif'). */
 	format?: Format;
@@ -178,7 +178,7 @@ export async function loadFrameImages(basePath: string): Promise<HTMLImageElemen
 export async function createStickerFromImages(
 	options: BrowserStickerOptions,
 ): Promise<StickerResult> {
-	const preset: Preset = options.preset ?? "whatsapp";
+	const preset: Preset = options.preset ?? "large";
 	const format: Format = options.format ?? "gif";
 	const config: PresetConfig = presets[preset];
 	const { width, height } = config;

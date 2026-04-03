@@ -38,7 +38,7 @@ npx abe-yells-at logo.png
 Options:
 
 ```
---preset, -p   whatsapp | slack | discord   (default: whatsapp)
+--preset, -p   large | medium | small        (default: large)
 --format, -f   gif | webp | all             (default: all)
 --output, -o   output directory             (default: .)
 ```
@@ -54,7 +54,7 @@ import { createSticker } from "abe-yells-at";
 
 const result = await createSticker({
   logo: "./my-logo.png",
-  preset: "whatsapp",
+  preset: "large",
   format: "gif",
 });
 
@@ -70,18 +70,18 @@ const frames = await loadFrameImages("/frames");
 const result = await createStickerFromImages({
   frames,
   logo: myLogoElement,
-  preset: "discord",
+  preset: "medium",
   format: "webp",
 });
 ```
 
 ## Size Presets
 
-| Preset | Size | Use case |
-|--------|------|----------|
-| `whatsapp` | 512x512 | WhatsApp stickers |
-| `slack` | 128x128 | Slack custom emoji |
-| `discord` | 320x320 | Discord stickers |
+| Preset | Size |
+|--------|------|
+| `large` | 512x512 |
+| `medium` | 320x320 |
+| `small` | 128x128 |
 
 ## Development
 

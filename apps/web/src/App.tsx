@@ -16,7 +16,7 @@ export default function App() {
 	const [logoFile, setLogoFile] = useState<File | null>(null);
 	const [logoImg, setLogoImg] = useState<HTMLImageElement | null>(null);
 	const [logoName, setLogoName] = useState("");
-	const [preset, setPreset] = useState<Preset>("whatsapp");
+	const [preset, setPreset] = useState<Preset>("large");
 	const [format, setFormat] = useState<Format>("gif");
 
 	const [generating, setGenerating] = useState(false);

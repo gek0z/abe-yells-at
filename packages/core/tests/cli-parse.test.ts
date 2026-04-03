@@ -21,20 +21,20 @@ describe("parseArgs", () => {
 		const result = parseArgs(argv("logo.png"));
 		expect(result).toEqual({
 			imagePath: "logo.png",
-			preset: "whatsapp",
+			preset: "large",
 			format: "all",
 			output: ".",
 		});
 	});
 
 	test("parses --preset flag", () => {
-		const result = parseArgs(argv("logo.png", "--preset", "discord"));
-		expect(result?.preset).toBe("discord");
+		const result = parseArgs(argv("logo.png", "--preset", "small"));
+		expect(result?.preset).toBe("small");
 	});
 
 	test("parses -p shorthand", () => {
-		const result = parseArgs(argv("logo.png", "-p", "slack"));
-		expect(result?.preset).toBe("slack");
+		const result = parseArgs(argv("logo.png", "-p", "medium"));
+		expect(result?.preset).toBe("medium");
 	});
 
 	test("parses --format flag", () => {
@@ -58,10 +58,10 @@ describe("parseArgs", () => {
 	});
 
 	test("parses all flags together", () => {
-		const result = parseArgs(argv("logo.png", "-p", "discord", "-f", "gif", "-o", "./out"));
+		const result = parseArgs(argv("logo.png", "-p", "small", "-f", "gif", "-o", "./out"));
 		expect(result).toEqual({
 			imagePath: "logo.png",
-			preset: "discord",
+			preset: "small",
 			format: "gif",
 			output: "./out",
 		});
@@ -80,7 +80,7 @@ describe("parseArgs", () => {
 	});
 
 	test("throws when no image path provided", () => {
-		expect(() => parseArgs(argv("-p", "slack"))).toThrow(CliParseError);
+		expect(() => parseArgs(argv("-p", "small"))).toThrow(CliParseError);
 	});
 
 	test("throws on missing preset value", () => {

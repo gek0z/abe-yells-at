@@ -25,7 +25,7 @@ export function Preview({ logo, preset }: { logo: HTMLImageElement; preset: Pres
 			};
 
 			tick();
-			timerRef.current = setInterval(tick, 120);
+			timerRef.current = setInterval(tick, 50);
 		}
 
 		start();

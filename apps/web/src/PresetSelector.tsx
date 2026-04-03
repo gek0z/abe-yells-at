@@ -1,9 +1,9 @@
 import type { Preset } from "@/sticker-engine";
 
 const PRESET_OPTIONS: { value: Preset; label: string }[] = [
-	{ value: "whatsapp", label: "WhatsApp 512" },
-	{ value: "slack", label: "Slack 128" },
-	{ value: "discord", label: "Discord 320" },
+	{ value: "large", label: "Large 512" },
+	{ value: "medium", label: "Medium 320" },
+	{ value: "small", label: "Small 128" },
 ];
 
 export function PresetSelector({

@@ -1,10 +1,10 @@
-export type Preset = "whatsapp" | "slack" | "discord";
+export type Preset = "large" | "medium" | "small";
 export type Format = "gif" | "webp";
 
 export interface StickerOptions {
 	/** Logo image: file path (Node), URL string, or raw image data */
 	logo: string | Buffer | Blob | ArrayBuffer | Uint8Array;
-	/** Target platform preset (default: 'whatsapp') */
+	/** Target size preset (default: 'large') */
 	preset?: Preset;
 	/** Output format (default: 'gif') */
 	format?: Format;

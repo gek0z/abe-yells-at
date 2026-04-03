@@ -2,19 +2,19 @@ import { describe, expect, test } from "bun:test";
 import { presets } from "@/presets";
 
 describe("presets", () => {
-	test("whatsapp is 512x512", () => {
-		expect(presets.whatsapp.width).toBe(512);
-		expect(presets.whatsapp.height).toBe(512);
+	test("large is 512x512", () => {
+		expect(presets.large.width).toBe(512);
+		expect(presets.large.height).toBe(512);
 	});
 
-	test("slack is 128x128", () => {
-		expect(presets.slack.width).toBe(128);
-		expect(presets.slack.height).toBe(128);
+	test("medium is 320x320", () => {
+		expect(presets.medium.width).toBe(320);
+		expect(presets.medium.height).toBe(320);
 	});
 
-	test("discord is 320x320", () => {
-		expect(presets.discord.width).toBe(320);
-		expect(presets.discord.height).toBe(320);
+	test("small is 128x128", () => {
+		expect(presets.small.width).toBe(128);
+		expect(presets.small.height).toBe(128);
 	});
 
 	test("logo placement is within frame bounds", () => {

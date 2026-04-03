@@ -22,17 +22,17 @@ ${bold("USAGE")}
   ${cyan("abe-yells-at")} <image-path> [options]
 
 ${bold("OPTIONS")}
-  ${green("--preset, -p")}   Platform preset: ${yellow("whatsapp")} | ${yellow("slack")} | ${yellow("discord")}  ${dim("(default: whatsapp)")}
-  ${green("--format, -f")}   Output format: ${yellow("gif")} | ${yellow("webp")} | ${yellow("all")}             ${dim("(default: all)")}
-  ${green("--output, -o")}   Output directory                              ${dim("(default: .)")}
+  ${green("--preset, -p")}   Size preset: ${yellow("large")} | ${yellow("medium")} | ${yellow("small")}  ${dim("(default: large)")}
+  ${green("--format, -f")}   Output format: ${yellow("gif")} | ${yellow("webp")} | ${yellow("all")}       ${dim("(default: all)")}
+  ${green("--output, -o")}   Output directory                        ${dim("(default: .)")}
   ${green("--help, -h")}     Show this help message
 
 ${bold("EXAMPLES")}
-  ${dim("# Create stickers in all formats with whatsapp preset")}
+  ${dim("# Create stickers in all formats at large size")}
   ${cyan("abe-yells-at logo.png")}
 
-  ${dim("# Create a discord-sized GIF")}
-  ${cyan("abe-yells-at logo.png -p discord -f gif")}
+  ${dim("# Create a small GIF")}
+  ${cyan("abe-yells-at logo.png -p small -f gif")}
 
   ${dim("# Specify output directory")}
   ${cyan("abe-yells-at logo.png -o ./stickers")}
@@ -61,7 +61,7 @@ export function parseArgs(argv: string[]): CliArgs | null {
 	}
 
 	let imagePath = "";
-	let preset: Preset = "whatsapp";
+	let preset: Preset = "large";
 	let format: "gif" | "webp" | "all" = "all";
 	let output = ".";
 
@@ -70,8 +70,8 @@ export function parseArgs(argv: string[]): CliArgs | null {
 
 		if (arg === "--preset" || arg === "-p") {
 			const val = args[++i];
-			if (!val || !["whatsapp", "slack", "discord"].includes(val)) {
-				throw new CliParseError(`Invalid preset "${val}". Use whatsapp, slack, or discord.`);
+			if (!val || !["large", "medium", "small"].includes(val)) {
+				throw new CliParseError(`Invalid preset "${val}". Use large, medium, or small.`);
 			}
 			preset = val as Preset;
 		} else if (arg === "--format" || arg === "-f") {

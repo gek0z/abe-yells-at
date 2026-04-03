@@ -34,7 +34,7 @@ function createPresetConfig(size: number): PresetConfig {
 }
 
 export const presets: Record<Preset, PresetConfig> = {
-	whatsapp: createPresetConfig(512),
-	slack: createPresetConfig(128),
-	discord: createPresetConfig(320),
+	large: createPresetConfig(512),
+	medium: createPresetConfig(320),
+	small: createPresetConfig(128),
 };

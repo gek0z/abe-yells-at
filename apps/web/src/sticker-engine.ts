@@ -4,17 +4,17 @@ import { applyPalette, GIFEncoder, quantize } from "gifenc";
 // Types
 // ---------------------------------------------------------------------------
 
-export type Preset = "whatsapp" | "slack" | "discord";
+export type Preset = "large" | "medium" | "small";
 export type Format = "gif" | "webp";
 
 export const PRESET_SIZES: Record<Preset, number> = {
-	whatsapp: 512,
-	slack: 128,
-	discord: 320,
+	large: 512,
+	medium: 320,
+	small: 128,
 };
 
 const FRAME_COUNT = 9;
-const FRAME_DELAY_MS = 120;
+const FRAME_DELAY_MS = 50;
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -216,7 +216,7 @@ async function muxAnimatedWebP(
 		offset += c.byteLength;
 	}
 
-	return new Blob([result.buffer as ArrayBuffer], { type: "image/webp" });
+	return new Blob([new Uint8Array(result)], { type: "image/webp" });
 }
 
 // ---------------------------------------------------------------------------
@@ -301,13 +301,25 @@ async function encodeGIF(
 		compositeFrame(ctx, frames[i], logo, size);
 		const imageData = ctx.getImageData(0, 0, size, size);
 
-		const palette = quantize(imageData.data, 256, { format: "rgb444" });
-		const index = applyPalette(imageData.data, palette, "rgb444");
+		const palette = quantize(imageData.data, 256, { format: "rgba4444" });
+		const index = applyPalette(imageData.data, palette, "rgba4444");
+
+		// Find a transparent color in the palette (alpha < 128)
+		let transparentIndex = -1;
+		for (let p = 0; p < palette.length; p++) {
+			if (palette[p][3] !== undefined && palette[p][3] < 128) {
+				transparentIndex = p;
+				break;
+			}
+		}
 
 		gif.writeFrame(index, size, size, {
 			palette,
 			delay: FRAME_DELAY_MS,
 			repeat: 0,
+			transparent: transparentIndex >= 0,
+			transparentIndex: transparentIndex >= 0 ? transparentIndex : 0,
+			dispose: 2,
 		});
 
 		const progress = 20 + Math.round((i / frames.length) * 75);
@@ -321,7 +333,7 @@ async function encodeGIF(
 	onProgress?.(100);
 
 	const bytes = gif.bytes();
-	return new Blob([bytes.buffer as ArrayBuffer], { type: "image/gif" });
+	return new Blob([new Uint8Array(bytes)], { type: "image/gif" });
 }
 
 // ---------------------------------------------------------------------------

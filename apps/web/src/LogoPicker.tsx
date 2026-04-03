@@ -18,6 +18,16 @@ function getLogoUrl(logo: SvglLogo): string {
 	return logo.route.light;
 }
 
+const SVGL_PREFIX = "https://svgl.app/library/";
+const RAW_GH_PREFIX = "https://raw.githubusercontent.com/pheralb/svgl/main/static/library/";
+
+function getCorsUrl(url: string): string {
+	if (url.startsWith(SVGL_PREFIX)) {
+		return url.replace(SVGL_PREFIX, RAW_GH_PREFIX);
+	}
+	return url;
+}
+
 // ---------------------------------------------------------------------------
 // API
 // ---------------------------------------------------------------------------
@@ -99,20 +109,27 @@ export function LogoPicker({
 	}, [query, category, fetchLogos]);
 
 	const handleSelect = useCallback(
-		(logo: SvglLogo) => {
-			const img = new Image();
-			img.crossOrigin = "anonymous";
-			img.onload = () => onSelect(logo.title, img);
-			img.onerror = () => {
-				// Fallback: try the dark variant
-				if (typeof logo.route === "object") {
-					const fallback = new Image();
-					fallback.crossOrigin = "anonymous";
-					fallback.onload = () => onSelect(logo.title, fallback);
-					fallback.src = logo.route.dark;
-				}
-			};
-			img.src = getLogoUrl(logo);
+		async (logo: SvglLogo) => {
+			const corsUrl = getCorsUrl(getLogoUrl(logo));
+			try {
+				// Fetch via CORS-friendly URL, create local blob
+				// so the canvas doesn't get tainted
+				const res = await fetch(corsUrl);
+				const svgText = await res.text();
+				const blob = new Blob([svgText], { type: "image/svg+xml" });
+				const blobUrl = URL.createObjectURL(blob);
+
+				const img = new Image();
+				img.onload = () => {
+					onSelect(logo.title, img);
+				};
+				img.onerror = () => URL.revokeObjectURL(blobUrl);
+				img.src = blobUrl;
+			} catch {
+				const img = new Image();
+				img.onload = () => onSelect(logo.title, img);
+				img.src = getLogoUrl(logo);
+			}
 		},
 		[onSelect],
 	);
