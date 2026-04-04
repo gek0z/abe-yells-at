@@ -79,8 +79,23 @@ function StickerApp() {
 			const ext = format === "gif" ? "gif" : format === "webp" ? "webp" : "mp4";
 			const filename = `abe-yells-at-${PRESET_SIZES[preset]}.${ext}`;
 
-			// Desktop: standard download
 			const url = URL.createObjectURL(blob);
+
+			// Try Web Share API first (best for mobile -- opens native share sheet)
+			if (navigator.share && format === "video") {
+				try {
+					const file = new File([blob], filename, { type: blob.type });
+					if (navigator.canShare?.({ files: [file] })) {
+						await navigator.share({ files: [file] });
+						URL.revokeObjectURL(url);
+						return;
+					}
+				} catch {
+					// Cancelled or unsupported -- fall through
+				}
+			}
+
+			// Standard download
 			const a = document.createElement("a");
 			a.href = url;
 			a.download = filename;
