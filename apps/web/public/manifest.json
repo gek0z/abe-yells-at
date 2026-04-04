@@ -1,0 +1,16 @@
+{
+	"name": "Abe Yells At",
+	"short_name": "Abe Yells At",
+	"description": "Create animated stickers of Grandpa Abe Simpson yelling at your logo",
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "#87CEEB",
+	"theme_color": "#87CEEB",
+	"icons": [
+		{
+			"src": "/favicon.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		}
+	]
+}

@@ -27,11 +27,11 @@ describe("presets", () => {
 		}
 	});
 
-	test("logo size is roughly 30-35% of frame", () => {
+	test("logo size is roughly 40-50% of frame", () => {
 		for (const preset of Object.values(presets)) {
 			const ratio = preset.logo.maxWidth / preset.width;
-			expect(ratio).toBeGreaterThan(0.25);
-			expect(ratio).toBeLessThan(0.4);
+			expect(ratio).toBeGreaterThan(0.4);
+			expect(ratio).toBeLessThan(0.5);
 		}
 	});
 });
