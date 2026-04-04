@@ -76,26 +76,10 @@ function StickerApp() {
 			});
 			setResultBlob(blob);
 
-			const ext = format === "gif" ? "gif" : format === "webp" ? "webp" : "mp4";
+			const ext = format === "gif" ? "gif" : "webp";
 			const filename = `abe-yells-at-${PRESET_SIZES[preset]}.${ext}`;
 
 			const url = URL.createObjectURL(blob);
-
-			// Try Web Share API first (best for mobile -- opens native share sheet)
-			if (navigator.share && format === "video") {
-				try {
-					const file = new File([blob], filename, { type: blob.type });
-					if (navigator.canShare?.({ files: [file] })) {
-						await navigator.share({ files: [file] });
-						URL.revokeObjectURL(url);
-						return;
-					}
-				} catch {
-					// Cancelled or unsupported -- fall through
-				}
-			}
-
-			// Standard download
 			const a = document.createElement("a");
 			a.href = url;
 			a.download = filename;
@@ -243,7 +227,10 @@ function StickerApp() {
 	// Result view
 	return (
 		<>
-			<div className="result-page" style={{ paddingBottom: `${PRESET_SIZES[preset] + 4}px` }}>
+			<div
+				className="result-page"
+				style={{ paddingBottom: `min(${PRESET_SIZES[preset] + 4}px, 90vw)` }}
+			>
 				<SiteNav />
 
 				<div className="result-container">
@@ -286,11 +273,11 @@ function StickerApp() {
 					</button>
 				</div>
 
-				<div className="result-abe-bg" style={{ height: `${PRESET_SIZES[preset] + 4}px` }} />
 				<div
-					className="result-abe"
-					style={{ width: `${PRESET_SIZES[preset]}px`, maxWidth: "90vw" }}
-				>
+					className="result-abe-bg"
+					style={{ height: `min(${PRESET_SIZES[preset] + 4}px, 90vw)` }}
+				/>
+				<div className="result-abe" style={{ width: `min(${PRESET_SIZES[preset]}px, 90vw)` }}>
 					<Preview logo={logoImg} preset={preset} />
 				</div>
 			</div>

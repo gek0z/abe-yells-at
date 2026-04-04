@@ -69,22 +69,21 @@ function WhatsAppIOS() {
 	return (
 		<ol>
 			<li>
-				Tap <strong>Save / Share</strong> above and select <strong>WhatsApp</strong> from the share
-				sheet to send the sticker directly.
+				Tap <strong>Generate & Download</strong> above, then tap <strong>Download</strong> in the
+				popup (not View).
 			</li>
 			<li>
-				Alternatively, tap <strong>Save to Files</strong> in the share sheet, then in WhatsApp:
+				The sticker saves to your <strong>Downloads</strong> folder in the Files app.
 			</li>
 			<li>
-				Tap <WaIcon name="iphone-stickers-sticker-icon" alt="Stickers" />.
+				In WhatsApp, open a chat and tap the <strong>+</strong> button.
 			</li>
 			<li>
-				Tap <WaIcon name="iphone-create-sticker" alt="Create sticker" /> &gt;{" "}
-				<strong>Use a photo</strong>.
+				Select <strong>Document</strong>, then browse to <strong>Downloads</strong> and pick your
+				sticker file.
 			</li>
-			<li>Browse to your saved sticker file and select it.</li>
 			<li>
-				Tap <WaIcon name="iphone-send" alt="Send" noInvert /> to send your sticker.
+				Tap <WaIcon name="iphone-send" alt="Send" noInvert /> to send.
 			</li>
 		</ol>
 	);

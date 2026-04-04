@@ -6,7 +6,7 @@ import { applyPalette, GIFEncoder, quantize } from "gifenc";
 // ---------------------------------------------------------------------------
 
 export type Preset = "large" | "medium" | "small";
-export type Format = "gif" | "webp" | "video";
+export type Format = "gif" | "webp";
 
 export const PRESET_SIZES: Record<Preset, number> = {
 	large: 512,
@@ -286,8 +286,6 @@ export async function generateSticker(options: {
 
 	if (format === "gif") {
 		return encodeGIF(ctx, canvas, frames, logo, size, onProgress);
-	} else if (format === "video") {
-		return encodeVideo(ctx, canvas, frames, logo, size, onProgress);
 	} else {
 		return encodeWebP(ctx, canvas, frames, logo, size, onProgress);
 	}
@@ -395,68 +393,4 @@ async function encodeWebP(
 	const result = await muxAnimatedWebP(frameBuffers, size, size, FRAME_DELAY_MS);
 	onProgress?.(100);
 	return result;
-}
-
-// ---------------------------------------------------------------------------
-// Video encoding (MP4/WebM via MediaRecorder)
-// ---------------------------------------------------------------------------
-
-async function encodeVideo(
-	ctx: CanvasRenderingContext2D,
-	canvas: HTMLCanvasElement,
-	frames: HTMLImageElement[],
-	logo: HTMLImageElement | ImageBitmap,
-	size: number,
-	onProgress?: (percent: number) => void,
-): Promise<Blob> {
-	const fps = Math.round(1000 / FRAME_DELAY_MS);
-
-	// Use a live framerate stream (iOS needs this instead of manual requestFrame)
-	const stream = canvas.captureStream(fps);
-
-	// Pick best available codec
-	const mimeType = MediaRecorder.isTypeSupported("video/mp4;codecs=avc1")
-		? "video/mp4;codecs=avc1"
-		: MediaRecorder.isTypeSupported("video/mp4")
-			? "video/mp4"
-			: MediaRecorder.isTypeSupported("video/webm;codecs=vp9")
-				? "video/webm;codecs=vp9"
-				: "video/webm";
-
-	const recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 4_000_000 });
-	const chunks: Blob[] = [];
-
-	recorder.ondataavailable = (e) => {
-		if (e.data.size > 0) chunks.push(e.data);
-	};
-
-	const stopped = new Promise<void>((resolve) => {
-		recorder.onstop = () => resolve();
-	});
-
-	// Draw the first frame before starting to avoid blank start
-	compositeFrame(ctx, frames[0], logo, size, "#ffffff");
-	recorder.start(100); // collect data every 100ms
-
-	// Loop the animation 3 times
-	const loops = 3;
-	const totalFrames = frames.length * loops;
-	let frameCount = 0;
-
-	for (let loop = 0; loop < loops; loop++) {
-		for (let i = 0; i < frames.length; i++) {
-			compositeFrame(ctx, frames[i], logo, size, "#ffffff");
-			await new Promise((r) => setTimeout(r, FRAME_DELAY_MS));
-
-			frameCount++;
-			onProgress?.(20 + Math.round((frameCount / totalFrames) * 75));
-		}
-	}
-
-	recorder.stop();
-	await stopped;
-	onProgress?.(100);
-
-	const ext = mimeType.includes("mp4") ? "mp4" : "webm";
-	return new Blob(chunks, { type: `video/${ext}` });
 }
