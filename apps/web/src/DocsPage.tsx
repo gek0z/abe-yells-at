@@ -220,7 +220,7 @@ abe-yells-at logo.png -o ./stickers`}
 						<li>
 							Source on{" "}
 							<a
-								href="https://github.com/user/abe-yells-at"
+								href="https://github.com/gek0z/abe-yells-at"
 								target="_blank"
 								rel="noopener noreferrer"
 							>

@@ -9,6 +9,10 @@
   Upload your own or search thousands of brand logos. Download as GIF or WebP for WhatsApp, Slack, or Discord.
 </p>
 
+<p align="center">
+  <a href="https://abeyells.at">abeyells.at</a>
+</p>
+
 ## What's in the box
 
 This is a monorepo with two packages:
@@ -27,7 +31,7 @@ bun install
 cd apps/web && bun run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) -- drop a logo anywhere on the page, or search thousands of brand logos via the built-in drawer powered by [svgl](https://svgl.app) and [logo.dev](https://logo.dev). Pick a size, download your sticker.
+Visit [abeyells.at](https://abeyells.at), or run locally at [http://localhost:5173](http://localhost:5173) -- drop a logo anywhere on the page, or search thousands of brand logos via the built-in drawer powered by [svgl](https://svgl.app) and [logo.dev](https://logo.dev). Pick a size, download your sticker.
 
 The result page shows a live preview of your sticker with Abe at the bottom, and includes step-by-step instructions for adding it to WhatsApp (Android/iOS), Slack (Desktop/Mobile), and Discord (Server Settings/Emoji Picker).
 
