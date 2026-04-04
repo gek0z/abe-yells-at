@@ -662,12 +662,19 @@ body {
 
 .result-abe {
 	position: fixed;
-	bottom: 0;
+	bottom: env(safe-area-inset-bottom, 0px);
 	left: 50%;
 	transform: translateX(-50%);
 	z-index: 10;
 	pointer-events: none;
 	transition: width 0.3s ease;
+}
+
+@supports (bottom: env(safe-area-inset-bottom)) {
+	.result-abe,
+	.result-abe-bg {
+		bottom: env(safe-area-inset-bottom, 0px);
+	}
 }
 
 .result-abe .preview-card {
