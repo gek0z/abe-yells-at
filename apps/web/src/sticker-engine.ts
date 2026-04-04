@@ -1,3 +1,4 @@
+import { encode as encodeWebPFrame } from "@jsquash/webp";
 import { applyPalette, GIFEncoder, quantize } from "gifenc";
 
 // ---------------------------------------------------------------------------
@@ -342,7 +343,7 @@ async function encodeGIF(
 
 async function encodeWebP(
 	ctx: CanvasRenderingContext2D,
-	canvas: HTMLCanvasElement,
+	_canvas: HTMLCanvasElement,
 	frames: HTMLImageElement[],
 	logo: HTMLImageElement | ImageBitmap,
 	size: number,
@@ -353,15 +354,10 @@ async function encodeWebP(
 	for (let i = 0; i < frames.length; i++) {
 		compositeFrame(ctx, frames[i], logo, size);
 
-		// Encode this frame as a single WebP
-		const blob: Blob = await new Promise((resolve, reject) => {
-			canvas.toBlob(
-				(b) => (b ? resolve(b) : reject(new Error("toBlob failed"))),
-				"image/webp",
-				0.85,
-			);
-		});
-		frameBuffers.push(await blob.arrayBuffer());
+		// Encode frame to WebP via WASM (works on all browsers including iOS)
+		const imageData = ctx.getImageData(0, 0, size, size);
+		const webpBuffer = await encodeWebPFrame(imageData, { quality: 85 });
+		frameBuffers.push(webpBuffer);
 
 		const progress = 20 + Math.round((i / frames.length) * 65);
 		onProgress?.(progress);

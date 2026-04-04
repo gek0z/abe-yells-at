@@ -11,9 +11,10 @@
     "format": "biome format --write src/"
   },
   "dependencies": {
+    "@jsquash/webp": "^1.5.0",
+    "gifenc": "^1.0.3",
     "react": "^19",
-    "react-dom": "^19",
-    "gifenc": "^1.0.3"
+    "react-dom": "^19"
   },
   "devDependencies": {
     "@types/react": "^19",
