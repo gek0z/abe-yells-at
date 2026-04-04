@@ -56,6 +56,7 @@ export function LogoShowcase({ onLogoChange }: { onLogoChange?: (name: string) =
 	if (logos.length === 0) return null;
 
 	const logo = logos[currentIndex];
+	const nextLogo = logos[(currentIndex + 1) % logos.length];
 
 	return (
 		<div className="logo-showcase" aria-live="polite" aria-atomic="true">
@@ -63,6 +64,13 @@ export function LogoShowcase({ onLogoChange }: { onLogoChange?: (name: string) =
 				<img src={getLogoUrl(logo)} alt={logo.title} />
 				<span className="sr-only">Abe yells at {logo.title}</span>
 			</div>
+			{/* Prefetch next logo */}
+			<img
+				src={getLogoUrl(nextLogo)}
+				alt=""
+				aria-hidden="true"
+				style={{ position: "absolute", width: 0, height: 0, overflow: "hidden", opacity: 0 }}
+			/>
 		</div>
 	);
 }
