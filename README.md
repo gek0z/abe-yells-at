@@ -6,7 +6,7 @@
 
 <p align="center">
   Create animated stickers of Grandpa Abe Simpson yelling at your logo.<br/>
-  Upload your own or pick from 500+ brand logos. Download as GIF or WebP for WhatsApp, Slack, or Discord.
+  Upload your own or search thousands of brand logos. Download as GIF or WebP for WhatsApp, Slack, or Discord.
 </p>
 
 ## What's in the box
@@ -27,7 +27,9 @@ bun install
 cd apps/web && bun run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) -- drop a logo anywhere on the page, or search 500+ brand logos via the built-in [svgl](https://svgl.app)-powered drawer. Pick a size, download your sticker.
+Open [http://localhost:5173](http://localhost:5173) -- drop a logo anywhere on the page, or search thousands of brand logos via the built-in drawer powered by [svgl](https://svgl.app) and [logo.dev](https://logo.dev). Pick a size, download your sticker.
+
+The result page shows a live preview of your sticker with Abe at the bottom, and includes step-by-step instructions for adding it to WhatsApp (Android/iOS), Slack (Desktop/Mobile), and Discord (Server Settings/Emoji Picker).
 
 ### CLI
 
@@ -118,10 +120,12 @@ abe-yells/
 ├── apps/web/               # Vite + React web app
 │   ├── src/
 │   │   ├── App.tsx         # main app shell (landing + result views)
-│   │   ├── LogoDrawer.tsx  # slide-up drawer for svgl logo search
+│   │   ├── LogoDrawer.tsx  # slide-up drawer (svgl + logo.dev search)
 │   │   ├── LogoMarquee.tsx # rotating logo showcase on landing page
 │   │   ├── Preview.tsx     # animated canvas preview
-│   │   ├── PlatformInstructions.tsx  # WhatsApp/Slack/Discord usage guides
+│   │   ├── PlatformInstructions.tsx  # WhatsApp/Slack/Discord guides
+│   │   ├── SiteNav.tsx     # shared nav (GitHub, npm, Docs, Privacy)
+│   │   ├── DocsPage.tsx    # /docs page with usage guides + credits
 │   │   ├── PresetSelector.tsx
 │   │   ├── FormatSelector.tsx
 │   │   └── sticker-engine.ts  # client-side compositing + encoding
@@ -136,7 +140,7 @@ abe-yells/
 - **Linting & formatting**: [Biome](https://biomejs.dev)
 - **Git hooks**: [Lefthook](https://github.com/evilmartians/lefthook)
 - **Web app**: [Vite](https://vite.dev) + [React](https://react.dev)
-- **Logo library**: [svgl](https://svgl.app) API (500+ brand SVGs)
+- **Logo search**: [svgl](https://svgl.app) + [logo.dev](https://logo.dev) APIs
 - **GIF encoding**: [gifenc](https://github.com/mattdesl/gifenc)
 - **WebP encoding**: Custom animated WebP RIFF muxer
 - **Deployment**: [Cloudflare Pages](https://pages.cloudflare.com)

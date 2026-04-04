@@ -229,61 +229,59 @@ function StickerApp() {
 	return (
 		<>
 			<div className="result-page">
-				<div className="result-header">
-					<h1 className="result-title unselectable">ABE YELLS AT {logoName.toUpperCase()}</h1>
-				</div>
+				<SiteNav />
 
-				<div className="result-grid">
-					<Preview logo={logoImg} preset={preset} />
+				<div className="result-container">
+					<h1 className="result-title unselectable">
+						ABE YELLS AT
+						<br />
+						{logoName.toUpperCase()}
+					</h1>
 
-					<div className="controls">
-						<div className="logo-info">
-							<img className="logo-thumb" src={logoImg.src} alt="Selected logo" />
-							<div className="logo-info-text">
-								<span className="logo-name-text">{logoFile ? logoFile.name : logoName}</span>
-								<span className="logo-size-text">
-									{logoFile ? formatBytes(logoFile.size) : "from svgl.app"}
-								</span>
-							</div>
+					<div className="result-controls unselectable">
+						<div className="result-controls-row">
+							<PresetSelector value={preset} onChange={setPreset} />
+							<FormatSelector value={format} onChange={setFormat} />
 						</div>
 
-						<PresetSelector value={preset} onChange={setPreset} />
-						<FormatSelector value={format} onChange={setFormat} />
-
-						<div className="control-group">
-							<button
-								className="download-btn"
-								onClick={handleDownload}
-								disabled={generating}
-								type="button"
-							>
-								{generating
-									? `Generating... ${progress}%`
-									: resultBlob
-										? `Download Again (${formatBytes(resultBlob.size)})`
-										: "Generate & Download"}
-							</button>
-
-							{generating && (
-								<div className="progress-wrap">
-									<div className="progress-bar" style={{ width: `${progress}%` }} />
-								</div>
-							)}
-
-							{resultBlob && !generating && (
-								<p className="file-size">File size: {formatBytes(resultBlob.size)}</p>
-							)}
-						</div>
-
-						<button className="reset-btn" onClick={handleReset} type="button">
-							Start Over with New Logo
+						<button
+							className="download-btn"
+							onClick={handleDownload}
+							disabled={generating}
+							type="button"
+						>
+							{generating
+								? `Generating... ${progress}%`
+								: resultBlob
+									? `Download Again (${formatBytes(resultBlob.size)})`
+									: "Generate & Download"}
 						</button>
+
+						{generating && (
+							<div className="progress-wrap">
+								<div className="progress-bar" style={{ width: `${progress}%` }} />
+							</div>
+						)}
+
+						{resultBlob && !generating && (
+							<p className="file-size">
+								File size: {formatBytes(resultBlob.size)}
+								{logoFile ? ` - ${logoFile.name}` : ""}
+							</p>
+						)}
 					</div>
+
+					<PlatformInstructions format={format} />
+
+					<button className="reset-btn" onClick={handleReset} type="button">
+						Start Over with New Logo
+					</button>
 				</div>
 
-				<PlatformInstructions format={format} />
-
-				<SiteNav className="on-result" />
+				<div className="result-abe-bg" />
+				<div className="result-abe">
+					<Preview logo={logoImg} preset={preset} />
+				</div>
 			</div>
 
 			<LogoDrawer

@@ -1,9 +1,9 @@
 import type { Preset } from "@/sticker-engine";
 
 const PRESET_OPTIONS: { value: Preset; label: string }[] = [
-	{ value: "large", label: "Large 512" },
-	{ value: "medium", label: "Medium 320" },
-	{ value: "small", label: "Small 128" },
+	{ value: "large", label: "Large" },
+	{ value: "medium", label: "Medium" },
+	{ value: "small", label: "Small" },
 ];
 
 export function PresetSelector({
