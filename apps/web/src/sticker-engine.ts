@@ -301,9 +301,24 @@ async function encodeGIF(
 	for (let i = 0; i < frames.length; i++) {
 		compositeFrame(ctx, frames[i], logo, size);
 		const imageData = ctx.getImageData(0, 0, size, size);
+		const { data } = imageData;
 
-		const palette = quantize(imageData.data, 256, { format: "rgba4444" });
-		const index = applyPalette(imageData.data, palette, "rgba4444");
+		// Snap semi-transparent pixels: alpha >= 128 becomes fully opaque,
+		// alpha < 128 becomes fully transparent. This prevents dark fringe
+		// artifacts since GIF only supports 1-bit transparency.
+		for (let px = 0; px < data.length; px += 4) {
+			if (data[px + 3] < 128) {
+				data[px] = 0;
+				data[px + 1] = 0;
+				data[px + 2] = 0;
+				data[px + 3] = 0;
+			} else {
+				data[px + 3] = 255;
+			}
+		}
+
+		const palette = quantize(data, 256, { format: "rgba4444" });
+		const index = applyPalette(data, palette, "rgba4444");
 
 		// Find a transparent color in the palette (alpha < 128)
 		let transparentIndex = -1;

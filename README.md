@@ -145,8 +145,9 @@ abe-yells/
 - **Git hooks**: [Lefthook](https://github.com/evilmartians/lefthook)
 - **Web app**: [Vite](https://vite.dev) + [React](https://react.dev)
 - **Logo search**: [svgl](https://svgl.app) + [logo.dev](https://logo.dev) APIs
-- **GIF encoding**: [gifenc](https://github.com/mattdesl/gifenc)
-- **WebP encoding**: Custom animated WebP RIFF muxer
+- **GIF encoding**: [gifenc](https://github.com/mattdesl/gifenc) with 1-bit alpha snapping
+- **WebP encoding**: [@jsquash/webp](https://github.com/jamsinclair/jsquash) WASM encoder + custom animated WebP RIFF muxer
+- **Versioning**: [Changesets](https://github.com/changesets/changesets)
 - **Deployment**: [Cloudflare Pages](https://pages.cloudflare.com)
 
 All sticker processing happens client-side -- no server needed.

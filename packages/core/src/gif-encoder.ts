@@ -23,8 +23,23 @@ export function encodeGif(frames: GifFrame[], delay = 50): Uint8Array {
 
 	for (let i = 0; i < frames.length; i++) {
 		const frame = frames[i];
-		const palette = quantize(frame.data, 256, { format: "rgba4444" });
-		const index = applyPalette(frame.data, palette, "rgba4444");
+
+		// Snap semi-transparent pixels to fully opaque or fully transparent
+		// to prevent dark fringe artifacts (GIF only supports 1-bit alpha)
+		const data = new Uint8Array(frame.data);
+		for (let px = 0; px < data.length; px += 4) {
+			if (data[px + 3] < 128) {
+				data[px] = 0;
+				data[px + 1] = 0;
+				data[px + 2] = 0;
+				data[px + 3] = 0;
+			} else {
+				data[px + 3] = 255;
+			}
+		}
+
+		const palette = quantize(data, 256, { format: "rgba4444" });
+		const index = applyPalette(data, palette, "rgba4444");
 
 		// Find a transparent color in the palette (alpha < 128)
 		let transparentIndex = -1;
