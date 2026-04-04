@@ -151,15 +151,32 @@ abe-yells/
 
 All sticker processing happens client-side -- no server needed.
 
-## Deploy
+## CI/CD
 
-The web app deploys to Cloudflare Pages:
+Three GitHub Actions workflows handle everything automatically:
 
-```bash
-cd apps/web
-bun run build
-npx wrangler pages deploy dist
-```
+| Workflow | Trigger | What it does |
+|----------|---------|--------------|
+| **CI** | push to main, PRs with `run-ci` label | lint, typecheck, test, build |
+| **Deploy** | push to main (path-filtered) | deploy web app to Cloudflare Pages |
+| **Release** | push to main (path-filtered) | version PR or npm publish via changesets |
+
+### Publishing a new version
+
+1. Make changes to `packages/core`
+2. Run `bunx changeset` -- pick patch/minor/major, write a summary
+3. Commit the changeset with your changes and merge to main
+4. The Release workflow auto-creates a "Version Packages" PR
+5. Merge that PR -- bumps version, updates CHANGELOG, publishes to npm
+
+### Required secrets
+
+| Secret | Where |
+|--------|-------|
+| `CLOUDFLARE_API_TOKEN` | GitHub Actions |
+| `CLOUDFLARE_ACCOUNT_ID` | GitHub Actions |
+| `VITE_LOGO_DEV_TOKEN` | GitHub Actions + `.env` |
+| `NPM_TOKEN` | GitHub Actions (npm Automation token) |
 
 ## Author
 
