@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 // ---------------------------------------------------------------------------
-// Types matching the svgl.app API
+// Types
 // ---------------------------------------------------------------------------
 
 interface SvglLogo {
@@ -9,11 +9,16 @@ interface SvglLogo {
 	title: string;
 	category: string | string[];
 	route: string | { light: string; dark: string };
-	wordmark?: { light: string; dark: string };
-	url?: string;
 }
 
-export function getLogoUrl(logo: SvglLogo): string {
+interface LogoResult {
+	id: string;
+	title: string;
+	imgUrl: string;
+	source: "svgl" | "logodev";
+}
+
+export function getLogoUrl(logo: { route: string | { light: string; dark: string } }): string {
 	if (typeof logo.route === "string") return logo.route;
 	return logo.route.light;
 }
@@ -29,46 +34,49 @@ export function getCorsUrl(url: string): string {
 }
 
 // ---------------------------------------------------------------------------
-// API
+// API helpers
 // ---------------------------------------------------------------------------
 
-const API_BASE = "https://api.svgl.app";
+const LOGO_DEV_TOKEN = import.meta.env.VITE_LOGO_DEV_TOKEN as string;
 
-async function searchLogos(query: string): Promise<SvglLogo[]> {
-	const url = query ? `${API_BASE}?search=${encodeURIComponent(query)}` : `${API_BASE}?limit=60`;
-	const res = await fetch(url);
-	if (!res.ok) return [];
-	return res.json();
+function logoDevUrl(name: string): string {
+	return `https://img.logo.dev/name/${encodeURIComponent(name)}?token=${LOGO_DEV_TOKEN}&size=128&format=png&fallback=404`;
 }
 
-async function fetchByCategory(category: string): Promise<SvglLogo[]> {
-	const res = await fetch(`${API_BASE}/category/${encodeURIComponent(category)}`);
+async function searchSvgl(query: string): Promise<LogoResult[]> {
+	if (!query) return [];
+	const res = await fetch(`https://api.svgl.app?search=${encodeURIComponent(query)}`);
 	if (!res.ok) return [];
-	return res.json();
+	const data: SvglLogo[] = await res.json();
+	return data.map((logo) => ({
+		id: `svgl-${logo.id}`,
+		title: logo.title,
+		imgUrl: getLogoUrl(logo),
+		source: "svgl" as const,
+	}));
 }
 
-// ---------------------------------------------------------------------------
-// Categories
-// ---------------------------------------------------------------------------
-
-const CATEGORIES = [
-	"All",
-	"Payment",
-	"Software",
-	"AI",
-	"Framework",
-	"Library",
-	"Language",
-	"Database",
-	"Cloud",
-	"Design",
-	"Social",
-	"Browser",
-	"Hosting",
-	"Compiler",
-	"CMS",
-	"Education",
-];
+async function searchLogoDev(query: string): Promise<LogoResult | null> {
+	if (!query || !LOGO_DEV_TOKEN) return null;
+	const url = logoDevUrl(query);
+	try {
+		const res = await fetch(url);
+		if (!res.ok) return null;
+		// Verify it's actually an image, not an error
+		const contentType = res.headers.get("content-type") || "";
+		if (!contentType.includes("image")) return null;
+		const blob = await res.blob();
+		const blobUrl = URL.createObjectURL(blob);
+		return {
+			id: `logodev-${query}`,
+			title: query,
+			imgUrl: blobUrl,
+			source: "logodev",
+		};
+	} catch {
+		return null;
+	}
+}
 
 // ---------------------------------------------------------------------------
 // Component
@@ -84,38 +92,53 @@ export function LogoDrawer({
 	onSelect: (name: string, img: HTMLImageElement) => void;
 }) {
 	const [query, setQuery] = useState("");
-	const [category, setCategory] = useState("All");
-	const [logos, setLogos] = useState<SvglLogo[]>([]);
+	const [results, setResults] = useState<LogoResult[]>([]);
 	const [loading, setLoading] = useState(false);
+	const [searched, setSearched] = useState(false);
 	const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const searchRef = useRef<HTMLInputElement | null>(null);
+	const drawerRef = useRef<HTMLDivElement | null>(null);
 
-	const fetchLogos = useCallback(async (q: string, cat: string) => {
-		setLoading(true);
-		try {
-			const results = cat !== "All" && !q ? await fetchByCategory(cat) : await searchLogos(q);
-			setLogos(results);
-		} catch {
-			setLogos([]);
-		} finally {
-			setLoading(false);
-		}
-	}, []);
-
-	// Debounced search
+	// Debounced search -- queries both sources
 	useEffect(() => {
+		if (!query.trim()) {
+			setResults([]);
+			setSearched(false);
+			return;
+		}
+
 		if (debounceRef.current) clearTimeout(debounceRef.current);
-		debounceRef.current = setTimeout(() => {
-			fetchLogos(query, category);
-		}, 250);
+		debounceRef.current = setTimeout(async () => {
+			setLoading(true);
+			setSearched(true);
+			try {
+				const [svglResults, logoDevResult] = await Promise.all([
+					searchSvgl(query),
+					searchLogoDev(query),
+				]);
+
+				// logo.dev result goes first, then svgl results
+				const combined: LogoResult[] = [];
+				if (logoDevResult) {
+					combined.push(logoDevResult);
+				}
+				for (const r of svglResults) {
+					combined.push(r);
+				}
+				setResults(combined);
+			} catch {
+				setResults([]);
+			} finally {
+				setLoading(false);
+			}
+		}, 300);
+
 		return () => {
 			if (debounceRef.current) clearTimeout(debounceRef.current);
 		};
-	}, [query, category, fetchLogos]);
+	}, [query]);
 
-	const drawerRef = useRef<HTMLDivElement | null>(null);
-
-	// Auto-focus search input when opened, handle Escape, trap focus
+	// Focus + keyboard handling
 	useEffect(() => {
 		if (!open) return;
 
@@ -151,30 +174,36 @@ export function LogoDrawer({
 	}, [open, onClose]);
 
 	const handleSelect = useCallback(
-		async (logo: SvglLogo) => {
-			const corsUrl = getCorsUrl(getLogoUrl(logo));
+		async (result: LogoResult) => {
 			try {
-				// Fetch via CORS-friendly URL, create local blob
-				// so the canvas doesn't get tainted
-				const res = await fetch(corsUrl);
-				const svgText = await res.text();
-				const blob = new Blob([svgText], { type: "image/svg+xml" });
-				const blobUrl = URL.createObjectURL(blob);
+				let blobUrl: string;
+
+				if (result.source === "svgl") {
+					const corsUrl = getCorsUrl(result.imgUrl);
+					const res = await fetch(corsUrl);
+					const svgText = await res.text();
+					const blob = new Blob([svgText], { type: "image/svg+xml" });
+					blobUrl = URL.createObjectURL(blob);
+				} else {
+					// logo.dev results already have blob URLs
+					blobUrl = result.imgUrl;
+				}
 
 				const img = new Image();
 				img.onload = () => {
-					onSelect(logo.title, img);
+					onSelect(result.title, img);
 					onClose();
 				};
 				img.onerror = () => URL.revokeObjectURL(blobUrl);
 				img.src = blobUrl;
 			} catch {
+				// Direct fallback
 				const img = new Image();
 				img.onload = () => {
-					onSelect(logo.title, img);
+					onSelect(result.title, img);
 					onClose();
 				};
-				img.src = getLogoUrl(logo);
+				img.src = result.imgUrl;
 			}
 		},
 		[onSelect, onClose],
@@ -198,7 +227,7 @@ export function LogoDrawer({
 				aria-label="Search brand logos"
 			>
 				<div className="drawer-header">
-					<span className="drawer-title">Brand Logos</span>
+					<span className="drawer-title">Search Logos</span>
 					<button
 						className="drawer-close"
 						onClick={onClose}
@@ -214,51 +243,36 @@ export function LogoDrawer({
 					className="drawer-search"
 					type="text"
 					aria-label="Search brand logos"
-					placeholder="Search 500+ brand logos..."
+					placeholder="Type a brand name..."
 					value={query}
-					onChange={(e) => {
-						setQuery(e.target.value);
-						setCategory("All");
-					}}
+					onChange={(e) => setQuery(e.target.value)}
 				/>
 
-				<a
-					className="drawer-credit"
-					href="https://svgl.app"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					powered by svgl
-				</a>
-
-				<div className="drawer-categories">
-					{CATEGORIES.map((cat) => (
-						<button
-							key={cat}
-							className={`drawer-cat${category === cat ? " active" : ""}`}
-							onClick={() => {
-								setCategory(cat);
-								setQuery("");
-							}}
-							type="button"
-						>
-							{cat}
-						</button>
-					))}
+				<div className="drawer-credits">
+					<a href="https://svgl.app" target="_blank" rel="noopener noreferrer">
+						svgl
+					</a>
+					<span>+</span>
+					<a href="https://logo.dev" target="_blank" rel="noopener noreferrer">
+						logo.dev
+					</a>
 				</div>
 
 				<div className="drawer-grid">
 					{loading && <p className="drawer-status">Searching...</p>}
-					{!loading && logos.length === 0 && <p className="drawer-status">No logos found</p>}
-					{logos.map((logo) => (
+					{!loading && !searched && <p className="drawer-status">Type a brand name to search</p>}
+					{!loading && searched && results.length === 0 && (
+						<p className="drawer-status">No logos found</p>
+					)}
+					{results.map((result) => (
 						<button
-							key={logo.id}
+							key={result.id}
 							className="drawer-item"
-							onClick={() => handleSelect(logo)}
+							onClick={() => handleSelect(result)}
 							type="button"
 						>
-							<img src={getLogoUrl(logo)} alt={logo.title} loading="lazy" />
-							<span>{logo.title}</span>
+							<img src={result.imgUrl} alt={result.title} loading="lazy" />
+							<span>{result.title}</span>
 						</button>
 					))}
 				</div>
