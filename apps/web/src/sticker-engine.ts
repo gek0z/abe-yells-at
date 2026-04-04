@@ -51,12 +51,9 @@ function compositeFrame(
 		ctx.fillRect(0, 0, size, size);
 	}
 
-	// Draw background frame, scaled to fill
-	ctx.drawImage(frame, 0, 0, size, size);
-
-	// Logo placement: top-left, ~5% padding, ~30% of frame size
+	// Logo first, then Abe on top
 	const pad = Math.round(size * 0.05);
-	const maxLogoDim = Math.round(size * 0.3);
+	const maxLogoDim = Math.round(size * 0.45);
 
 	const logoW =
 		logo.width >= logo.height ? maxLogoDim : Math.round((logo.width / logo.height) * maxLogoDim);
@@ -64,6 +61,9 @@ function compositeFrame(
 		logo.height >= logo.width ? maxLogoDim : Math.round((logo.height / logo.width) * maxLogoDim);
 
 	ctx.drawImage(logo, pad, pad, logoW, logoH);
+
+	// Draw Abe frame on top
+	ctx.drawImage(frame, 0, 0, size, size);
 }
 
 // ---------------------------------------------------------------------------

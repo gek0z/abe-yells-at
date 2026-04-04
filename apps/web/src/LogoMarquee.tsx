@@ -9,19 +9,17 @@ const SHOWCASE_LOGOS: ShowcaseLogo[] = [
 	{ title: "Apple", url: "https://svgl.app/library/apple.svg" },
 	{ title: "Google", url: "https://svgl.app/library/google.svg" },
 	{ title: "Microsoft", url: "https://svgl.app/library/microsoft.svg" },
-	{ title: "Amazon", url: "https://svgl.app/library/aws.svg" },
+	{ title: "AWS", url: "https://svgl.app/library/aws_light.svg" },
 	{ title: "Meta", url: "https://svgl.app/library/meta.svg" },
-	{ title: "Netflix", url: "https://svgl.app/library/netflix.svg" },
+	{ title: "Netflix", url: "https://svgl.app/library/netflix-icon.svg" },
 	{ title: "Spotify", url: "https://svgl.app/library/spotify.svg" },
 	{ title: "Discord", url: "https://svgl.app/library/discord.svg" },
-	{ title: "Slack", url: "https://svgl.app/library/slack.svg" },
-	{ title: "GitHub", url: "https://svgl.app/library/github-light.svg" },
+	{ title: "GitHub", url: "https://svgl.app/library/github_light.svg" },
 	{ title: "Twitter", url: "https://svgl.app/library/x.svg" },
 	{ title: "Stripe", url: "https://svgl.app/library/stripe.svg" },
 	{ title: "Figma", url: "https://svgl.app/library/figma.svg" },
 	{ title: "Notion", url: "https://svgl.app/library/notion.svg" },
-	{ title: "Vercel", url: "https://svgl.app/library/vercel-light.svg" },
-	{ title: "React", url: "https://svgl.app/library/react_dark.svg" },
+	{ title: "Vercel", url: "https://svgl.app/library/vercel.svg" },
 	{ title: "OpenAI", url: "https://svgl.app/library/openai.svg" },
 	{ title: "Cloudflare", url: "https://svgl.app/library/cloudflare.svg" },
 	{ title: "PayPal", url: "https://svgl.app/library/paypal.svg" },
@@ -30,7 +28,7 @@ const SHOWCASE_LOGOS: ShowcaseLogo[] = [
 	{ title: "Shopify", url: "https://svgl.app/library/shopify.svg" },
 	{ title: "Docker", url: "https://svgl.app/library/docker.svg" },
 	{ title: "Firebase", url: "https://svgl.app/library/firebase.svg" },
-	{ title: "Linear", url: "https://svgl.app/library/linear-light.svg" },
+	{ title: "Linear", url: "https://svgl.app/library/linear.svg" },
 ];
 
 function shuffle<T>(arr: T[]): T[] {
@@ -53,6 +51,7 @@ export function LogoShowcase({ onLogoChange }: { onLogoChange?: (name: string) =
 
 	const advance = useCallback(() => {
 		setVisible(false);
+		// Wait for fade-out (300ms CSS) + buffer before swapping
 		setTimeout(() => {
 			setCurrentIndex((prev) => {
 				const next = (prev + 1) % logos.length;
@@ -60,7 +59,7 @@ export function LogoShowcase({ onLogoChange }: { onLogoChange?: (name: string) =
 				return next;
 			});
 			setVisible(true);
-		}, 400);
+		}, 350);
 	}, [logos, onLogoChange]);
 
 	useEffect(() => {

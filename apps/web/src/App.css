@@ -324,10 +324,10 @@ body {
 	align-items: center;
 	gap: 0.5rem;
 	opacity: 0;
-	transform: scale(0.8);
+	transform: scale(0.85);
 	transition:
-		opacity 0.4s ease,
-		transform 0.4s ease;
+		opacity 0.3s ease,
+		transform 0.3s ease;
 }
 
 .logo-showcase-item.visible {
@@ -336,8 +336,8 @@ body {
 }
 
 .logo-showcase-item img {
-	width: 28cqmin;
-	height: 28cqmin;
+	width: 40cqmin;
+	height: 40cqmin;
 	object-fit: contain;
 	filter: none;
 }
@@ -474,7 +474,10 @@ body {
 	background: var(--dark);
 	z-index: 101;
 	transform: translateY(100%);
-	transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+	visibility: hidden;
+	transition:
+		transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+		visibility 0s 0.35s;
 	display: flex;
 	flex-direction: column;
 	box-shadow: none;
@@ -483,6 +486,10 @@ body {
 
 .drawer.open {
 	transform: translateY(0);
+	visibility: visible;
+	transition:
+		transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+		visibility 0s 0s;
 }
 
 .drawer-header {
@@ -640,55 +647,72 @@ body {
 	background-attachment: fixed;
 	animation: fadeIn 0.4s ease;
 	position: relative;
-	padding-bottom: 520px;
 }
 
-.result-abe-bg {
+/* Desktop: Abe fixed at bottom with full-width bg */
+.result-preview-top {
 	position: fixed;
 	bottom: 0;
-	left: 0;
-	width: 100vw;
-	transition: height 0.3s ease;
-	background: linear-gradient(
-		to bottom,
-		transparent 0px,
-		var(--yellow) 2px,
-		#f0f4f8 3px,
-		#f0f4f8 100%
-	);
-	z-index: 9;
-	pointer-events: none;
-}
-
-.result-abe {
-	position: fixed;
-	bottom: env(safe-area-inset-bottom, 0px);
 	left: 50%;
 	transform: translateX(-50%);
 	z-index: 10;
 	pointer-events: none;
-	transition: width 0.3s ease;
+	transition: max-width 0.3s ease;
 }
 
-@supports (bottom: env(safe-area-inset-bottom)) {
-	.result-abe,
-	.result-abe-bg {
-		bottom: env(safe-area-inset-bottom, 0px);
-	}
-}
-
-.result-abe .preview-card {
+.result-preview-top .preview-card {
 	background: transparent;
 }
 
-.result-abe .preview-label {
+.result-preview-top .preview-label {
 	display: none;
 }
 
-.result-abe .preview-card canvas {
+.result-preview-top .preview-card canvas {
 	width: 100%;
 	max-width: 100%;
 	border-radius: 0;
+	display: block;
+}
+
+.result-preview-border {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100vw;
+	z-index: 9;
+	pointer-events: none;
+	border-top: 2px solid var(--yellow);
+	background: #ffffff;
+}
+
+/* Mobile: Abe sticky at top, content below */
+@media (max-width: 700px) {
+	.result-page {
+		padding-bottom: 0 !important;
+	}
+
+	.result-preview-top {
+		position: sticky;
+		top: 0;
+		bottom: auto;
+		left: auto;
+		transform: none;
+		margin: 0 auto;
+		pointer-events: none;
+		background: #ffffff;
+	}
+
+	.result-preview-border {
+		position: sticky;
+		top: 0;
+		bottom: auto;
+		z-index: 11;
+		border-top: none;
+		border-bottom: 2px solid var(--yellow);
+		background: none;
+		height: 2px;
+	}
 }
 
 .result-container {
@@ -1124,7 +1148,12 @@ body {
 	}
 
 	.result-container {
-		padding-top: 2.5rem;
+		padding-top: 1rem;
+	}
+
+	.result-page .site-nav {
+		position: relative;
+		z-index: 12;
 	}
 
 	.drawer {

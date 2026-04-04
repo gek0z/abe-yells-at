@@ -20,7 +20,7 @@ export interface PresetConfig {
 
 function createPresetConfig(size: number): PresetConfig {
 	const padding = Math.round(size * 0.05);
-	const logoSize = Math.round(size * 0.32);
+	const logoSize = Math.round(size * 0.45);
 	return {
 		width: size,
 		height: size,

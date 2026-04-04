@@ -33,7 +33,7 @@ cd apps/web && bun run dev
 
 Visit [abeyells.at](https://abeyells.at), or run locally at [http://localhost:5173](http://localhost:5173) -- drop a logo anywhere on the page, or search thousands of brand logos via the built-in drawer powered by [svgl](https://svgl.app) and [logo.dev](https://logo.dev). Pick a size, download your sticker.
 
-The result page shows a live preview of your sticker with Abe at the bottom, and includes step-by-step instructions for adding it to WhatsApp (Android/iOS), Slack (Desktop/Mobile), and Discord (Server Settings/Emoji Picker).
+The logo is composited behind Abe so his fist goes over the logo. The result page shows a live preview with step-by-step instructions for WhatsApp (Android/iOS), Slack (Desktop/Mobile), and Discord.
 
 ### CLI
 

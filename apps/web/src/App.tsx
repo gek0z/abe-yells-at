@@ -233,6 +233,19 @@ function StickerApp() {
 			>
 				<SiteNav />
 
+				<div
+					className="result-preview-top"
+					style={{
+						maxWidth: `min(${PRESET_SIZES[preset]}px, 90vw)`,
+					}}
+				>
+					<Preview logo={logoImg} preset={preset} />
+				</div>
+				<div
+					className="result-preview-border"
+					style={{ height: `min(${PRESET_SIZES[preset]}px, 90vw)` }}
+				/>
+
 				<div className="result-container">
 					<h1 className="result-title unselectable">
 						ABE YELLS AT
@@ -271,14 +284,6 @@ function StickerApp() {
 					<button className="reset-btn" onClick={handleReset} type="button">
 						Start Over with New Logo
 					</button>
-				</div>
-
-				<div
-					className="result-abe-bg"
-					style={{ height: `min(${PRESET_SIZES[preset] + 4}px, 90vw)` }}
-				/>
-				<div className="result-abe" style={{ width: `min(${PRESET_SIZES[preset]}px, 90vw)` }}>
-					<Preview logo={logoImg} preset={preset} />
 				</div>
 			</div>
 
