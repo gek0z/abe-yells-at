@@ -32,10 +32,6 @@ jobs:
 
       - run: bun run --cwd packages/core build
 
-      - run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > packages/core/.npmrc
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: Create release PR or publish
         uses: changesets/action@v1
         with:
@@ -44,4 +40,4 @@ jobs:
           commit: "chore: version packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
