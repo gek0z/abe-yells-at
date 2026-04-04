@@ -76,7 +76,7 @@ function StickerApp() {
 			});
 			setResultBlob(blob);
 
-			const ext = format === "gif" ? "gif" : "webp";
+			const ext = format === "gif" ? "gif" : format === "webp" ? "webp" : "mp4";
 			const filename = `abe-yells-at-${PRESET_SIZES[preset]}.${ext}`;
 
 			// Desktop: standard download
