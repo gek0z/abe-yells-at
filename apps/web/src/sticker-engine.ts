@@ -173,8 +173,8 @@ async function muxAnimatedWebP(
 		anmfHeader[12] = dur[0];
 		anmfHeader[13] = dur[1];
 		anmfHeader[14] = dur[2];
-		// flags: blending=0, disposal=0
-		anmfHeader[15] = 0;
+		// flags: bit 0 = dispose to bg (1), bit 1 = no blending (0)
+		anmfHeader[15] = 1;
 
 		const anmfPayloadSize = 16 + rawFrame.byteLength;
 		const anmfPadding = anmfPayloadSize % 2; // pad to even
