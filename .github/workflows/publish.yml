@@ -1,16 +1,18 @@
-name: Publish to npm
+name: Release
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [main]
+    paths:
+      - "packages/core/**"
+      - ".changeset/**"
 
 jobs:
-  publish:
+  release:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      id-token: write
-    environment: npm
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
 
@@ -27,5 +29,12 @@ jobs:
 
       - run: bun run --cwd packages/core build
 
-      - run: npm publish --access public --provenance
-        working-directory: packages/core
+      - name: Create release PR or publish
+        uses: changesets/action@v1
+        with:
+          publish: npx changeset publish
+          title: "chore: version packages"
+          commit: "chore: version packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
