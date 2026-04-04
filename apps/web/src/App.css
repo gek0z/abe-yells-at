@@ -1116,6 +1116,10 @@ body {
 		font-size: 2rem;
 	}
 
+	.result-container {
+		padding-top: 1rem;
+	}
+
 	.drawer {
 		height: 85dvh;
 		max-height: 85dvh;
