@@ -1,6 +1,6 @@
 {
   "name": "abe-yells-at",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Create animated stickers of Grandpa Abe Simpson yelling at your logo",
   "type": "module",
   "main": "./dist/index.js",
