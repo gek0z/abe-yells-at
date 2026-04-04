@@ -112,22 +112,21 @@ export function LogoDrawer({
 			setLoading(true);
 			setSearched(true);
 			try {
-				const [svglResults, logoDevResult] = await Promise.all([
+				const [svglResults, logoDevResult] = await Promise.allSettled([
 					searchSvgl(query),
 					searchLogoDev(query),
 				]);
 
-				// logo.dev result goes first, then svgl results
 				const combined: LogoResult[] = [];
-				if (logoDevResult) {
-					combined.push(logoDevResult);
+				if (logoDevResult.status === "fulfilled" && logoDevResult.value) {
+					combined.push(logoDevResult.value);
 				}
-				for (const r of svglResults) {
-					combined.push(r);
+				if (svglResults.status === "fulfilled") {
+					for (const r of svglResults.value) {
+						combined.push(r);
+					}
 				}
 				setResults(combined);
-			} catch {
-				setResults([]);
 			} finally {
 				setLoading(false);
 			}
