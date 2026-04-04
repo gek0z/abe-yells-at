@@ -1,2 +1,2 @@
-/assets/*  /assets/:splat  200
-/*  /index.html  200
+/docs  /index.html  200
+/privacy  /index.html  200
