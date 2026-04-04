@@ -41,8 +41,15 @@ function compositeFrame(
 	frame: HTMLImageElement,
 	logo: HTMLImageElement | ImageBitmap,
 	size: number,
+	bg?: string,
 ) {
 	ctx.clearRect(0, 0, size, size);
+
+	// Fill solid background if requested (video needs this, GIF/WebP use transparency)
+	if (bg) {
+		ctx.fillStyle = bg;
+		ctx.fillRect(0, 0, size, size);
+	}
 
 	// Draw background frame, scaled to fill
 	ctx.drawImage(frame, 0, 0, size, size);
@@ -428,7 +435,7 @@ async function encodeVideo(
 	});
 
 	// Draw the first frame before starting to avoid blank start
-	compositeFrame(ctx, frames[0], logo, size);
+	compositeFrame(ctx, frames[0], logo, size, "#ffffff");
 	recorder.start(100); // collect data every 100ms
 
 	// Loop the animation 3 times
@@ -438,7 +445,7 @@ async function encodeVideo(
 
 	for (let loop = 0; loop < loops; loop++) {
 		for (let i = 0; i < frames.length; i++) {
-			compositeFrame(ctx, frames[i], logo, size);
+			compositeFrame(ctx, frames[i], logo, size, "#ffffff");
 			await new Promise((r) => setTimeout(r, FRAME_DELAY_MS));
 
 			frameCount++;
