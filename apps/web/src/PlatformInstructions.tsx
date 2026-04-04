@@ -69,35 +69,20 @@ function WhatsAppIOS() {
 	return (
 		<ol>
 			<li>
+				Tap <strong>Save / Share</strong> above and select <strong>WhatsApp</strong> from the share
+				sheet to send the sticker directly.
+			</li>
+			<li>
+				Alternatively, tap <strong>Save to Files</strong> in the share sheet, then in WhatsApp:
+			</li>
+			<li>
 				Tap <WaIcon name="iphone-stickers-sticker-icon" alt="Stickers" />.
 			</li>
 			<li>
 				Tap <WaIcon name="iphone-create-sticker" alt="Create sticker" /> &gt;{" "}
 				<strong>Use a photo</strong>.
 			</li>
-			<li>Select a photo from your device's gallery.</li>
-			<li>
-				On the preview screen, choose from one of the preset options, then:
-				<ul>
-					<li>
-						Tap <WaIcon name="android-add-sticker-emoji" alt="Add sticker emoji" noInvert /> to add
-						a sticker or emoji.
-					</li>
-					<li>
-						Tap <WaIcon name="android-add-text-to-sticker" alt="Add text" noInvert /> to add text.
-					</li>
-					<li>
-						Tap <WaIcon name="android-draw-on-sticker" alt="Draw" noInvert /> to draw on your
-						sticker.
-					</li>
-					<li>
-						Tap <WaIcon name="iphone-undo" alt="Undo" noInvert /> to undo any changes.
-					</li>
-					<li>
-						Tap <WaIcon name="iphone-dismiss" alt="Dismiss" noInvert /> to cancel or start over.
-					</li>
-				</ul>
-			</li>
+			<li>Browse to your saved sticker file and select it.</li>
 			<li>
 				Tap <WaIcon name="iphone-send" alt="Send" noInvert /> to send your sticker.
 			</li>

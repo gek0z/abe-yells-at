@@ -19,7 +19,7 @@ function StickerApp() {
 	const [logoImg, setLogoImg] = useState<HTMLImageElement | null>(null);
 	const [logoName, setLogoName] = useState("");
 	const [preset, setPreset] = useState<Preset>("large");
-	const [format, setFormat] = useState<Format>("gif");
+	const [format, setFormat] = useState<Format>("webp");
 
 	const [generating, setGenerating] = useState(false);
 	const [progress, setProgress] = useState(0);
@@ -76,10 +76,14 @@ function StickerApp() {
 			});
 			setResultBlob(blob);
 
+			const ext = format === "gif" ? "gif" : "webp";
+			const filename = `abe-yells-at-${PRESET_SIZES[preset]}.${ext}`;
+
+			// Desktop: standard download
 			const url = URL.createObjectURL(blob);
 			const a = document.createElement("a");
 			a.href = url;
-			a.download = `abe-yells-at-sticker-${PRESET_SIZES[preset]}x${PRESET_SIZES[preset]}.${format}`;
+			a.download = filename;
 			document.body.appendChild(a);
 			a.click();
 			a.remove();
