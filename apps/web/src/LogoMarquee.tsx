@@ -1,39 +1,55 @@
-import { useCallback, useEffect, useState } from "react";
-import { getLogoUrl } from "@/LogoDrawer";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
-interface SvglLogo {
-	id: number;
+interface ShowcaseLogo {
 	title: string;
-	category: string | string[];
-	route: string | { light: string; dark: string };
+	url: string;
+}
+
+const SHOWCASE_LOGOS: ShowcaseLogo[] = [
+	{ title: "Apple", url: "https://svgl.app/library/apple.svg" },
+	{ title: "Google", url: "https://svgl.app/library/google.svg" },
+	{ title: "Microsoft", url: "https://svgl.app/library/microsoft.svg" },
+	{ title: "Amazon", url: "https://svgl.app/library/aws.svg" },
+	{ title: "Meta", url: "https://svgl.app/library/meta.svg" },
+	{ title: "Netflix", url: "https://svgl.app/library/netflix.svg" },
+	{ title: "Spotify", url: "https://svgl.app/library/spotify.svg" },
+	{ title: "Discord", url: "https://svgl.app/library/discord.svg" },
+	{ title: "Slack", url: "https://svgl.app/library/slack.svg" },
+	{ title: "GitHub", url: "https://svgl.app/library/github-light.svg" },
+	{ title: "Twitter", url: "https://svgl.app/library/x.svg" },
+	{ title: "Stripe", url: "https://svgl.app/library/stripe.svg" },
+	{ title: "Figma", url: "https://svgl.app/library/figma.svg" },
+	{ title: "Notion", url: "https://svgl.app/library/notion.svg" },
+	{ title: "Vercel", url: "https://svgl.app/library/vercel-light.svg" },
+	{ title: "React", url: "https://svgl.app/library/react_dark.svg" },
+	{ title: "OpenAI", url: "https://svgl.app/library/openai.svg" },
+	{ title: "Cloudflare", url: "https://svgl.app/library/cloudflare.svg" },
+	{ title: "PayPal", url: "https://svgl.app/library/paypal.svg" },
+	{ title: "Twitch", url: "https://svgl.app/library/twitch.svg" },
+	{ title: "Reddit", url: "https://svgl.app/library/reddit.svg" },
+	{ title: "Shopify", url: "https://svgl.app/library/shopify.svg" },
+	{ title: "Docker", url: "https://svgl.app/library/docker.svg" },
+	{ title: "Firebase", url: "https://svgl.app/library/firebase.svg" },
+	{ title: "Linear", url: "https://svgl.app/library/linear-light.svg" },
+];
+
+function shuffle<T>(arr: T[]): T[] {
+	const a = [...arr];
+	for (let i = a.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[a[i], a[j]] = [a[j], a[i]];
+	}
+	return a;
 }
 
 export function LogoShowcase({ onLogoChange }: { onLogoChange?: (name: string) => void }) {
-	const [logos, setLogos] = useState<SvglLogo[]>([]);
+	const logos = useMemo(() => shuffle(SHOWCASE_LOGOS), []);
 	const [currentIndex, setCurrentIndex] = useState(0);
-	const [visible, setVisible] = useState(false);
+	const [visible, setVisible] = useState(true);
 
 	useEffect(() => {
-		let cancelled = false;
-		async function load() {
-			try {
-				const res = await fetch("https://api.svgl.app?limit=30");
-				if (!res.ok) return;
-				const data: SvglLogo[] = await res.json();
-				if (!cancelled && data.length > 0) {
-					setLogos(data);
-					setVisible(true);
-					onLogoChange?.(data[0].title);
-				}
-			} catch {
-				// decorative -- fail silently
-			}
-		}
-		load();
-		return () => {
-			cancelled = true;
-		};
-	}, [onLogoChange]);
+		onLogoChange?.(logos[0].title);
+	}, [logos, onLogoChange]);
 
 	const advance = useCallback(() => {
 		setVisible(false);
@@ -48,12 +64,9 @@ export function LogoShowcase({ onLogoChange }: { onLogoChange?: (name: string) =
 	}, [logos, onLogoChange]);
 
 	useEffect(() => {
-		if (logos.length === 0) return;
 		const timer = setInterval(advance, 2500);
 		return () => clearInterval(timer);
-	}, [logos, advance]);
-
-	if (logos.length === 0) return null;
+	}, [advance]);
 
 	const logo = logos[currentIndex];
 	const nextLogo = logos[(currentIndex + 1) % logos.length];
@@ -61,12 +74,11 @@ export function LogoShowcase({ onLogoChange }: { onLogoChange?: (name: string) =
 	return (
 		<div className="logo-showcase" aria-live="polite" aria-atomic="true">
 			<div className={`logo-showcase-item${visible ? " visible" : ""}`}>
-				<img src={getLogoUrl(logo)} alt={logo.title} />
+				<img src={logo.url} alt={logo.title} />
 				<span className="sr-only">Abe yells at {logo.title}</span>
 			</div>
-			{/* Prefetch next logo */}
 			<img
-				src={getLogoUrl(nextLogo)}
+				src={nextLogo.url}
 				alt=""
 				aria-hidden="true"
 				style={{ position: "absolute", width: 0, height: 0, overflow: "hidden", opacity: 0 }}
