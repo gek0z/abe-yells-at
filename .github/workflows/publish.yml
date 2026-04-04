@@ -13,6 +13,8 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      id-token: write
+    environment: npm
     steps:
       - uses: actions/checkout@v4
 
@@ -32,9 +34,9 @@ jobs:
       - name: Create release PR or publish
         uses: changesets/action@v1
         with:
-          publish: npx changeset publish
+          publish: npm publish --provenance --access public
           title: "chore: version packages"
           commit: "chore: version packages"
+          cwd: packages/core
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
