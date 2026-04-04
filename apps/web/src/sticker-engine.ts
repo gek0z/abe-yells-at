@@ -402,15 +402,21 @@ async function encodeVideo(
 	size: number,
 	onProgress?: (percent: number) => void,
 ): Promise<Blob> {
-	// Determine supported mime type
-	const mimeType = MediaRecorder.isTypeSupported("video/mp4")
-		? "video/mp4"
-		: MediaRecorder.isTypeSupported("video/webm;codecs=vp9")
-			? "video/webm;codecs=vp9"
-			: "video/webm";
+	const fps = Math.round(1000 / FRAME_DELAY_MS);
 
-	const stream = canvas.captureStream(0);
-	const recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 2_000_000 });
+	// Use a live framerate stream (iOS needs this instead of manual requestFrame)
+	const stream = canvas.captureStream(fps);
+
+	// Pick best available codec
+	const mimeType = MediaRecorder.isTypeSupported("video/mp4;codecs=avc1")
+		? "video/mp4;codecs=avc1"
+		: MediaRecorder.isTypeSupported("video/mp4")
+			? "video/mp4"
+			: MediaRecorder.isTypeSupported("video/webm;codecs=vp9")
+				? "video/webm;codecs=vp9"
+				: "video/webm";
+
+	const recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 4_000_000 });
 	const chunks: Blob[] = [];
 
 	recorder.ondataavailable = (e) => {
@@ -421,9 +427,11 @@ async function encodeVideo(
 		recorder.onstop = () => resolve();
 	});
 
-	recorder.start();
+	// Draw the first frame before starting to avoid blank start
+	compositeFrame(ctx, frames[0], logo, size);
+	recorder.start(100); // collect data every 100ms
 
-	// Loop the animation 3 times for a good-length video
+	// Loop the animation 3 times
 	const loops = 3;
 	const totalFrames = frames.length * loops;
 	let frameCount = 0;
@@ -431,25 +439,15 @@ async function encodeVideo(
 	for (let loop = 0; loop < loops; loop++) {
 		for (let i = 0; i < frames.length; i++) {
 			compositeFrame(ctx, frames[i], logo, size);
-
-			// Request a frame capture
-			const track = stream.getVideoTracks()[0];
-			if (track && "requestFrame" in track) {
-				(track as unknown as { requestFrame: () => void }).requestFrame();
-			}
-
-			// Wait for frame duration
 			await new Promise((r) => setTimeout(r, FRAME_DELAY_MS));
 
 			frameCount++;
-			const progress = 20 + Math.round((frameCount / totalFrames) * 75);
-			onProgress?.(progress);
+			onProgress?.(20 + Math.round((frameCount / totalFrames) * 75));
 		}
 	}
 
 	recorder.stop();
 	await stopped;
-
 	onProgress?.(100);
 
 	const ext = mimeType.includes("mp4") ? "mp4" : "webm";
