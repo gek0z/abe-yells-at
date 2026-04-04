@@ -16,7 +16,6 @@ function formatBytes(bytes: number): string {
 }
 
 function StickerApp() {
-	const [logoFile, setLogoFile] = useState<File | null>(null);
 	const [logoImg, setLogoImg] = useState<HTMLImageElement | null>(null);
 	const [logoName, setLogoName] = useState("");
 	const [preset, setPreset] = useState<Preset>("large");
@@ -37,7 +36,6 @@ function StickerApp() {
 		const img = new Image();
 		img.onload = () => {
 			setLogoImg(img);
-			setLogoFile(file);
 			setLogoName(file.name.replace(/\.[^.]+$/, ""));
 			setResultBlob(null);
 		};
@@ -46,13 +44,11 @@ function StickerApp() {
 
 	const handlePickedLogo = useCallback((name: string, img: HTMLImageElement) => {
 		setLogoImg(img);
-		setLogoFile(null);
 		setLogoName(name);
 		setResultBlob(null);
 	}, []);
 
 	const handleReset = useCallback(() => {
-		setLogoFile(null);
 		setLogoImg(null);
 		setLogoName("");
 		setResultBlob(null);
@@ -228,7 +224,7 @@ function StickerApp() {
 	// Result view
 	return (
 		<>
-			<div className="result-page">
+			<div className="result-page" style={{ paddingBottom: `${PRESET_SIZES[preset] + 4}px` }}>
 				<SiteNav />
 
 				<div className="result-container">
@@ -262,13 +258,6 @@ function StickerApp() {
 								<div className="progress-bar" style={{ width: `${progress}%` }} />
 							</div>
 						)}
-
-						{resultBlob && !generating && (
-							<p className="file-size">
-								File size: {formatBytes(resultBlob.size)}
-								{logoFile ? ` - ${logoFile.name}` : ""}
-							</p>
-						)}
 					</div>
 
 					<PlatformInstructions format={format} />
@@ -278,8 +267,11 @@ function StickerApp() {
 					</button>
 				</div>
 
-				<div className="result-abe-bg" />
-				<div className="result-abe">
+				<div className="result-abe-bg" style={{ height: `${PRESET_SIZES[preset] + 4}px` }} />
+				<div
+					className="result-abe"
+					style={{ width: `${PRESET_SIZES[preset]}px`, maxWidth: "90vw" }}
+				>
 					<Preview logo={logoImg} preset={preset} />
 				</div>
 			</div>

@@ -356,7 +356,11 @@ async function encodeWebP(
 
 		// Encode frame to WebP via WASM (works on all browsers including iOS)
 		const imageData = ctx.getImageData(0, 0, size, size);
-		const webpBuffer = await encodeWebPFrame(imageData, { quality: 85 });
+		const webpBuffer = await encodeWebPFrame(imageData, {
+			lossless: 1,
+			alpha_compression: 1,
+			alpha_quality: 100,
+		});
 		frameBuffers.push(webpBuffer);
 
 		const progress = 20 + Math.round((i / frames.length) * 65);

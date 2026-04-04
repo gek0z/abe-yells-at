@@ -640,7 +640,7 @@ body {
 	background-attachment: fixed;
 	animation: fadeIn 0.4s ease;
 	position: relative;
-	padding-bottom: calc(50dvh + 4px);
+	padding-bottom: 520px;
 }
 
 .result-abe-bg {
@@ -648,7 +648,7 @@ body {
 	bottom: 0;
 	left: 0;
 	width: 100vw;
-	height: calc(50dvh + 4px);
+	transition: height 0.3s ease;
 	background: linear-gradient(
 		to bottom,
 		transparent 0px,
@@ -665,9 +665,9 @@ body {
 	bottom: 0;
 	left: 50%;
 	transform: translateX(-50%);
-	width: 50dvh;
 	z-index: 10;
 	pointer-events: none;
+	transition: width 0.3s ease;
 }
 
 .result-abe .preview-card {
@@ -1116,18 +1116,6 @@ body {
 		font-size: 2rem;
 	}
 
-	.result-abe {
-		width: 35dvh;
-	}
-
-	.result-abe-bg {
-		height: calc(35dvh + 4px);
-	}
-
-	.result-page {
-		padding-bottom: calc(35dvh + 4px);
-	}
-
 	.drawer {
 		height: 85dvh;
 		max-height: 85dvh;
@@ -1154,18 +1142,6 @@ body {
 
 	.abe-frame {
 		max-height: 30dvh;
-	}
-
-	.result-abe {
-		width: 30dvh;
-	}
-
-	.result-abe-bg {
-		height: calc(30dvh + 4px);
-	}
-
-	.result-page {
-		padding-bottom: calc(30dvh + 4px);
 	}
 }
 
