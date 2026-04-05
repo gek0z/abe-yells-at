@@ -16,7 +16,7 @@
       "name": "@abe-yells/web",
       "dependencies": {
         "@jsquash/webp": "^1.5.0",
-        "gifenc": "^1.0.3",
+        "abe-yells-at": "workspace:*",
         "react": "^19",
         "react-dom": "^19",
       },
@@ -40,6 +40,9 @@
       "devDependencies": {
         "@types/node": "^22",
         "bun-types": "^1.3.11",
+      },
+      "optionalDependencies": {
+        "@jsquash/webp": "^1.5.0",
       },
     },
   },

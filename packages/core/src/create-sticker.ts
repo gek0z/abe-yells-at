@@ -1,12 +1,7 @@
 import { encodeGif, type GifFrame } from "@/gif-encoder";
 import { type PresetConfig, presets } from "@/presets";
-import type { Format, Preset, StickerOptions, StickerResult } from "@/types";
-import {
-	encodeAnimatedWebP,
-	encodeWebPFrameBrowser,
-	encodeWebPFrameNode,
-	type WebPFrame,
-} from "@/webp-encoder";
+import type { Format, OnProgress, Preset, StickerOptions, StickerResult } from "@/types";
+import { encodeAnimatedWebP, type WebPFrame } from "@/webp-encoder";
 
 const FRAME_COUNT = 9;
 const FRAME_DELAY_MS = 50; // 20 fps
@@ -29,6 +24,7 @@ async function createStickerNode(options: StickerOptions): Promise<StickerResult
 	const format: Format = options.format ?? "gif";
 	const config: PresetConfig = presets[preset];
 	const { width, height } = config;
+	const onProgress = options.onProgress;
 
 	// Resolve frames directory (relative to this file in the package)
 	const framesDir = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..", "frames");
@@ -57,6 +53,8 @@ async function createStickerNode(options: StickerOptions): Promise<StickerResult
 		logoImage = await loadImage(Buffer.from(ab));
 	}
 
+	onProgress?.(15);
+
 	// Calculate logo dimensions (fit within maxWidth/maxHeight, maintain aspect ratio)
 	const logoAspect = logoImage.width / logoImage.height;
 	let logoW = config.logo.maxWidth;
@@ -75,24 +73,16 @@ async function createStickerNode(options: StickerOptions): Promise<StickerResult
 		// ── GIF path ──────────────────────────────────────────────────
 		const gifFrames: GifFrame[] = [];
 
-		for (const frameImg of frameImages) {
+		for (let i = 0; i < frameImages.length; i++) {
+			const frameImg = frameImages[i];
 			const canvas = createCanvas(width, height);
 			const ctx = canvas.getContext("2d");
 
-			// Draw the Abe frame scaled to canvas size
+			// Draw logo first (behind Abe)
+			ctx.drawImage(logoImage, logoX, logoY, logoW, logoH);
+
+			// Draw the Abe frame on top
 			ctx.drawImage(frameImg, 0, 0, width, height);
-
-			// Draw a subtle white outline/shadow behind the logo
-			ctx.save();
-			ctx.shadowColor = "rgba(255, 255, 255, 0.85)";
-			ctx.shadowBlur = Math.max(2, Math.round(width * 0.008));
-			ctx.shadowOffsetX = 0;
-			ctx.shadowOffsetY = 0;
-			ctx.drawImage(logoImage, logoX, logoY, logoW, logoH);
-			ctx.restore();
-
-			// Draw logo on top (crisp, no shadow)
-			ctx.drawImage(logoImage, logoX, logoY, logoW, logoH);
 
 			const imageData = ctx.getImageData(0, 0, width, height);
 			gifFrames.push({
@@ -104,40 +94,39 @@ async function createStickerNode(options: StickerOptions): Promise<StickerResult
 				width,
 				height,
 			});
+
+			onProgress?.(20 + Math.round((i / frameImages.length) * 75));
 		}
 
 		const data = encodeGif(gifFrames, FRAME_DELAY_MS);
+		onProgress?.(100);
 		return { data, format: "gif", width, height, preset };
-	} else {
-		// ── WebP path ─────────────────────────────────────────────────
-		const webpFrames: WebPFrame[] = [];
-
-		for (const frameImg of frameImages) {
-			const canvas = createCanvas(width, height);
-			const ctx = canvas.getContext("2d");
-
-			ctx.drawImage(frameImg, 0, 0, width, height);
-
-			// Shadow for logo
-			ctx.save();
-			ctx.shadowColor = "rgba(255, 255, 255, 0.85)";
-			ctx.shadowBlur = Math.max(2, Math.round(width * 0.008));
-			ctx.shadowOffsetX = 0;
-			ctx.shadowOffsetY = 0;
-			ctx.drawImage(logoImage, logoX, logoY, logoW, logoH);
-			ctx.restore();
-
-			ctx.drawImage(logoImage, logoX, logoY, logoW, logoH);
-
-			const frameData = await encodeWebPFrameNode(
-				canvas as unknown as Parameters<typeof encodeWebPFrameNode>[0],
-			);
-			webpFrames.push({ data: frameData, width, height });
-		}
-
-		const data = encodeAnimatedWebP(webpFrames, FRAME_DELAY_MS);
-		return { data, format: "webp", width, height, preset };
 	}
+
+	// ── WebP path ─────────────────────────────────────────────────
+	const webpFrames: WebPFrame[] = [];
+
+	for (let i = 0; i < frameImages.length; i++) {
+		const frameImg = frameImages[i];
+		const canvas = createCanvas(width, height);
+		const ctx = canvas.getContext("2d");
+
+		// Draw logo first (behind Abe)
+		ctx.drawImage(logoImage, logoX, logoY, logoW, logoH);
+
+		// Draw the Abe frame on top
+		ctx.drawImage(frameImg, 0, 0, width, height);
+
+		const buf = await canvas.encode("webp", 80);
+		const frameData = new Uint8Array(buf.buffer, buf.byteOffset, buf.byteLength);
+		webpFrames.push({ data: frameData, width, height });
+
+		onProgress?.(20 + Math.round((i / frameImages.length) * 70));
+	}
+
+	const data = encodeAnimatedWebP(webpFrames, FRAME_DELAY_MS);
+	onProgress?.(100);
+	return { data, format: "webp", width, height, preset };
 }
 
 // ── Browser implementation ───────────────────────────────────────────
@@ -151,6 +140,8 @@ export interface BrowserStickerOptions {
 	preset?: Preset;
 	/** Output format (default: 'gif'). */
 	format?: Format;
+	/** Progress callback (0-100). */
+	onProgress?: OnProgress;
 }
 
 /**
@@ -173,7 +164,55 @@ export async function loadFrameImages(basePath: string): Promise<HTMLImageElemen
 }
 
 /**
+ * Draw one composited frame onto a canvas context.
+ * Draws logo first, then Abe frame on top.
+ */
+export function compositeFrame(
+	ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
+	frame: HTMLImageElement | ImageBitmap,
+	logo: HTMLImageElement | ImageBitmap,
+	size: number,
+	bg?: string,
+): void {
+	const config = presets.large;
+	// Find the right preset by size
+	let presetConfig: PresetConfig = config;
+	for (const p of Object.values(presets)) {
+		if (p.width === size) {
+			presetConfig = p;
+			break;
+		}
+	}
+
+	ctx.clearRect(0, 0, size, size);
+
+	// Fill solid background if requested
+	if (bg) {
+		ctx.fillStyle = bg;
+		ctx.fillRect(0, 0, size, size);
+	}
+
+	// Calculate logo dimensions
+	const logoAspect = logo.width / logo.height;
+	let logoW = presetConfig.logo.maxWidth;
+	let logoH = logoW / logoAspect;
+	if (logoH > presetConfig.logo.maxHeight) {
+		logoH = presetConfig.logo.maxHeight;
+		logoW = logoH * logoAspect;
+	}
+	logoW = Math.round(logoW);
+	logoH = Math.round(logoH);
+
+	// Draw logo first (behind Abe)
+	ctx.drawImage(logo, presetConfig.logo.x, presetConfig.logo.y, logoW, logoH);
+
+	// Draw Abe frame on top
+	ctx.drawImage(frame, 0, 0, size, size);
+}
+
+/**
  * Create a sticker in the browser from pre-loaded images.
+ * Uses @jsquash/webp for WebP encoding.
  */
 export async function createStickerFromImages(
 	options: BrowserStickerOptions,
@@ -182,26 +221,13 @@ export async function createStickerFromImages(
 	const format: Format = options.format ?? "gif";
 	const config: PresetConfig = presets[preset];
 	const { width, height } = config;
+	const onProgress = options.onProgress;
 
 	if (options.frames.length !== FRAME_COUNT) {
 		throw new Error(`Expected ${FRAME_COUNT} frames, got ${options.frames.length}`);
 	}
 
 	const logo = options.logo;
-
-	// Calculate logo dimensions
-	const logoAspect = logo.width / logo.height;
-	let logoW = config.logo.maxWidth;
-	let logoH = logoW / logoAspect;
-	if (logoH > config.logo.maxHeight) {
-		logoH = config.logo.maxHeight;
-		logoW = logoH * logoAspect;
-	}
-	logoW = Math.round(logoW);
-	logoH = Math.round(logoH);
-
-	const logoX = config.logo.x;
-	const logoY = config.logo.y;
 
 	const canvas = new OffscreenCanvas(width, height);
 	const ctx = canvas.getContext("2d");
@@ -210,19 +236,8 @@ export async function createStickerFromImages(
 	if (format === "gif") {
 		const gifFrames: GifFrame[] = [];
 
-		for (const frameImg of options.frames) {
-			ctx.clearRect(0, 0, width, height);
-			ctx.drawImage(frameImg, 0, 0, width, height);
-
-			ctx.save();
-			ctx.shadowColor = "rgba(255, 255, 255, 0.85)";
-			ctx.shadowBlur = Math.max(2, Math.round(width * 0.008));
-			ctx.shadowOffsetX = 0;
-			ctx.shadowOffsetY = 0;
-			ctx.drawImage(logo, logoX, logoY, logoW, logoH);
-			ctx.restore();
-
-			ctx.drawImage(logo, logoX, logoY, logoW, logoH);
+		for (let i = 0; i < options.frames.length; i++) {
+			compositeFrame(ctx as unknown as CanvasRenderingContext2D, options.frames[i], logo, width);
 
 			const imageData = ctx.getImageData(0, 0, width, height);
 			gifFrames.push({
@@ -230,34 +245,37 @@ export async function createStickerFromImages(
 				width,
 				height,
 			});
+
+			onProgress?.(20 + Math.round((i / options.frames.length) * 75));
 		}
 
 		const data = encodeGif(gifFrames, FRAME_DELAY_MS);
+		onProgress?.(100);
 		return { data, format: "gif", width, height, preset };
-	} else {
-		const webpFrames: WebPFrame[] = [];
-
-		for (const frameImg of options.frames) {
-			ctx.clearRect(0, 0, width, height);
-			ctx.drawImage(frameImg, 0, 0, width, height);
-
-			ctx.save();
-			ctx.shadowColor = "rgba(255, 255, 255, 0.85)";
-			ctx.shadowBlur = Math.max(2, Math.round(width * 0.008));
-			ctx.shadowOffsetX = 0;
-			ctx.shadowOffsetY = 0;
-			ctx.drawImage(logo, logoX, logoY, logoW, logoH);
-			ctx.restore();
-
-			ctx.drawImage(logo, logoX, logoY, logoW, logoH);
-
-			const frameData = await encodeWebPFrameBrowser(canvas);
-			webpFrames.push({ data: frameData, width, height });
-		}
-
-		const data = encodeAnimatedWebP(webpFrames, FRAME_DELAY_MS);
-		return { data, format: "webp", width, height, preset };
 	}
+
+	// ── WebP path (using @jsquash/webp) ──────────────────────────
+	const { encode: encodeWebPFrame } = await import("@jsquash/webp");
+	const webpFrames: WebPFrame[] = [];
+
+	for (let i = 0; i < options.frames.length; i++) {
+		compositeFrame(ctx as unknown as CanvasRenderingContext2D, options.frames[i], logo, width);
+
+		const imageData = ctx.getImageData(0, 0, width, height);
+		const webpBuffer = await encodeWebPFrame(imageData, {
+			lossless: 1,
+			alpha_compression: 1,
+			alpha_quality: 100,
+		});
+		webpFrames.push({ data: new Uint8Array(webpBuffer), width, height });
+
+		onProgress?.(20 + Math.round((i / options.frames.length) * 65));
+	}
+
+	onProgress?.(90);
+	const data = encodeAnimatedWebP(webpFrames, FRAME_DELAY_MS);
+	onProgress?.(100);
+	return { data, format: "webp", width, height, preset };
 }
 
 // ── Main entry (auto-detects environment) ────────────────────────────

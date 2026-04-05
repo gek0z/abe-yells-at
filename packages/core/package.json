@@ -11,6 +11,10 @@
   },
   "exports": {
     ".": {
+      "browser": {
+        "types": "./dist/browser.d.ts",
+        "import": "./dist/browser.js"
+      },
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
@@ -21,7 +25,7 @@
     "frames/"
   ],
   "scripts": {
-    "build": "bun build src/index.ts --outdir dist --format esm --target node --external @napi-rs/canvas && bun build src/index.ts --outfile dist/index.cjs --format cjs --target node --external @napi-rs/canvas && bun build src/cli.ts --outfile dist/cli.js --format esm --target node --external @napi-rs/canvas && tsgo --emitDeclarationOnly",
+    "build": "bun build src/index.ts --outdir dist --format esm --target node --external @napi-rs/canvas && bun build src/index.ts --outfile dist/index.cjs --format cjs --target node --external @napi-rs/canvas && bun build src/cli.ts --outfile dist/cli.js --format esm --target node --external @napi-rs/canvas && bun build src/browser.ts --outfile dist/browser.js --format esm --target browser --external @jsquash/webp --external @napi-rs/canvas && tsgo --emitDeclarationOnly",
     "typecheck": "tsgo --noEmit",
     "test": "bun test",
     "lint": "biome check src/",
@@ -30,6 +34,9 @@
   "dependencies": {
     "gifenc": "^1.0.3",
     "@napi-rs/canvas": "^0.1.65"
+  },
+  "optionalDependencies": {
+    "@jsquash/webp": "^1.5.0"
   },
   "devDependencies": {
     "@types/node": "^22",

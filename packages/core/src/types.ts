@@ -1,6 +1,8 @@
 export type Preset = "large" | "medium" | "small";
 export type Format = "gif" | "webp";
 
+export type OnProgress = (percent: number) => void;
+
 export interface StickerOptions {
 	/** Logo image: file path (Node), URL string, or raw image data */
 	logo: string | Buffer | Blob | ArrayBuffer | Uint8Array;
@@ -8,6 +10,8 @@ export interface StickerOptions {
 	preset?: Preset;
 	/** Output format (default: 'gif') */
 	format?: Format;
+	/** Progress callback (0-100) */
+	onProgress?: OnProgress;
 }
 
 export interface StickerResult {
