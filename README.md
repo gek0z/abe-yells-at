@@ -46,7 +46,7 @@ Options:
 ```
 --preset, -p   large | medium | small        (default: large)
 --format, -f   gif | webp | all             (default: all)
---output, -o   output directory             (default: .)
+--output, -o   output directory             (default: same as input)
 ```
 
 ### Library
@@ -133,7 +133,10 @@ abe-yells/
 │   │   ├── Preview.tsx     # animated canvas preview
 │   │   ├── PlatformInstructions.tsx  # WhatsApp/Slack/Discord guides
 │   │   ├── SiteNav.tsx     # shared nav (GitHub, npm, Docs, Privacy)
+│   │   ├── CookieBar.tsx   # cookie consent banner (Consent Mode v2)
 │   │   ├── DocsPage.tsx    # /docs page with usage guides + credits
+│   │   ├── NotFoundPage.tsx # 404 page
+│   │   ├── PrivacyPage.tsx # /privacy page
 │   │   ├── PresetSelector.tsx
 │   │   ├── FormatSelector.tsx
 │   │   └── sticker-engine.ts  # thin wrapper around abe-yells-at core
@@ -181,6 +184,8 @@ Three GitHub Actions workflows handle everything automatically:
 | `CLOUDFLARE_API_TOKEN` | GitHub Actions |
 | `CLOUDFLARE_ACCOUNT_ID` | GitHub Actions |
 | `VITE_LOGO_DEV_TOKEN` | GitHub Actions + `.env` |
+| `VITE_GTM_ID` | GitHub Actions + `.env` |
+| `CLOUDFLARE_ZONE_ID` | GitHub Actions |
 | `NPM_TOKEN` | GitHub Actions (npm Automation token) |
 
 ## Author

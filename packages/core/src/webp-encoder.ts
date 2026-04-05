@@ -38,20 +38,55 @@ function asciiBytes(s: string): Uint8Array {
 	return a;
 }
 
+function readUint32LE(buf: Uint8Array, offset: number): number {
+	return (
+		buf[offset] | (buf[offset + 1] << 8) | (buf[offset + 2] << 16) | ((buf[offset + 3] << 24) >>> 0)
+	);
+}
+
 /**
- * Strip the outer RIFF/WEBP wrapper from a single-image WebP so we get just
- * the inner chunk (VP8 or VP8L).  We need the raw bitstream for ANMF payloads.
+ * Strip the RIFF/WEBP wrapper and extract only the frame-data chunks needed
+ * for ANMF payloads: ALPH (optional) + VP8 or VP8L.
+ *
+ * Extended-format chunks like VP8X and ICCP must be removed — they are only
+ * valid at the top level of a WebP file, not inside an ANMF frame.
  */
 function stripRiffWrapper(webp: Uint8Array): Uint8Array {
-	// A valid single-image WebP starts with: RIFF <4 bytes> WEBP <chunk>
 	const riff = String.fromCharCode(webp[0], webp[1], webp[2], webp[3]);
 	const magic = String.fromCharCode(webp[8], webp[9], webp[10], webp[11]);
-	if (riff === "RIFF" && magic === "WEBP") {
-		// return everything after the 12-byte RIFF+WEBP header
+	if (riff !== "RIFF" || magic !== "WEBP") {
+		return webp; // already raw chunks
+	}
+
+	// Walk chunks after the 12-byte RIFF/WEBP header, keep only ALPH + VP8/VP8L
+	const kept: Uint8Array[] = [];
+	let pos = 12;
+
+	while (pos + 8 <= webp.length) {
+		const fourcc = String.fromCharCode(webp[pos], webp[pos + 1], webp[pos + 2], webp[pos + 3]);
+		const dataSize = readUint32LE(webp, pos + 4);
+		const paddedSize = dataSize + (dataSize % 2); // RIFF chunks are word-aligned
+
+		if (fourcc === "VP8 " || fourcc === "VP8L" || fourcc === "ALPH") {
+			kept.push(webp.subarray(pos, pos + 8 + paddedSize));
+		}
+
+		pos += 8 + paddedSize;
+	}
+
+	if (kept.length === 0) {
+		// Fallback: return everything after the RIFF header
 		return webp.subarray(12);
 	}
-	// already a raw chunk
-	return webp;
+
+	const totalLen = kept.reduce((sum, c) => sum + c.length, 0);
+	const result = new Uint8Array(totalLen);
+	let off = 0;
+	for (const chunk of kept) {
+		result.set(chunk, off);
+		off += chunk.length;
+	}
+	return result;
 }
 
 // ── public API ───────────────────────────────────────────────────────
@@ -86,13 +121,11 @@ export function encodeAnimatedWebP(frames: WebPFrame[], delay = 100): Uint8Array
 	// ANIM chunk: 8 + 6
 	const animSize = 14;
 
-	// ANMF chunks
+	// ANMF chunks: 8 (fourcc + size) + 16 (fields) + raw.length + padding
 	let anmfTotalSize = 0;
 	for (const raw of rawFrames) {
-		// ANMF header: 8 (fourcc + size) + 16 (fields) + raw.length
-		// If raw.length is odd, a padding byte is added
-		const paddedLen = raw.length + (raw.length % 2);
-		anmfTotalSize += 8 + 16 + paddedLen;
+		const chunkDataSize = 16 + raw.length;
+		anmfTotalSize += 8 + chunkDataSize + (chunkDataSize % 2);
 	}
 
 	const buf = new Uint8Array(12 + vp8xSize + animSize + anmfTotalSize);
@@ -138,12 +171,11 @@ export function encodeAnimatedWebP(frames: WebPFrame[], delay = 100): Uint8Array
 
 	// ── ANMF chunks ───────────────────────────────────────────────────
 	for (const raw of rawFrames) {
-		const paddedLen = raw.length + (raw.length % 2);
-		const anmfPayloadSize = 16 + paddedLen;
+		const anmfDataSize = 16 + raw.length;
 
 		buf.set(asciiBytes("ANMF"), offset);
 		offset += 4;
-		writeUint32LE(buf, offset, anmfPayloadSize);
+		writeUint32LE(buf, offset, anmfDataSize);
 		offset += 4;
 
 		// Frame X / 2 (24-bit LE) – always 0
@@ -168,8 +200,8 @@ export function encodeAnimatedWebP(frames: WebPFrame[], delay = 100): Uint8Array
 		// Frame bitstream data
 		buf.set(raw, offset);
 		offset += raw.length;
-		// Padding byte if odd
-		if (raw.length % 2 !== 0) {
+		// Padding byte if chunk data size is odd
+		if (anmfDataSize % 2 !== 0) {
 			buf[offset] = 0;
 			offset += 1;
 		}

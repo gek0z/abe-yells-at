@@ -23,7 +23,7 @@ describe("parseArgs", () => {
 			imagePath: "logo.png",
 			preset: "large",
 			format: "all",
-			output: ".",
+			output: "",
 		});
 	});
 

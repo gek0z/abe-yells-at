@@ -24,7 +24,7 @@ ${bold("USAGE")}
 ${bold("OPTIONS")}
   ${green("--preset, -p")}   Size preset: ${yellow("large")} | ${yellow("medium")} | ${yellow("small")}  ${dim("(default: large)")}
   ${green("--format, -f")}   Output format: ${yellow("gif")} | ${yellow("webp")} | ${yellow("all")}       ${dim("(default: all)")}
-  ${green("--output, -o")}   Output directory                        ${dim("(default: .)")}
+  ${green("--output, -o")}   Output directory                        ${dim("(default: same as input)")}
   ${green("--help, -h")}     Show this help message
 
 ${bold("EXAMPLES")}
@@ -63,7 +63,7 @@ export function parseArgs(argv: string[]): CliArgs | null {
 	let imagePath = "";
 	let preset: Preset = "large";
 	let format: "gif" | "webp" | "all" = "all";
-	let output = ".";
+	let output = "";
 
 	for (let i = 0; i < args.length; i++) {
 		const arg = args[i];
@@ -132,8 +132,8 @@ async function main(): Promise<void> {
 		process.exit(1);
 	}
 
-	// Ensure output directory exists
-	const resolvedOutput = path.resolve(output);
+	// Ensure output directory exists (default: same directory as input image)
+	const resolvedOutput = output ? path.resolve(output) : path.dirname(resolvedImage);
 	if (!fs.existsSync(resolvedOutput)) {
 		fs.mkdirSync(resolvedOutput, { recursive: true });
 	}
@@ -158,7 +158,8 @@ async function main(): Promise<void> {
 				format: fmt,
 			});
 
-			const filename = `abe-yells-at-${preset}.${fmt}`;
+			const baseName = path.basename(resolvedImage).replace(/\.[^.]+$/, "");
+			const filename = `abe-yells-at-${baseName}-${preset}.${fmt}`;
 			const outPath = path.join(resolvedOutput, filename);
 			fs.writeFileSync(outPath, result.data);
 

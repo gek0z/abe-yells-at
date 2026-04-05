@@ -15,7 +15,7 @@ Options:
 ```
 --preset, -p   large | medium | small        (default: large)
 --format, -f   gif | webp | all             (default: all)
---output, -o   output directory             (default: .)
+--output, -o   output directory             (default: same as input)
 ```
 
 ## Library
