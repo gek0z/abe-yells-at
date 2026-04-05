@@ -80,7 +80,12 @@ function StickerApp() {
 			setResultBlob(blob);
 
 			const ext = format === "gif" ? "gif" : "webp";
-			const filename = `abe-yells-at-${PRESET_SIZES[preset]}.${ext}`;
+			const slug =
+				logoName
+					.toLowerCase()
+					.replace(/[^a-z0-9]+/g, "-")
+					.replace(/^-|-$/g, "") || "logo";
+			const filename = `abe-yells-at-${slug}-${PRESET_SIZES[preset]}.${ext}`;
 
 			const url = URL.createObjectURL(blob);
 			const a = document.createElement("a");
@@ -95,7 +100,7 @@ function StickerApp() {
 		} finally {
 			setGenerating(false);
 		}
-	}, [logoImg, preset, format]);
+	}, [logoImg, logoName, preset, format]);
 
 	// Drag handlers for full-page drop zone
 	const handleDragOver = useCallback(
