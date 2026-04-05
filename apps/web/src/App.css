@@ -43,6 +43,7 @@
 
 html {
 	scroll-behavior: smooth;
+	background-color: var(--sky-bottom);
 }
 
 body {
