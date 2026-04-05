@@ -3,6 +3,7 @@ dist/
 *.tsbuildinfo
 *.d.ts.map
 **/tests/**/*.d.ts
+**/tests/**/*.js
 .DS_Store
 .env
 .env.*
