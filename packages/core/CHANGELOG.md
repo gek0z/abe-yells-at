@@ -1,5 +1,11 @@
 # abe-yells-at
 
+## 1.1.2
+
+### Patch Changes
+
+- [`a0bf478`](https://github.com/gek0z/abe-yells-at/commit/a0bf47855e6c2660ff32b6200049a35e5937ad74) Thanks [@gek0z](https://github.com/gek0z)! - Fix CLI output: default to input image directory instead of CWD, include original filename in output (abe-yells-at-[name]-[preset]), and fix corrupted animated WebP by stripping VP8X/ICCP chunks from ANMF frame data
+
 ## 1.1.1
 
 ### Patch Changes
