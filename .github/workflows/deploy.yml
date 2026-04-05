@@ -37,6 +37,9 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy apps/web/dist --project-name=abe-yells-at
 
+      - name: Wait for deploy propagation
+        run: sleep 30
+
       - name: Purge Cloudflare cache
         run: |
           curl -s -X POST \
