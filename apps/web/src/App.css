@@ -1274,8 +1274,9 @@ body {
 	transition: color 0.2s ease;
 }
 
-.footer-privacy:hover {
-	color: rgba(255, 255, 255, 0.9);
+.footer-privacy:hover,
+.footer-privacy.active {
+	color: var(--yellow);
 }
 
 /* ---------------------------------------------------------------------------
@@ -1484,6 +1485,60 @@ body {
 	overflow: hidden;
 	clip: rect(0, 0, 0, 0);
 	border: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   404 page
+--------------------------------------------------------------------------- */
+.not-found-page {
+	min-height: 100dvh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	padding: 2rem;
+}
+
+.not-found-content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.not-found-abe {
+	width: 160px;
+	height: auto;
+	border-radius: var(--radius);
+}
+
+.not-found-title {
+	font-family: "Bangers", cursive;
+	font-size: 6rem;
+	color: var(--yellow);
+	line-height: 1;
+	text-shadow: 3px 3px 0 var(--dark);
+}
+
+.not-found-text {
+	font-size: 1.2rem;
+	color: var(--text-dark);
+	margin-bottom: 1rem;
+}
+
+.not-found-link {
+	background: var(--yellow);
+	color: var(--text-dark);
+	text-decoration: none;
+	font-weight: 700;
+	padding: 0.6rem 1.5rem;
+	border-radius: 999px;
+	transition: background var(--transition);
+}
+
+.not-found-link:hover {
+	background: var(--yellow-hover);
 }
 
 /* ---------------------------------------------------------------------------

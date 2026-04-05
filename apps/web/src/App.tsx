@@ -4,6 +4,7 @@ import { DocsPage } from "@/DocsPage";
 import { FormatSelector } from "@/FormatSelector";
 import { LogoDrawer } from "@/LogoDrawer";
 import { LogoShowcase } from "@/LogoMarquee";
+import { NotFoundPage } from "@/NotFoundPage";
 import { PlatformInstructions } from "@/PlatformInstructions";
 import { PresetSelector } from "@/PresetSelector";
 import { Preview } from "@/Preview";
@@ -303,7 +304,15 @@ function StickerApp() {
 export default function App() {
 	const path = window.location.pathname;
 	const page =
-		path === "/docs" ? <DocsPage /> : path === "/privacy" ? <PrivacyPage /> : <StickerApp />;
+		path === "/" ? (
+			<StickerApp />
+		) : path === "/docs" ? (
+			<DocsPage />
+		) : path === "/privacy" ? (
+			<PrivacyPage />
+		) : (
+			<NotFoundPage />
+		);
 	return (
 		<>
 			{page}
