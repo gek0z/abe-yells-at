@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { CodeBlock } from "@/components/CodeBlock";
 import { SiteNav } from "@/components/SiteNav";
 
 const TABS = ["Web App", "npm Package", "CLI", "Credits"] as const;
@@ -62,7 +63,7 @@ export function DocsPage() {
 					<section className="docs-section">
 						<h2>Web App</h2>
 						<p>
-							The easiest way to use Abe Yells At. No installation needed -- everything runs in your
+							The easiest way to use Abe Yells At. No installation needed, everything runs in your
 							browser.
 						</p>
 						<ol>
@@ -83,7 +84,7 @@ export function DocsPage() {
 								<strong>format</strong> (GIF, WebP, or PNG).
 							</li>
 							<li>
-								Click <strong>Generate & Download</strong> -- the sticker is created client-side and
+								Click <strong>Generate & Download</strong>, the sticker is created client-side and
 								downloaded instantly.
 							</li>
 							<li>
@@ -100,30 +101,49 @@ export function DocsPage() {
 						<p>
 							Use <code>abe-yells-at</code> programmatically in your Node.js or browser projects.
 						</p>
-						<pre>
-							<code>npm install abe-yells-at</code>
-						</pre>
+						<CodeBlock
+							lang="bash"
+							code={`npm install abe-yells-at
+# or
+pnpm add abe-yells-at
+# or
+bun add abe-yells-at`}
+						/>
 
 						<h3>Node.js</h3>
-						<pre>
-							<code>
-								{`import { createSticker } from "abe-yells-at";
+						<p>
+							The <code>logo</code> option accepts a file path, URL, Buffer, ArrayBuffer,
+							Uint8Array, or Blob.
+						</p>
+						<CodeBlock
+							lang="ts"
+							code={`import { createSticker } from "abe-yells-at";
 
 const result = await createSticker({
   logo: "./my-logo.png",
   preset: "large",   // "large" | "medium" | "small"
   format: "gif",     // "gif" | "webp" | "png"
+  onProgress: (percent) => console.log(percent + "%"),
 });
 
-// result.data is a Uint8Array
+// result.data    Uint8Array of the encoded image
+// result.format  "gif" | "webp" | "png"
+// result.width   pixel width
+// result.height  pixel height
+// result.preset  preset used
 fs.writeFileSync("sticker.gif", result.data);`}
-							</code>
-						</pre>
+						/>
 
 						<h3>Browser</h3>
-						<pre>
-							<code>
-								{`import { createStickerFromImages, loadFrameImages } from "abe-yells-at";
+						<p>
+							In the browser, use <code>createStickerFromImages</code> with pre-loaded frames. Copy
+							the 9 frame PNGs from <code>node_modules/abe-yells-at/frames/</code> to your public
+							directory and load them with <code>loadFrameImages</code>. The <code>logo</code> must
+							be an <code>HTMLImageElement</code> or <code>ImageBitmap</code>.
+						</p>
+						<CodeBlock
+							lang="ts"
+							code={`import { createStickerFromImages, loadFrameImages } from "abe-yells-at";
 
 const frames = await loadFrameImages("/frames");
 const result = await createStickerFromImages({
@@ -131,9 +151,12 @@ const result = await createStickerFromImages({
   logo: myImageElement,
   preset: "medium",
   format: "webp",
-});`}
-							</code>
-						</pre>
+  onProgress: (percent) => console.log(percent + "%"),
+});
+
+// Convert to a downloadable Blob
+const blob = new Blob([result.data], { type: "image/webp" });`}
+						/>
 
 						<h3>Size Presets</h3>
 						<table className="docs-table">
@@ -170,9 +193,32 @@ const result = await createStickerFromImages({
 				{tab === "CLI" && (
 					<section className="docs-section">
 						<h2>CLI</h2>
-						<pre>
-							<code>npx abe-yells-at logo.png</code>
-						</pre>
+						<p>
+							Generate stickers from the command line. No code needed, just point it at an image.
+						</p>
+
+						<h3>Install</h3>
+						<CodeBlock
+							lang="bash"
+							code={`npm install -g abe-yells-at
+# or
+pnpm add -g abe-yells-at
+# or
+bun add -g abe-yells-at`}
+						/>
+						<p>Or run directly without installing:</p>
+						<CodeBlock
+							lang="bash"
+							code={`npx abe-yells-at logo.png
+# or
+pnpm dlx abe-yells-at logo.png
+# or
+bunx abe-yells-at logo.png`}
+						/>
+
+						<h3>Usage</h3>
+						<CodeBlock code="abe-yells-at <image-path> [options]" lang="bash" />
+
 						<h3>Options</h3>
 						<table className="docs-table">
 							<thead>
@@ -180,6 +226,7 @@ const result = await createStickerFromImages({
 									<th>Flag</th>
 									<th>Values</th>
 									<th>Default</th>
+									<th>Description</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -189,6 +236,7 @@ const result = await createStickerFromImages({
 									</td>
 									<td>large, medium, small</td>
 									<td>large</td>
+									<td>Output size (512px, 320px, 128px)</td>
 								</tr>
 								<tr>
 									<td>
@@ -196,6 +244,9 @@ const result = await createStickerFromImages({
 									</td>
 									<td>gif, webp, png, all</td>
 									<td>all</td>
+									<td>
+										Output format. <code>all</code> generates GIF + WebP + PNG
+									</td>
 								</tr>
 								<tr>
 									<td>
@@ -203,22 +254,46 @@ const result = await createStickerFromImages({
 									</td>
 									<td>directory path</td>
 									<td>same as input</td>
+									<td>Where to save the output files</td>
+								</tr>
+								<tr>
+									<td>
+										<code>--help, -h</code>
+									</td>
+									<td />
+									<td />
+									<td>Show help message</td>
 								</tr>
 							</tbody>
 						</table>
+
+						<h3>Output</h3>
+						<p>
+							Files are named <code>abe-yells-at-&lt;name&gt;-&lt;preset&gt;.&lt;ext&gt;</code>. For
+							example, running on <code>logo.png</code> with default settings produces:
+						</p>
+						<CodeBlock
+							lang="bash"
+							code={`abe-yells-at-logo-large.gif   # animated GIF
+abe-yells-at-logo-large.webp  # animated WebP
+abe-yells-at-logo-large.png   # static PNG (frame 1)`}
+						/>
+
 						<h3>Examples</h3>
-						<pre>
-							<code>
-								{`# Generate all formats at large size
+						<CodeBlock
+							lang="bash"
+							code={`# Generate all formats at large size
 abe-yells-at logo.png
 
 # Small GIF only
 abe-yells-at logo.png -p small -f gif
 
-# Custom output directory
+# Static PNG at medium size
+abe-yells-at logo.png -f png -p medium
+
+# Save to a specific directory
 abe-yells-at logo.png -o ./stickers`}
-							</code>
-						</pre>
+						/>
 					</section>
 				)}
 

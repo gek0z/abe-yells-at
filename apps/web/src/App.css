@@ -1402,21 +1402,58 @@ body {
 	font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
 }
 
-.docs-section pre {
+.cb-wrap {
+	position: relative;
+	margin-bottom: 1rem;
+}
+
+.cb-wrap pre {
 	background: #12121f;
 	border: 1px solid rgba(255, 255, 255, 0.08);
 	border-radius: 10px;
 	padding: 1rem 1.25rem;
 	overflow-x: auto;
-	margin-bottom: 1rem;
+	margin-bottom: 0;
 }
 
-.docs-section pre code {
+.cb-wrap pre code {
 	background: none;
 	padding: 0;
 	font-size: 0.85rem;
 	line-height: 1.6;
 	color: #d4d4e0;
+}
+
+.cb-copy {
+	position: absolute;
+	top: 0.5rem;
+	right: 0.5rem;
+	padding: 0.25rem 0.6rem;
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	border-radius: 6px;
+	background: rgba(255, 255, 255, 0.06);
+	color: rgba(255, 255, 255, 0.5);
+	font-size: 0.75rem;
+	cursor: pointer;
+	transition: all var(--transition);
+	z-index: 1;
+}
+
+.cb-copy:hover {
+	background: rgba(255, 255, 255, 0.12);
+	color: rgba(255, 255, 255, 0.9);
+}
+
+.cb-comment {
+	color: #6a6a80;
+}
+
+.cb-keyword {
+	color: #7ec8e3;
+}
+
+.cb-string {
+	color: #a8d8a8;
 }
 
 .docs-table {

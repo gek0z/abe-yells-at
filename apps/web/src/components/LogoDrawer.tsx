@@ -99,7 +99,7 @@ export function LogoDrawer({
 	const searchRef = useRef<HTMLInputElement | null>(null);
 	const drawerRef = useRef<HTMLDivElement | null>(null);
 
-	// Debounced search -- queries both sources
+	// Debounced search, queries both sources
 	useEffect(() => {
 		if (!query.trim()) {
 			setResults([]);
