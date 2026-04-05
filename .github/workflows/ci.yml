@@ -49,3 +49,16 @@ jobs:
       - run: bun run --cwd apps/web build
         env:
           VITE_LOGO_DEV_TOKEN: ${{ secrets.VITE_LOGO_DEV_TOKEN }}
+
+  ci:
+    if: always()
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - run: |
+          if [ "${{ needs.build.result }}" = "success" ] || [ "${{ needs.build.result }}" = "skipped" ]; then
+            echo "CI passed"
+          else
+            echo "CI failed"
+            exit 1
+          fi
