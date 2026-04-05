@@ -229,22 +229,24 @@ function StickerApp() {
 		<>
 			<div
 				className="result-page"
-				style={{ paddingBottom: `min(${PRESET_SIZES[preset] + 4}px, 90vw)` }}
+				style={
+					{
+						"--preview-size": `min(${PRESET_SIZES[preset]}px, 90vw)`,
+					} as React.CSSProperties
+				}
 			>
-				<SiteNav />
-
 				<div
 					className="result-preview-top"
-					style={{
-						maxWidth: `min(${PRESET_SIZES[preset]}px, 90vw)`,
-					}}
+					style={
+						{
+							"--preview-size": `min(${PRESET_SIZES[preset]}px, 90vw)`,
+						} as React.CSSProperties
+					}
 				>
 					<Preview logo={logoImg} preset={preset} />
 				</div>
-				<div
-					className="result-preview-border"
-					style={{ height: `min(${PRESET_SIZES[preset]}px, 90vw)` }}
-				/>
+				<SiteNav />
+				<div className="result-preview-border" />
 
 				<div className="result-container">
 					<h1 className="result-title unselectable">
