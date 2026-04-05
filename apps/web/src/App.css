@@ -646,7 +646,7 @@ body {
 	background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%);
 	background-attachment: fixed;
 	animation: fadeInOpacity 0.4s ease;
-	padding-bottom: calc(var(--preview-size, 512px) + 4px);
+	padding-bottom: calc(min(var(--preview-size, 512px), 40dvh) + 4px);
 }
 
 @keyframes fadeInOpacity {
@@ -676,7 +676,7 @@ body {
 .result-preview-top .preview-card {
 	background: transparent;
 	gap: 0;
-	width: var(--preview-size, 512px);
+	width: min(var(--preview-size, 512px), 40dvh);
 	transition: width 0.3s ease;
 }
 

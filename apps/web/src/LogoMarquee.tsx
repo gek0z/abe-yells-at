@@ -12,7 +12,6 @@ const SHOWCASE_LOGOS: ShowcaseLogo[] = [
 	{ title: "AWS", url: "https://svgl.app/library/aws_light.svg" },
 	{ title: "Meta", url: "https://svgl.app/library/meta.svg" },
 	{ title: "Netflix", url: "https://svgl.app/library/netflix-icon.svg" },
-	{ title: "Spotify", url: "https://svgl.app/library/spotify.svg" },
 	{ title: "Discord", url: "https://svgl.app/library/discord.svg" },
 	{ title: "GitHub", url: "https://svgl.app/library/github_light.svg" },
 	{ title: "Twitter", url: "https://svgl.app/library/x.svg" },
