@@ -1,6 +1,9 @@
 import { useEffect, useRef } from "react";
 import { loadFrames, PRESET_SIZES, type Preset, renderPreviewFrame } from "@/lib/sticker-engine";
 
+/** Always render at the largest size so the preview is never pixelated. */
+const RENDER_SIZE = PRESET_SIZES.large;
+
 export function Preview({ logo, preset }: { logo: HTMLImageElement; preset: Preset }) {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 	const framesRef = useRef<HTMLImageElement[] | null>(null);
@@ -20,7 +23,7 @@ export function Preview({ logo, preset }: { logo: HTMLImageElement; preset: Pres
 				const canvas = canvasRef.current;
 				if (!canvas || !framesRef.current) return;
 				const idx = frameIdxRef.current % framesRef.current.length;
-				renderPreviewFrame(canvas, framesRef.current[idx], logo, PRESET_SIZES[preset]);
+				renderPreviewFrame(canvas, framesRef.current[idx], logo, RENDER_SIZE);
 				frameIdxRef.current = idx + 1;
 			};
 
@@ -34,7 +37,7 @@ export function Preview({ logo, preset }: { logo: HTMLImageElement; preset: Pres
 			cancelled = true;
 			if (timerRef.current) clearInterval(timerRef.current);
 		};
-	}, [logo, preset]);
+	}, [logo]);
 
 	return (
 		<div className="preview-card">

@@ -9,9 +9,13 @@ import { PresetSelector } from "@/components/PresetSelector";
 import { Preview } from "@/components/Preview";
 import { SiteNav } from "@/components/SiteNav";
 import { type Format, generateSticker, PRESET_SIZES, type Preset } from "@/lib/sticker-engine";
+
 import { DocsPage } from "@/pages/DocsPage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 import { PrivacyPage } from "@/pages/PrivacyPage";
+
+const PREVIEW_SCALE: Record<Preset, number> = { large: 1, medium: 0.45, small: 0.25 };
+const MAX_PREVIEW_PX = PRESET_SIZES.large;
 
 function formatBytes(bytes: number): string {
 	if (bytes < 1024) return `${bytes} B`;
@@ -230,7 +234,7 @@ function StickerApp() {
 				className="result-page"
 				style={
 					{
-						"--preview-size": `min(${PRESET_SIZES[preset]}px, 90vw)`,
+						"--preview-size": `min(${Math.round(MAX_PREVIEW_PX * PREVIEW_SCALE[preset])}px, 90vw)`,
 					} as React.CSSProperties
 				}
 			>
@@ -238,7 +242,7 @@ function StickerApp() {
 					className="result-preview-top"
 					style={
 						{
-							"--preview-size": `min(${PRESET_SIZES[preset]}px, 90vw)`,
+							"--preview-size": `min(${Math.round(MAX_PREVIEW_PX * PREVIEW_SCALE[preset])}px, 90vw)`,
 						} as React.CSSProperties
 					}
 				>
