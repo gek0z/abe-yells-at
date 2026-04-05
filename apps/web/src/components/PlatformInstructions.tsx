@@ -11,7 +11,7 @@ const TABS: { id: Platform; label: string }[] = [
 ];
 
 const RECOMMENDED: Record<Platform, string> = {
-	whatsapp: "WebP",
+	whatsapp: "GIF",
 	slack: "GIF",
 	discord: "GIF or WebP",
 };
@@ -74,17 +74,18 @@ function WhatsAppIOS() {
 				popup (not View).
 			</li>
 			<li>
-				The sticker saves to your <strong>Downloads</strong> folder in the Files app.
+				Open the <strong>Downloads</strong> folder in the <strong>Files</strong> app and find your
+				sticker.
 			</li>
 			<li>
-				In WhatsApp, open a chat and tap the <strong>+</strong> button.
+				Tap the file, then tap the{" "}
+				<strong>
+					Share <WaIcon name="iphone-share" alt="Share" noInvert />
+				</strong>{" "}
+				button.
 			</li>
 			<li>
-				Select <strong>Document</strong>, then browse to <strong>Downloads</strong> and pick your
-				sticker file.
-			</li>
-			<li>
-				Tap <WaIcon name="iphone-send" alt="Send" noInvert /> to send.
+				Select <strong>WhatsApp</strong> from the share sheet, pick a chat, and send.
 			</li>
 		</ol>
 	);
