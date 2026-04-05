@@ -90,7 +90,7 @@ function StickerApp() {
 					.toLowerCase()
 					.replace(/[^a-z0-9]+/g, "-")
 					.replace(/^-|-$/g, "") || "logo";
-			const filename = `abe-yells-at-${slug}-${PRESET_SIZES[preset]}.${ext}`;
+			const filename = `abe-yells-at-${slug}-${preset}.${ext}`;
 
 			const url = URL.createObjectURL(blob);
 			const a = document.createElement("a");
