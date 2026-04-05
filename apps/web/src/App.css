@@ -1331,24 +1331,9 @@ body {
 	margin-bottom: 2.5rem;
 }
 
-.docs-toc {
-	display: flex;
-	gap: 1.5rem;
+.docs-pills {
 	margin-bottom: 2.5rem;
-	padding-bottom: 1.5rem;
-	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.docs-toc a {
-	color: #9a9ab8;
-	text-decoration: none;
-	font-size: 0.9rem;
-	font-weight: 600;
-	transition: color 0.2s ease;
-}
-
-.docs-toc a:hover {
-	color: var(--yellow);
+	max-width: 500px;
 }
 
 .docs-section {

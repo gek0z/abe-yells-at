@@ -3,6 +3,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 interface ShowcaseLogo {
 	title: string;
 	url: string;
+	invert?: boolean;
+	brightness?: number;
 }
 
 const SHOWCASE_LOGOS: ShowcaseLogo[] = [
@@ -15,7 +17,6 @@ const SHOWCASE_LOGOS: ShowcaseLogo[] = [
 	{ title: "Discord", url: "https://svgl.app/library/discord.svg" },
 	{ title: "GitHub", url: "https://svgl.app/library/github_light.svg" },
 	{ title: "Twitter", url: "https://svgl.app/library/x.svg" },
-	{ title: "Stripe", url: "https://svgl.app/library/stripe.svg" },
 	{ title: "Figma", url: "https://svgl.app/library/figma.svg" },
 	{ title: "Notion", url: "https://svgl.app/library/notion.svg" },
 	{ title: "Vercel", url: "https://svgl.app/library/vercel.svg" },
@@ -25,9 +26,27 @@ const SHOWCASE_LOGOS: ShowcaseLogo[] = [
 	{ title: "Twitch", url: "https://svgl.app/library/twitch.svg" },
 	{ title: "Reddit", url: "https://svgl.app/library/reddit.svg" },
 	{ title: "Shopify", url: "https://svgl.app/library/shopify.svg" },
-	{ title: "Docker", url: "https://svgl.app/library/docker.svg" },
+	{ title: "Docker", url: "https://svgl.app/library/docker.svg", brightness: 0.5 },
 	{ title: "Firebase", url: "https://svgl.app/library/firebase.svg" },
-	{ title: "Linear", url: "https://svgl.app/library/linear.svg" },
+	{ title: "Linear", url: "https://svgl.app/library/linear.svg", brightness: 0 },
+	{ title: "YouTube", url: "https://svgl.app/library/youtube.svg" },
+	{ title: "Instagram", url: "https://svgl.app/library/instagram-icon.svg" },
+	{ title: "WhatsApp", url: "https://svgl.app/library/whatsapp-icon.svg", invert: true },
+	{ title: "Snapchat", url: "https://svgl.app/library/snapchat.svg" },
+	{ title: "Pinterest", url: "https://svgl.app/library/pinterest.svg" },
+	{ title: "Telegram", url: "https://svgl.app/library/telegram.svg" },
+	{ title: "Tailwind", url: "https://svgl.app/library/tailwindcss.svg", invert: true },
+	{ title: "React", url: "https://svgl.app/library/react_light.svg" },
+	{ title: "Rust", url: "https://svgl.app/library/rust.svg" },
+	{ title: "Go", url: "https://svgl.app/library/golang.svg" },
+	{ title: "Kubernetes", url: "https://svgl.app/library/kubernetes.svg" },
+	{ title: "Uber", url: "https://svgl.app/library/uber_light.svg" },
+	{ title: "Airbnb", url: "https://svgl.app/library/airbnb.svg" },
+	{ title: "Zoom", url: "https://svgl.app/library/zoom.svg" },
+	{ title: "Salesforce", url: "https://svgl.app/library/salesforce.svg" },
+	{ title: "Steam", url: "https://svgl.app/library/steam.svg" },
+	{ title: "PlayStation", url: "https://svgl.app/library/playstation.svg", brightness: 0.5 },
+	{ title: "Xbox", url: "https://svgl.app/library/xbox.svg" },
 ];
 
 function shuffle<T>(arr: T[]): T[] {
@@ -72,7 +91,17 @@ export function LogoShowcase({ onLogoChange }: { onLogoChange?: (name: string) =
 	return (
 		<div className="logo-showcase" aria-live="polite" aria-atomic="true">
 			<div className={`logo-showcase-item${visible ? " visible" : ""}`}>
-				<img src={logo.url} alt={logo.title} />
+				<img
+					src={logo.url}
+					alt={logo.title}
+					style={
+						logo.invert
+							? { filter: "brightness(0) invert(1)" }
+							: logo.brightness != null
+								? { filter: `brightness(${logo.brightness})` }
+								: undefined
+					}
+				/>
 				<span className="sr-only">Abe yells at {logo.title}</span>
 			</div>
 			<img
