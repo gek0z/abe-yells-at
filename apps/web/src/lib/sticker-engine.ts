@@ -19,9 +19,6 @@ export const PRESET_SIZES: Record<Preset, number> = Object.fromEntries(
 	Object.entries(presets).map(([key, config]: [string, PresetConfig]) => [key, config.width]),
 ) as Record<Preset, number>;
 
-const FRAME_COUNT = 9;
-const FRAME_DELAY_MS = 50;
-
 // ---------------------------------------------------------------------------
 // Frame loading
 // ---------------------------------------------------------------------------
@@ -85,5 +82,3 @@ export async function generateSticker(options: {
 		type: format === "gif" ? "image/gif" : "image/webp",
 	});
 }
-
-export { FRAME_COUNT, FRAME_DELAY_MS };

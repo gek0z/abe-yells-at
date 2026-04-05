@@ -245,15 +245,6 @@ body {
 	}
 }
 
-.landing-subtitle {
-	font-size: 1.1rem;
-	color: rgba(255, 255, 255, 0.85);
-	text-align: center;
-	margin-top: 0.75rem;
-	z-index: 1;
-	text-shadow: none;
-}
-
 .landing-actions {
 	display: flex;
 	flex-wrap: wrap;
@@ -945,13 +936,6 @@ body {
 	transition: width 0.2s ease;
 }
 
-/* File size badge */
-.file-size {
-	font-size: 0.8rem;
-	color: rgba(255, 255, 255, 0.6);
-	text-align: center;
-}
-
 /* Reset/Start Over button */
 .reset-btn {
 	padding: 0.6rem 1.5rem;
@@ -1237,17 +1221,6 @@ body {
 	padding: 0.75rem 1.5rem;
 	font-size: 0.75rem;
 	color: rgba(255, 255, 255, 0.5);
-}
-
-.site-footer {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 1.5rem;
-	padding: 0.75rem 1.5rem;
-	font-size: 0.75rem;
-	color: rgba(255, 255, 255, 0.5);
-	z-index: 2;
 }
 
 .site-nav.on-docs {

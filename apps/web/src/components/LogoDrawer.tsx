@@ -18,7 +18,7 @@ interface LogoResult {
 	source: "svgl" | "logodev";
 }
 
-export function getLogoUrl(logo: { route: string | { light: string; dark: string } }): string {
+function getLogoUrl(logo: { route: string | { light: string; dark: string } }): string {
 	if (typeof logo.route === "string") return logo.route;
 	return logo.route.light;
 }
@@ -26,7 +26,7 @@ export function getLogoUrl(logo: { route: string | { light: string; dark: string
 const SVGL_PREFIX = "https://svgl.app/library/";
 const RAW_GH_PREFIX = "https://raw.githubusercontent.com/pheralb/svgl/main/static/library/";
 
-export function getCorsUrl(url: string): string {
+function getCorsUrl(url: string): string {
 	if (url.startsWith(SVGL_PREFIX)) {
 		return url.replace(SVGL_PREFIX, RAW_GH_PREFIX);
 	}
