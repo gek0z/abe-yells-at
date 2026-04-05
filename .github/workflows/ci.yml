@@ -3,6 +3,12 @@ name: CI
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "*.md"
+      - "**/*.md"
+      - .gitignore
+      - LICENSE
+      - .changeset/**
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened, labeled]
