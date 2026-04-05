@@ -53,6 +53,9 @@
     "slack",
     "discord"
   ],
+  "engines": {
+    "node": ">=18"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
