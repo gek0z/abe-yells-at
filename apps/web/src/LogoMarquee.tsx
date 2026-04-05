@@ -16,7 +16,7 @@ const SHOWCASE_LOGOS: ShowcaseLogo[] = [
 	{ title: "Netflix", url: "https://svgl.app/library/netflix-icon.svg" },
 	{ title: "Discord", url: "https://svgl.app/library/discord.svg" },
 	{ title: "GitHub", url: "https://svgl.app/library/github_light.svg" },
-	{ title: "Twitter", url: "https://svgl.app/library/x.svg" },
+	{ title: "X", url: "https://svgl.app/library/x.svg" },
 	{ title: "Figma", url: "https://svgl.app/library/figma.svg" },
 	{ title: "Notion", url: "https://svgl.app/library/notion.svg" },
 	{ title: "Vercel", url: "https://svgl.app/library/vercel.svg" },
@@ -47,6 +47,11 @@ const SHOWCASE_LOGOS: ShowcaseLogo[] = [
 	{ title: "Steam", url: "https://svgl.app/library/steam.svg" },
 	{ title: "PlayStation", url: "https://svgl.app/library/playstation.svg", brightness: 0.5 },
 	{ title: "Xbox", url: "https://svgl.app/library/xbox.svg" },
+	{ title: "Threads", url: "https://svgl.app/library/threads.svg" },
+	{ title: "Bluesky", url: "https://svgl.app/library/bluesky.svg" },
+	{ title: "Adobe", url: "https://svgl.app/library/adobe.svg" },
+	{ title: "Canva", url: "https://svgl.app/library/canva.svg" },
+	{ title: "eBay", url: "https://svgl.app/library/ebay.svg" },
 ];
 
 function shuffle<T>(arr: T[]): T[] {
