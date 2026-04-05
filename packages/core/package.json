@@ -53,5 +53,15 @@
     "slack",
     "discord"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gek0z/abe-yells-at.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://abeyells.at",
+  "bugs": {
+    "url": "https://github.com/gek0z/abe-yells-at/issues"
+  },
+  "author": "riccardo.lol"
 }
