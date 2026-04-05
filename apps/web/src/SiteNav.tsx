@@ -21,7 +21,7 @@ export function SiteNav({ className, activePage }: { className?: string; activeP
 			<a className={`footer-link-text${isActive("docs") ? " active" : ""}`} href="/docs">
 				Docs
 			</a>
-			<a className="footer-privacy" href="/privacy">
+			<a className={`footer-privacy${isActive("privacy") ? " active" : ""}`} href="/privacy">
 				Privacy Policy
 			</a>
 		</nav>

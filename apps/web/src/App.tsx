@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { CookieBar } from "@/CookieBar";
 import { DocsPage } from "@/DocsPage";
 import { FormatSelector } from "@/FormatSelector";
 import { LogoDrawer } from "@/LogoDrawer";
@@ -6,6 +7,7 @@ import { LogoShowcase } from "@/LogoMarquee";
 import { PlatformInstructions } from "@/PlatformInstructions";
 import { PresetSelector } from "@/PresetSelector";
 import { Preview } from "@/Preview";
+import { PrivacyPage } from "@/PrivacyPage";
 import { SiteNav } from "@/SiteNav";
 import { type Format, generateSticker, PRESET_SIZES, type Preset } from "@/sticker-engine";
 
@@ -299,8 +301,13 @@ function StickerApp() {
 }
 
 export default function App() {
-	if (window.location.pathname === "/docs") {
-		return <DocsPage />;
-	}
-	return <StickerApp />;
+	const path = window.location.pathname;
+	const page =
+		path === "/docs" ? <DocsPage /> : path === "/privacy" ? <PrivacyPage /> : <StickerApp />;
+	return (
+		<>
+			{page}
+			<CookieBar />
+		</>
+	);
 }

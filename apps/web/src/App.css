@@ -1485,3 +1485,109 @@ body {
 	clip: rect(0, 0, 0, 0);
 	border: 0;
 }
+
+/* ---------------------------------------------------------------------------
+   Cookie consent bar
+--------------------------------------------------------------------------- */
+.cookie-bar {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 200;
+	padding: 1rem 1.5rem;
+	transform: translateY(100%);
+	transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cookie-bar.visible {
+	transform: translateY(0);
+}
+
+.cookie-bar-content {
+	max-width: var(--max-w);
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	background: var(--dark);
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	padding: 1rem 1.5rem;
+	box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.25);
+}
+
+.cookie-bar-content p {
+	font-size: 0.85rem;
+	color: var(--text-muted);
+	line-height: 1.5;
+	flex: 1;
+	margin: 0;
+}
+
+.cookie-bar-content a {
+	color: var(--yellow);
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
+.cookie-bar-actions {
+	display: flex;
+	gap: 0.5rem;
+	flex-shrink: 0;
+}
+
+.cookie-bar-reject {
+	background: transparent;
+	border: 1px solid var(--border);
+	color: var(--text-muted);
+	border-radius: 999px;
+	padding: 0.5rem 1.2rem;
+	font-size: 0.8rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all var(--transition);
+}
+
+.cookie-bar-reject:hover {
+	border-color: var(--text-muted);
+	color: var(--text);
+}
+
+.cookie-bar-accept {
+	background: var(--yellow);
+	border: none;
+	color: var(--text-dark);
+	border-radius: 999px;
+	padding: 0.5rem 1.2rem;
+	font-size: 0.8rem;
+	font-weight: 700;
+	cursor: pointer;
+	transition: all var(--transition);
+}
+
+.cookie-bar-accept:hover {
+	background: var(--yellow-hover);
+}
+
+@media (max-width: 500px) {
+	.cookie-bar {
+		padding: 0.75rem;
+	}
+
+	.cookie-bar-content {
+		flex-direction: column;
+		text-align: center;
+		padding: 1rem;
+	}
+
+	.cookie-bar-actions {
+		width: 100%;
+	}
+
+	.cookie-bar-reject,
+	.cookie-bar-accept {
+		flex: 1;
+	}
+}
