@@ -24,6 +24,8 @@ jobs:
 
       - run: bun test --cwd packages/core
 
+      - run: bun run --cwd packages/core build
+
       - run: bun run --cwd apps/web build
         env:
           VITE_LOGO_DEV_TOKEN: ${{ secrets.VITE_LOGO_DEV_TOKEN }}

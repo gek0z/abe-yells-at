@@ -25,6 +25,7 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
       - run: bunx tsgo --noEmit -p packages/core/tsconfig.json
+      - run: bun run --cwd packages/core build
       - run: bunx tsgo --noEmit -p apps/web/tsconfig.json
 
   test:

@@ -62,6 +62,7 @@ const result = await createSticker({
   logo: "./my-logo.png",
   preset: "large",
   format: "gif",
+  onProgress: (percent) => console.log(`${percent}%`),
 });
 
 // result.data is a Uint8Array of the animated GIF
@@ -78,8 +79,11 @@ const result = await createStickerFromImages({
   logo: myLogoElement,
   preset: "medium",
   format: "webp",
+  onProgress: (percent) => console.log(`${percent}%`),
 });
 ```
+
+The logo is composited behind Abe (his fist goes over the logo). The browser path uses WASM-based WebP encoding via `@jsquash/webp` for iOS compatibility.
 
 ## Size Presets
 
@@ -118,7 +122,7 @@ Pre-commit hooks (via [lefthook](https://github.com/evilmartians/lefthook)) auto
 ```
 abe-yells/
 ├── packages/core/          # npm package "abe-yells-at"
-│   ├── src/                # library + CLI source
+│   ├── src/                # library + CLI source (browser + Node entry points)
 │   ├── tests/              # bun tests
 │   └── frames/             # animation frame PNGs
 ├── apps/web/               # Vite + React web app
@@ -132,7 +136,7 @@ abe-yells/
 │   │   ├── DocsPage.tsx    # /docs page with usage guides + credits
 │   │   ├── PresetSelector.tsx
 │   │   ├── FormatSelector.tsx
-│   │   └── sticker-engine.ts  # client-side compositing + encoding
+│   │   └── sticker-engine.ts  # thin wrapper around abe-yells-at core
 │   └── public/frames/      # animation frames served statically
 └── assets/                 # original source assets
 ```
