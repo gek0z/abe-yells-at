@@ -1,5 +1,11 @@
 # abe-yells-at
 
+## 1.2.1
+
+### Patch Changes
+
+- [`7140c18`](https://github.com/gek0z/abe-yells-at/commit/7140c18436671d33ad56792dad0a0450921c1d6b) Thanks [@gek0z](https://github.com/gek0z)! - Improve npm package README with expanded CLI and library documentation
+
 ## 1.2.0
 
 ### Minor Changes
