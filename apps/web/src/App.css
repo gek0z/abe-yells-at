@@ -1275,8 +1275,11 @@ body {
 }
 
 .footer-privacy {
-	color: rgba(255, 255, 255, 0.5);
+	color: rgba(255, 255, 255, 0.7);
 	text-decoration: none;
+	font-size: 0.8rem;
+	font-weight: 600;
+	letter-spacing: 0.04em;
 	transition: color 0.2s ease;
 }
 
