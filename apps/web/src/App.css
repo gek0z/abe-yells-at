@@ -915,44 +915,40 @@ body {
 }
 
 .download-btn:disabled {
-	opacity: 0.5;
 	cursor: not-allowed;
 }
 
-/* Progress bar */
-.progress-wrap {
-	width: 100%;
-	max-width: 360px;
-	height: 6px;
-	background: rgba(255, 255, 255, 0.15);
-	border-radius: 3px;
-	overflow: hidden;
-}
-
-.progress-bar {
-	height: 100%;
-	background: var(--yellow);
-	border-radius: 3px;
-	transition: width 0.2s ease;
+.download-btn.generating {
+	background: linear-gradient(
+		to right,
+		var(--yellow) var(--progress, 0%),
+		rgba(255, 255, 255, 0.15) var(--progress, 0%)
+	);
+	opacity: 1;
 }
 
 /* Reset/Start Over button */
 .reset-btn {
-	padding: 0.6rem 1.5rem;
+	padding: 0.9rem 2rem;
 	border: none;
 	border-radius: 999px;
-	background: transparent;
-	color: rgba(255, 255, 255, 0.5);
-	font-size: 0.85rem;
+	background: var(--yellow);
+	color: var(--text-dark);
+	font-family: "Bangers", cursive;
+	font-size: 1.3rem;
+	letter-spacing: 0.04em;
 	cursor: pointer;
 	transition: all var(--transition);
 	margin-top: 1rem;
 }
 
 .reset-btn:hover {
-	color: rgba(255, 255, 255, 0.9);
-	text-decoration: underline;
-	text-underline-offset: 3px;
+	background: var(--yellow-hover);
+	transform: translateY(-2px) scale(1.03);
+}
+
+.reset-btn:active {
+	transform: translateY(0) scale(1);
 }
 
 /* ---------------------------------------------------------------------------

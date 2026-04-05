@@ -265,10 +265,17 @@ function StickerApp() {
 						</div>
 
 						<button
-							className="download-btn"
+							className={`download-btn${generating ? " generating" : ""}`}
 							onClick={handleDownload}
 							disabled={generating}
 							type="button"
+							style={
+								generating
+									? ({
+											"--progress": `${progress}%`,
+										} as React.CSSProperties)
+									: undefined
+							}
 						>
 							{generating
 								? `Generating... ${progress}%`
@@ -276,12 +283,6 @@ function StickerApp() {
 									? `Download Again (${formatBytes(resultBlob.size)})`
 									: "Generate & Download"}
 						</button>
-
-						{generating && (
-							<div className="progress-wrap">
-								<div className="progress-bar" style={{ width: `${progress}%` }} />
-							</div>
-						)}
 					</div>
 
 					<PlatformInstructions format={format} />
