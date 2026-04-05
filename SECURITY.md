@@ -4,7 +4,7 @@
 
 If you discover a security vulnerability in this project, please report it responsibly.
 
-**Email:** security@riccardo.lol
+**Email:** yo@riccardoaltieri.com
 
 Please include:
 
