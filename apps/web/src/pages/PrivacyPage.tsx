@@ -1,4 +1,4 @@
-import { SiteNav } from "@/SiteNav";
+import { SiteNav } from "@/components/SiteNav";
 
 export function PrivacyPage() {
 	return (

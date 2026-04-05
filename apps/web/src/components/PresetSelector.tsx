@@ -1,4 +1,4 @@
-import type { Preset } from "@/sticker-engine";
+import type { Preset } from "@/lib/sticker-engine";
 
 const PRESET_OPTIONS: { value: Preset; label: string }[] = [
 	{ value: "large", label: "Large" },

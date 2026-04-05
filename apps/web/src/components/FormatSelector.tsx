@@ -1,4 +1,4 @@
-import type { Format } from "@/sticker-engine";
+import type { Format } from "@/lib/sticker-engine";
 
 const FORMAT_OPTIONS: { value: Format; label: string }[] = [
 	{ value: "gif", label: "GIF" },

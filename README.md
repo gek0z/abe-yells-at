@@ -134,19 +134,23 @@ abe-yells/
 │   └── frames/             # animation frame PNGs
 ├── apps/web/               # Vite + React web app
 │   ├── src/
-│   │   ├── App.tsx         # main app shell (landing + result views)
-│   │   ├── LogoDrawer.tsx  # slide-up drawer (svgl + logo.dev search)
-│   │   ├── LogoMarquee.tsx # rotating logo showcase on landing page
-│   │   ├── Preview.tsx     # animated canvas preview
-│   │   ├── PlatformInstructions.tsx  # WhatsApp/Slack/Discord guides
-│   │   ├── SiteNav.tsx     # shared nav (GitHub, npm, Docs, Privacy)
-│   │   ├── CookieBar.tsx   # cookie consent banner (Consent Mode v2)
-│   │   ├── DocsPage.tsx    # /docs page with usage guides + credits
-│   │   ├── NotFoundPage.tsx # 404 page
-│   │   ├── PrivacyPage.tsx # /privacy page
-│   │   ├── PresetSelector.tsx
-│   │   ├── FormatSelector.tsx
-│   │   └── sticker-engine.ts  # thin wrapper around abe-yells-at core
+│   │   ├── components/     # reusable UI components
+│   │   │   ├── icons.tsx   # shared SVG icons (GitHub, npm, Upload, Smiley)
+│   │   │   ├── LogoDrawer.tsx       # slide-up drawer (svgl + logo.dev search)
+│   │   │   ├── LogoShowcase.tsx     # rotating logo showcase on landing page
+│   │   │   ├── Preview.tsx          # animated canvas preview
+│   │   │   ├── PlatformInstructions.tsx  # WhatsApp/Slack/Discord guides
+│   │   │   ├── SiteNav.tsx          # shared nav (GitHub, npm, Docs, Privacy)
+│   │   │   ├── CookieBar.tsx        # cookie consent banner (Consent Mode v2)
+│   │   │   ├── PresetSelector.tsx
+│   │   │   └── FormatSelector.tsx
+│   │   ├── pages/          # full page views
+│   │   │   ├── DocsPage.tsx         # /docs with pill-tabbed sections
+│   │   │   ├── NotFoundPage.tsx     # 404 page
+│   │   │   └── PrivacyPage.tsx      # /privacy page
+│   │   ├── lib/            # non-React logic
+│   │   │   └── sticker-engine.ts    # thin wrapper around abe-yells-at core
+│   │   └── App.tsx         # main app shell (landing + result views)
 │   └── public/frames/      # animation frames served statically
 └── assets/                 # original source assets
 ```

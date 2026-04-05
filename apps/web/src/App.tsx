@@ -1,16 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { CookieBar } from "@/CookieBar";
-import { DocsPage } from "@/DocsPage";
-import { FormatSelector } from "@/FormatSelector";
-import { LogoDrawer } from "@/LogoDrawer";
-import { LogoShowcase } from "@/LogoMarquee";
-import { NotFoundPage } from "@/NotFoundPage";
-import { PlatformInstructions } from "@/PlatformInstructions";
-import { PresetSelector } from "@/PresetSelector";
-import { Preview } from "@/Preview";
-import { PrivacyPage } from "@/PrivacyPage";
-import { SiteNav } from "@/SiteNav";
-import { type Format, generateSticker, PRESET_SIZES, type Preset } from "@/sticker-engine";
+import { CookieBar } from "@/components/CookieBar";
+import { FormatSelector } from "@/components/FormatSelector";
+import { UploadIcon } from "@/components/icons";
+import { LogoDrawer } from "@/components/LogoDrawer";
+import { LogoShowcase } from "@/components/LogoShowcase";
+import { PlatformInstructions } from "@/components/PlatformInstructions";
+import { PresetSelector } from "@/components/PresetSelector";
+import { Preview } from "@/components/Preview";
+import { SiteNav } from "@/components/SiteNav";
+import { type Format, generateSticker, PRESET_SIZES, type Preset } from "@/lib/sticker-engine";
+import { DocsPage } from "@/pages/DocsPage";
+import { NotFoundPage } from "@/pages/NotFoundPage";
+import { PrivacyPage } from "@/pages/PrivacyPage";
 
 function formatBytes(bytes: number): string {
 	if (bytes < 1024) return `${bytes} B`;
@@ -180,19 +181,7 @@ function StickerApp() {
 								onClick={() => fileInputRef.current?.click()}
 								type="button"
 							>
-								<svg
-									aria-label="Upload"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="currentColor"
-									strokeWidth="2"
-									width="18"
-									height="18"
-								>
-									<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-									<polyline points="17 8 12 3 7 8" />
-									<line x1="12" y1="3" x2="12" y2="15" />
-								</svg>
+								<UploadIcon />
 								Upload Your Own Logo
 							</button>
 							<button className="search-btn" onClick={() => setDrawerOpen(true)} type="button">

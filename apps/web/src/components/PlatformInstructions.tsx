@@ -1,5 +1,6 @@
 import { useState } from "react";
-import type { Format } from "@/sticker-engine";
+import { SmileyIcon } from "@/components/icons";
+import type { Format } from "@/lib/sticker-engine";
 
 type Platform = "whatsapp" | "slack" | "discord";
 
@@ -119,27 +120,6 @@ function WhatsAppInstructions() {
 				.
 			</p>
 		</div>
-	);
-}
-
-function SmileyIcon() {
-	return (
-		<svg
-			className="no-invert"
-			aria-label="Smiley face"
-			width="20"
-			height="20"
-			viewBox="0 0 20 20"
-			fill="none"
-			stroke="currentColor"
-			strokeWidth="1.5"
-			style={{ verticalAlign: "middle", margin: "0 0.15rem" }}
-		>
-			<circle cx="10" cy="10" r="8.5" />
-			<circle cx="7" cy="8.5" r="1" fill="currentColor" stroke="none" />
-			<circle cx="13" cy="8.5" r="1" fill="currentColor" stroke="none" />
-			<path d="M6.5 12.5c.8 1.5 2 2 3.5 2s2.7-.5 3.5-2" strokeLinecap="round" />
-		</svg>
 	);
 }
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SiteNav } from "@/SiteNav";
+import { SiteNav } from "@/components/SiteNav";
 
 const TABS = ["Web App", "npm Package", "CLI", "Credits"] as const;
 type Tab = (typeof TABS)[number];

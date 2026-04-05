@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { loadFrames, PRESET_SIZES, type Preset, renderPreviewFrame } from "@/sticker-engine";
+import { loadFrames, PRESET_SIZES, type Preset, renderPreviewFrame } from "@/lib/sticker-engine";
 
 export function Preview({ logo, preset }: { logo: HTMLImageElement; preset: Preset }) {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
