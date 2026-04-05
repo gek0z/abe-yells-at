@@ -2,15 +2,29 @@ import { SiteNav } from "@/components/SiteNav";
 
 export function NotFoundPage() {
 	return (
-		<div className="not-found-page">
+		<div className="landing not-found-page">
 			<SiteNav />
-			<div className="not-found-content">
-				<img className="not-found-abe" src="/abe.gif" alt="Grandpa Abe Simpson yelling" />
-				<h1 className="not-found-title">404</h1>
-				<p className="not-found-text">Old man yells at missing page.</p>
+
+			{/* Clouds */}
+			<div className="cloud cloud-1" />
+			<div className="cloud cloud-2" />
+			<div className="cloud cloud-3" />
+			<div className="cloud cloud-4" />
+
+			<div className="landing-content not-found-content">
+				<h1 className="landing-title">
+					Old man yells at
+					<br />
+					<span className="title-brand">missing page</span>
+				</h1>
 				<a className="not-found-link" href="/">
 					Go Home
 				</a>
+			</div>
+
+			<div className="abe-frame unselectable">
+				<span className="not-found-404 unselectable">404</span>
+				<img className="abe-landing" src="/abe.gif" alt="Grandpa Abe Simpson yelling" />
 			</div>
 		</div>
 	);

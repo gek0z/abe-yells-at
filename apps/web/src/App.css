@@ -1500,57 +1500,73 @@ body {
 }
 
 /* ---------------------------------------------------------------------------
-   404 page
+   404 page  (layout reuses .landing, .landing-content, .abe-frame)
 --------------------------------------------------------------------------- */
-.not-found-page {
-	min-height: 100dvh;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	text-align: center;
-	padding: 2rem;
+.not-found-404 {
+	position: absolute;
+	top: 14cqw;
+	left: 0;
+	font-family: "Bangers", cursive;
+	font-size: 36cqw;
+	color: rgba(255, 255, 255, 0.25);
+	line-height: 1;
+	-webkit-text-stroke: 2px rgba(255, 255, 255, 0.4);
+	paint-order: stroke fill;
+	z-index: 2;
+	animation: shake404 0.6s ease-in-out 0.3s;
+	pointer-events: auto;
+}
+
+@keyframes shake404 {
+	0%,
+	100% {
+		transform: rotate(0deg);
+	}
+	15% {
+		transform: rotate(-8deg);
+	}
+	30% {
+		transform: rotate(8deg);
+	}
+	45% {
+		transform: rotate(-6deg);
+	}
+	60% {
+		transform: rotate(6deg);
+	}
+	75% {
+		transform: rotate(-3deg);
+	}
+	90% {
+		transform: rotate(3deg);
+	}
 }
 
 .not-found-content {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 0.5rem;
-}
-
-.not-found-abe {
-	width: 160px;
-	height: auto;
-	border-radius: var(--radius);
-}
-
-.not-found-title {
-	font-family: "Bangers", cursive;
-	font-size: 6rem;
-	color: var(--yellow);
-	line-height: 1;
-	text-shadow: 3px 3px 0 var(--dark);
-}
-
-.not-found-text {
-	font-size: 1.2rem;
-	color: var(--text-dark);
-	margin-bottom: 1rem;
+	text-align: center;
+	gap: 1.5rem;
 }
 
 .not-found-link {
+	display: inline-block;
+	padding: 1rem 2.5rem;
+	border-radius: 999px;
 	background: var(--yellow);
 	color: var(--text-dark);
 	text-decoration: none;
-	font-weight: 700;
-	padding: 0.6rem 1.5rem;
-	border-radius: 999px;
-	transition: background var(--transition);
+	font-family: "Bangers", cursive;
+	font-size: 1.3rem;
+	letter-spacing: 0.04em;
+	transition: all var(--transition);
 }
 
 .not-found-link:hover {
 	background: var(--yellow-hover);
+	transform: translateY(-2px);
+}
+
+.not-found-link:active {
+	transform: translateY(0);
 }
 
 /* ---------------------------------------------------------------------------
