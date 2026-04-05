@@ -43,7 +43,7 @@
 
 html {
 	scroll-behavior: smooth;
-	background-color: var(--sky-bottom);
+	background-color: var(--sky-top);
 }
 
 body {
@@ -1151,16 +1151,21 @@ body {
 --------------------------------------------------------------------------- */
 @media (max-width: 700px) {
 	.landing-title {
-		font-size: 2.4rem;
+		font-size: 3.2rem;
 	}
 
 	.abe-frame {
-		max-height: 35dvh;
+		max-height: 45dvh;
 	}
 
 	.search-btn {
-		font-size: 0.9rem;
-		padding: 0.7rem 1.8rem;
+		font-size: 1.3rem;
+		padding: 1rem 2.4rem;
+	}
+
+	.upload-btn {
+		font-size: 1.2rem;
+		padding: 1rem 2rem;
 	}
 
 	.result-title {
@@ -1196,11 +1201,11 @@ body {
 
 @media (max-width: 400px) {
 	.landing-title {
-		font-size: 1.8rem;
+		font-size: 2.4rem;
 	}
 
 	.abe-frame {
-		max-height: 30dvh;
+		max-height: 40dvh;
 	}
 }
 
