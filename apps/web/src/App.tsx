@@ -166,45 +166,47 @@ function StickerApp() {
 					<div className="cloud cloud-3" />
 					<div className="cloud cloud-4" />
 
-					<h1 className="landing-title unselectable">
-						ABE YELLS AT
-						<br />
-						<span className="title-brand" key={showcaseName}>
-							{showcaseName ? showcaseName.toUpperCase() : "___"}
-						</span>
-					</h1>
-					<div className="landing-actions unselectable">
-						<button
-							className="upload-btn"
-							onClick={() => fileInputRef.current?.click()}
-							type="button"
-						>
-							<svg
-								aria-label="Upload"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="currentColor"
-								strokeWidth="2"
-								width="18"
-								height="18"
+					<div className="landing-content">
+						<h1 className="landing-title unselectable">
+							ABE YELLS AT
+							<br />
+							<span className="title-brand" key={showcaseName}>
+								{showcaseName ? showcaseName.toUpperCase() : "___"}
+							</span>
+						</h1>
+						<div className="landing-actions unselectable">
+							<button
+								className="upload-btn"
+								onClick={() => fileInputRef.current?.click()}
+								type="button"
 							>
-								<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-								<polyline points="17 8 12 3 7 8" />
-								<line x1="12" y1="3" x2="12" y2="15" />
-							</svg>
-							Upload Your Own Logo
-						</button>
-						<button className="search-btn" onClick={() => setDrawerOpen(true)} type="button">
-							Search Brand Logos
-						</button>
-						<input
-							ref={fileInputRef}
-							className="hidden-input"
-							type="file"
-							accept="image/png,image/jpeg,image/svg+xml,image/webp"
-							onChange={handleFileInputChange}
-							aria-label="Upload logo"
-						/>
+								<svg
+									aria-label="Upload"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									strokeWidth="2"
+									width="18"
+									height="18"
+								>
+									<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+									<polyline points="17 8 12 3 7 8" />
+									<line x1="12" y1="3" x2="12" y2="15" />
+								</svg>
+								Upload Your Own Logo
+							</button>
+							<button className="search-btn" onClick={() => setDrawerOpen(true)} type="button">
+								Search Brand Logos
+							</button>
+							<input
+								ref={fileInputRef}
+								className="hidden-input"
+								type="file"
+								accept="image/png,image/jpeg,image/svg+xml,image/webp"
+								onChange={handleFileInputChange}
+								aria-label="Upload logo"
+							/>
+						</div>
 					</div>
 
 					<div className="abe-frame unselectable">

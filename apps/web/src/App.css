@@ -72,6 +72,18 @@ body {
 	cursor: default;
 }
 
+.landing-content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	flex: 1;
+	z-index: 1;
+	min-height: 0;
+	padding-top: 3rem;
+}
+
 /* Cartoon clouds */
 .cloud {
 	position: absolute;
@@ -207,7 +219,6 @@ body {
 	font-size: 4.5rem;
 	color: var(--yellow);
 	text-align: center;
-	margin-top: 4rem;
 	letter-spacing: 0.04em;
 	text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.15);
 	z-index: 1;
@@ -347,16 +358,17 @@ body {
    Abe frame (logo + abe in 1:1 box)
 --------------------------------------------------------------------------- */
 .abe-frame {
-	position: absolute;
-	bottom: 0;
-	left: 50%;
-	transform: translateX(-50%);
 	width: 100%;
 	max-width: 50dvh;
+	min-width: 250px;
 	aspect-ratio: 1;
 	z-index: 1;
 	pointer-events: none;
 	container-type: size;
+	position: relative;
+	align-self: center;
+	margin-top: auto;
+	flex-shrink: 0;
 }
 
 .abe-landing {
