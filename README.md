@@ -38,7 +38,7 @@ bun install
 cd apps/web && bun run dev
 ```
 
-Visit [abeyells.at](https://abeyells.at), or run locally at [http://localhost:5173](http://localhost:5173) -- drop a logo anywhere on the page, or search thousands of brand logos via the built-in drawer powered by [svgl](https://svgl.app) and [logo.dev](https://logo.dev). Pick a size, download your sticker.
+Visit [abeyells.at](https://abeyells.at), or run locally at [http://localhost:5173](http://localhost:5173). Drop a logo anywhere on the page, or search thousands of brand logos via the built-in drawer powered by [svgl](https://svgl.app) and [logo.dev](https://logo.dev). Pick a size, download your sticker.
 
 The logo is composited behind Abe so his fist goes over the logo. The result page shows a live preview with step-by-step instructions for WhatsApp (Android/iOS), Slack (Desktop/Mobile), and Discord.
 
@@ -168,7 +168,7 @@ abe-yells/
 - **Versioning**: [Changesets](https://github.com/changesets/changesets)
 - **Deployment**: [Cloudflare Pages](https://pages.cloudflare.com)
 
-All sticker processing happens client-side -- no server needed.
+All sticker processing happens client-side, no server needed.
 
 ## CI/CD
 
@@ -183,10 +183,10 @@ Three GitHub Actions workflows handle everything automatically:
 ### Publishing a new version
 
 1. Make changes to `packages/core`
-2. Run `bunx changeset` -- pick patch/minor/major, write a summary
+2. Run `bunx changeset`, pick patch/minor/major, write a summary
 3. Commit the changeset with your changes and merge to main
 4. The Release workflow auto-creates a "Version Packages" PR
-5. Merge that PR -- bumps version, updates CHANGELOG, publishes to npm
+5. Merge that PR, which bumps version, updates CHANGELOG, and publishes to npm
 
 ### Required secrets
 
