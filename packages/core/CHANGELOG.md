@@ -1,5 +1,11 @@
 # abe-yells-at
 
+## 1.2.0
+
+### Minor Changes
+
+- [`f3db066`](https://github.com/gek0z/abe-yells-at/commit/f3db066dc142c6ef2b5c7b0ac0d309c994d4ef11) Thanks [@gek0z](https://github.com/gek0z)! - Add static PNG export format alongside GIF and WebP. Available in the npm package, CLI (`--format png`), and web app.
+
 ## 1.1.2
 
 ### Patch Changes
