@@ -47,6 +47,11 @@ describe("parseArgs", () => {
 		expect(result?.format).toBe("webp");
 	});
 
+	test("parses png format", () => {
+		const result = parseArgs(argv("logo.png", "-f", "png"));
+		expect(result?.format).toBe("png");
+	});
+
 	test("parses --output flag", () => {
 		const result = parseArgs(argv("logo.png", "--output", "./out"));
 		expect(result?.output).toBe("./out");

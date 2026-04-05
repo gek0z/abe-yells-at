@@ -78,7 +78,6 @@ export async function generateSticker(options: {
 		onProgress,
 	} satisfies BrowserStickerOptions);
 
-	return new Blob([result.data], {
-		type: format === "gif" ? "image/gif" : "image/webp",
-	});
+	const mimeType = format === "gif" ? "image/gif" : format === "png" ? "image/png" : "image/webp";
+	return new Blob([result.data], { type: mimeType });
 }

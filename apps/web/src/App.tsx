@@ -84,7 +84,7 @@ function StickerApp() {
 			});
 			setResultBlob(blob);
 
-			const ext = format === "gif" ? "gif" : "webp";
+			const ext = format === "gif" ? "gif" : format === "png" ? "png" : "webp";
 			const slug =
 				logoName
 					.toLowerCase()

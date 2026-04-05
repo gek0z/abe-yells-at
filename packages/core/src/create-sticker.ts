@@ -69,6 +69,19 @@ async function createStickerNode(options: StickerOptions): Promise<StickerResult
 	const logoX = config.logo.x;
 	const logoY = config.logo.y;
 
+	if (format === "png") {
+		// ── PNG path (static, frame 1 only) ───────────────────────────
+		const canvas = createCanvas(width, height);
+		const ctx = canvas.getContext("2d");
+		ctx.drawImage(logoImage, logoX, logoY, logoW, logoH);
+		ctx.drawImage(frameImages[0], 0, 0, width, height);
+
+		const buf = await canvas.encode("png");
+		const data = new Uint8Array(buf.buffer, buf.byteOffset, buf.byteLength);
+		onProgress?.(100);
+		return { data, format: "png", width, height, preset };
+	}
+
 	if (format === "gif") {
 		// ── GIF path ──────────────────────────────────────────────────
 		const gifFrames: GifFrame[] = [];
@@ -232,6 +245,15 @@ export async function createStickerFromImages(
 	const canvas = new OffscreenCanvas(width, height);
 	const ctx = canvas.getContext("2d");
 	if (!ctx) throw new Error("Failed to get 2d context");
+
+	if (format === "png") {
+		// ── PNG path (static, frame 1 only) ───────────────────────────
+		compositeFrame(ctx as unknown as CanvasRenderingContext2D, options.frames[0], logo, width);
+		const blob = await canvas.convertToBlob({ type: "image/png" });
+		const data = new Uint8Array(await blob.arrayBuffer());
+		onProgress?.(100);
+		return { data, format: "png", width, height, preset };
+	}
 
 	if (format === "gif") {
 		const gifFrames: GifFrame[] = [];

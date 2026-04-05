@@ -3,6 +3,7 @@ import type { Format } from "@/lib/sticker-engine";
 const FORMAT_OPTIONS: { value: Format; label: string }[] = [
 	{ value: "gif", label: "GIF" },
 	{ value: "webp", label: "WebP" },
+	{ value: "png", label: "PNG" },
 ];
 
 export function FormatSelector({

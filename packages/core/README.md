@@ -4,7 +4,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/abe-yells-at?color=yellow)](https://www.npmjs.com/package/abe-yells-at)
 [![license](https://img.shields.io/github/license/gek0z/abe-yells-at)](https://github.com/gek0z/abe-yells-at/blob/main/LICENSE)
 
-Create animated stickers of Grandpa Abe Simpson yelling at your logo. Download as GIF or WebP for WhatsApp, Slack, or Discord.
+Create animated stickers of Grandpa Abe Simpson yelling at your logo. Download as GIF, WebP, or PNG for WhatsApp, Slack, or Discord.
 
 Try it in the browser at [abeyells.at](https://abeyells.at).
 
@@ -18,7 +18,7 @@ Options:
 
 ```
 --preset, -p   large | medium | small        (default: large)
---format, -f   gif | webp | all             (default: all)
+--format, -f   gif | webp | png | all       (default: all)
 --output, -o   output directory             (default: same as input)
 ```
 

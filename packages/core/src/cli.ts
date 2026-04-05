@@ -23,7 +23,7 @@ ${bold("USAGE")}
 
 ${bold("OPTIONS")}
   ${green("--preset, -p")}   Size preset: ${yellow("large")} | ${yellow("medium")} | ${yellow("small")}  ${dim("(default: large)")}
-  ${green("--format, -f")}   Output format: ${yellow("gif")} | ${yellow("webp")} | ${yellow("all")}       ${dim("(default: all)")}
+  ${green("--format, -f")}   Output format: ${yellow("gif")} | ${yellow("webp")} | ${yellow("png")} | ${yellow("all")}  ${dim("(default: all)")}
   ${green("--output, -o")}   Output directory                        ${dim("(default: same as input)")}
   ${green("--help, -h")}     Show this help message
 
@@ -42,7 +42,7 @@ ${bold("EXAMPLES")}
 export interface CliArgs {
 	imagePath: string;
 	preset: Preset;
-	format: "gif" | "webp" | "all";
+	format: "gif" | "webp" | "png" | "all";
 	output: string;
 }
 
@@ -62,7 +62,7 @@ export function parseArgs(argv: string[]): CliArgs | null {
 
 	let imagePath = "";
 	let preset: Preset = "large";
-	let format: "gif" | "webp" | "all" = "all";
+	let format: "gif" | "webp" | "png" | "all" = "all";
 	let output = "";
 
 	for (let i = 0; i < args.length; i++) {
@@ -76,10 +76,10 @@ export function parseArgs(argv: string[]): CliArgs | null {
 			preset = val as Preset;
 		} else if (arg === "--format" || arg === "-f") {
 			const val = args[++i];
-			if (!val || !["gif", "webp", "all"].includes(val)) {
-				throw new CliParseError(`Invalid format "${val}". Use gif, webp, or all.`);
+			if (!val || !["gif", "webp", "png", "all"].includes(val)) {
+				throw new CliParseError(`Invalid format "${val}". Use gif, webp, png, or all.`);
 			}
-			format = val as "gif" | "webp" | "all";
+			format = val as "gif" | "webp" | "png" | "all";
 		} else if (arg === "--output" || arg === "-o") {
 			const val = args[++i];
 			if (!val) {
@@ -138,7 +138,7 @@ async function main(): Promise<void> {
 		fs.mkdirSync(resolvedOutput, { recursive: true });
 	}
 
-	const formats: Format[] = format === "all" ? ["gif", "webp"] : [format as Format];
+	const formats: Format[] = format === "all" ? ["gif", "webp", "png"] : [format as Format];
 
 	console.log("");
 	console.log(bold(`  Old man yells at ${cyan(path.basename(resolvedImage))}`));

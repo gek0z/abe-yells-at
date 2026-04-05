@@ -42,7 +42,7 @@ export function DocsPage() {
 				<h1 className="docs-title">Docs</h1>
 				<p className="docs-intro">
 					Create animated stickers of Grandpa Abe Simpson yelling at your logo. Upload your own or
-					pick from thousands of brand logos. Download as GIF or WebP.
+					pick from thousands of brand logos. Download as GIF, WebP, or PNG.
 				</p>
 
 				<div className="pills docs-pills">
@@ -80,7 +80,7 @@ export function DocsPage() {
 							</li>
 							<li>
 								Choose a <strong>size preset</strong> (Large 512px, Medium 320px, Small 128px) and{" "}
-								<strong>format</strong> (GIF or WebP).
+								<strong>format</strong> (GIF, WebP, or PNG).
 							</li>
 							<li>
 								Click <strong>Generate & Download</strong> -- the sticker is created client-side and
@@ -112,7 +112,7 @@ export function DocsPage() {
 const result = await createSticker({
   logo: "./my-logo.png",
   preset: "large",   // "large" | "medium" | "small"
-  format: "gif",     // "gif" | "webp"
+  format: "gif",     // "gif" | "webp" | "png"
 });
 
 // result.data is a Uint8Array
@@ -194,7 +194,7 @@ const result = await createStickerFromImages({
 									<td>
 										<code>--format, -f</code>
 									</td>
-									<td>gif, webp, all</td>
+									<td>gif, webp, png, all</td>
 									<td>all</td>
 								</tr>
 								<tr>
@@ -277,6 +277,21 @@ abe-yells-at logo.png -o ./stickers`}
 								>
 									npm
 								</a>
+							</li>
+							<li>
+								Shoutout to{" "}
+								<a
+									href="https://github.com/oncilla/old-man-yells-at"
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									old-man-yells-at
+								</a>{" "}
+								(static CLI) and{" "}
+								<a href="https://slackmojis.com/" target="_blank" rel="noopener noreferrer">
+									Slackmojis
+								</a>{" "}
+								(low-res Slack emoji)
 							</li>
 							<li>MIT License</li>
 						</ul>

@@ -1,5 +1,5 @@
 export type Preset = "large" | "medium" | "small";
-export type Format = "gif" | "webp";
+export type Format = "gif" | "webp" | "png";
 
 export type OnProgress = (percent: number) => void;
 
