@@ -1,5 +1,11 @@
 # abe-yells-at
 
+## 1.1.1
+
+### Patch Changes
+
+- [`9f96d88`](https://github.com/gek0z/abe-yells-at/commit/9f96d88184c54411fa4c5ae7f24f1ce78a26de0e) Thanks [@gek0z](https://github.com/gek0z)! - Add repository, homepage, bugs, and author fields to package.json; add README for npm
+
 ## 1.1.0
 
 ### Minor Changes
