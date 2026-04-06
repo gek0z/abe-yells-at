@@ -1297,7 +1297,21 @@ body {
 
 .docs-pills {
 	margin-bottom: 2.5rem;
-	max-width: 500px;
+	max-width: 600px;
+}
+
+.pill-short {
+	display: none;
+}
+
+@media (max-width: 600px) {
+	.pill-full {
+		display: none;
+	}
+
+	.pill-short {
+		display: inline;
+	}
 }
 
 .docs-section {
@@ -1461,6 +1475,25 @@ body {
 	padding: 0.5rem 0.75rem;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 	color: #c8c8d8;
+}
+
+@media (max-width: 600px) {
+	.docs-page {
+		padding: 0 0.75rem 3rem;
+	}
+
+	.docs-table {
+		font-size: 0.8rem;
+	}
+
+	.docs-table th,
+	.docs-table td {
+		padding: 0.4rem 0.5rem;
+	}
+
+	.docs-table .col-hide-mobile {
+		display: none;
+	}
 }
 
 /* ---------------------------------------------------------------------------

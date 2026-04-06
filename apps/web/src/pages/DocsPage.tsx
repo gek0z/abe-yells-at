@@ -2,26 +2,28 @@ import { useState } from "react";
 import { CodeBlock } from "@/components/CodeBlock";
 import { SiteNav } from "@/components/SiteNav";
 
-const TABS = ["Web App", "npm Package", "CLI", "Credits"] as const;
+const TABS = ["Website", "npm Package", "CLI", "Assets", "Credits"] as const;
 type Tab = (typeof TABS)[number];
 
 const HASH_TO_TAB: Record<string, Tab> = {
-	"web-app": "Web App",
+	website: "Website",
 	package: "npm Package",
 	cli: "CLI",
+	assets: "Assets",
 	credits: "Credits",
 };
 
 const TAB_TO_HASH: Record<Tab, string> = {
-	"Web App": "web-app",
+	Website: "website",
 	"npm Package": "package",
 	CLI: "cli",
+	Assets: "assets",
 	Credits: "credits",
 };
 
 function getTabFromHash(): Tab {
 	const hash = window.location.hash.replace("#", "");
-	return HASH_TO_TAB[hash] ?? "Web App";
+	return HASH_TO_TAB[hash] ?? "Website";
 }
 
 export function DocsPage() {
@@ -54,14 +56,21 @@ export function DocsPage() {
 							className={`pill${tab === t ? " active" : ""}`}
 							onClick={() => selectTab(t)}
 						>
-							{t}
+							{t === "npm Package" ? (
+								<>
+									<span className="pill-full">npm Package</span>
+									<span className="pill-short">npm</span>
+								</>
+							) : (
+								t
+							)}
 						</button>
 					))}
 				</div>
 
-				{tab === "Web App" && (
+				{tab === "Website" && (
 					<section className="docs-section">
-						<h2>Web App</h2>
+						<h2>Website</h2>
 						<p>
 							The easiest way to use Abe Yells At. No installation needed, everything runs in your
 							browser.
@@ -224,8 +233,8 @@ bunx abe-yells-at logo.png`}
 							<thead>
 								<tr>
 									<th>Flag</th>
-									<th>Values</th>
-									<th>Default</th>
+									<th className="col-hide-mobile">Values</th>
+									<th className="col-hide-mobile">Default</th>
 									<th>Description</th>
 								</tr>
 							</thead>
@@ -234,16 +243,16 @@ bunx abe-yells-at logo.png`}
 									<td>
 										<code>--preset, -p</code>
 									</td>
-									<td>large, medium, small</td>
-									<td>large</td>
+									<td className="col-hide-mobile">large, medium, small</td>
+									<td className="col-hide-mobile">large</td>
 									<td>Output size (512px, 320px, 128px)</td>
 								</tr>
 								<tr>
 									<td>
 										<code>--format, -f</code>
 									</td>
-									<td>gif, webp, png, all</td>
-									<td>all</td>
+									<td className="col-hide-mobile">gif, webp, png, all</td>
+									<td className="col-hide-mobile">all</td>
 									<td>
 										Output format. <code>all</code> generates GIF + WebP + PNG
 									</td>
@@ -252,16 +261,16 @@ bunx abe-yells-at logo.png`}
 									<td>
 										<code>--output, -o</code>
 									</td>
-									<td>directory path</td>
-									<td>same as input</td>
+									<td className="col-hide-mobile">directory path</td>
+									<td className="col-hide-mobile">same as input</td>
 									<td>Where to save the output files</td>
 								</tr>
 								<tr>
 									<td>
 										<code>--help, -h</code>
 									</td>
-									<td />
-									<td />
+									<td className="col-hide-mobile" />
+									<td className="col-hide-mobile" />
 									<td>Show help message</td>
 								</tr>
 							</tbody>
@@ -294,6 +303,79 @@ abe-yells-at logo.png -f png -p medium
 # Save to a specific directory
 abe-yells-at logo.png -o ./stickers`}
 						/>
+					</section>
+				)}
+
+				{tab === "Assets" && (
+					<section className="docs-section">
+						<h2>Assets</h2>
+						<p>
+							Download the character art and animation frames used by the project. All assets are
+							MIT licensed.
+						</p>
+
+						<h3>Character</h3>
+						<table className="docs-table">
+							<thead>
+								<tr>
+									<th>File</th>
+									<th>Format</th>
+									<th className="col-hide-mobile">Size</th>
+									<th />
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Abe (animated)</td>
+									<td>SVG</td>
+									<td className="col-hide-mobile">37 KB</td>
+									<td>
+										<a href="/abe.svg" download>
+											Download
+										</a>
+									</td>
+								</tr>
+								<tr>
+									<td>Abe (animated)</td>
+									<td>GIF</td>
+									<td className="col-hide-mobile">517 KB</td>
+									<td>
+										<a href="/abe.gif" download>
+											Download
+										</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<h3>Animation Frames</h3>
+						<p>The 9 individual PNG frames that make up the fist-shaking animation.</p>
+						<table className="docs-table">
+							<thead>
+								<tr>
+									<th>File</th>
+									<th>Format</th>
+									<th className="col-hide-mobile">Size</th>
+									<th />
+								</tr>
+							</thead>
+							<tbody>
+								{[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
+									<tr key={`frame-${n}`}>
+										<td>
+											<code>frame-{n}.png</code>
+										</td>
+										<td>PNG</td>
+										<td className="col-hide-mobile">~98 KB</td>
+										<td>
+											<a href={`/frames/frame-${n}.png`} download>
+												Download
+											</a>
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
 					</section>
 				)}
 
