@@ -136,6 +136,8 @@ abe-yells/
 │   ├── src/
 │   │   ├── components/     # reusable UI components
 │   │   │   ├── icons.tsx   # shared SVG icons (GitHub, npm, Upload, Smiley)
+│   │   │   ├── CloudBackground.tsx  # animated cloud background
+│   │   │   ├── CodeBlock.tsx        # syntax-highlighted code with copy button
 │   │   │   ├── LogoDrawer.tsx       # slide-up drawer (svgl + logo.dev search)
 │   │   │   ├── LogoShowcase.tsx     # rotating logo showcase on landing page
 │   │   │   ├── Preview.tsx          # animated canvas preview
@@ -149,10 +151,13 @@ abe-yells/
 │   │   │   ├── NotFoundPage.tsx     # 404 page
 │   │   │   └── PrivacyPage.tsx      # /privacy page
 │   │   ├── lib/            # non-React logic
+│   │   │   ├── analytics.ts         # GA4 custom event tracking
 │   │   │   └── sticker-engine.ts    # thin wrapper around abe-yells-at core
 │   │   └── App.tsx         # main app shell (landing + result views)
 │   └── public/frames/      # animation frames served statically
 └── assets/                 # original source assets
+    ├── pngs/               # optimized PNG frames
+    └── svgs/               # SVG frames
 ```
 
 ## Tech Stack
@@ -166,6 +171,7 @@ abe-yells/
 - **GIF encoding**: [gifenc](https://github.com/mattdesl/gifenc) with 1-bit alpha snapping
 - **WebP encoding**: [@jsquash/webp](https://github.com/jamsinclair/jsquash) WASM encoder + custom animated WebP RIFF muxer
 - **Versioning**: [Changesets](https://github.com/changesets/changesets)
+- **Analytics**: [Google Analytics 4](https://analytics.google.com) via GTM with custom event tracking
 - **Deployment**: [Cloudflare Pages](https://pages.cloudflare.com)
 
 All sticker processing happens client-side, no server needed.
@@ -176,7 +182,7 @@ Three GitHub Actions workflows handle everything automatically:
 
 | Workflow | Trigger | What it does |
 |----------|---------|--------------|
-| **CI** | push to main, PRs with `run-ci` label | lint, typecheck, test, build |
+| **CI** | push to main, PRs with `run-ci` label (skips doc/config-only changes) | lint, typecheck, test, build |
 | **Deploy** | push to main (path-filtered) | deploy web app to Cloudflare Pages |
 | **Release** | push to main (path-filtered) | version PR or npm publish via changesets |
 
