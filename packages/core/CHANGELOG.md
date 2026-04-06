@@ -1,5 +1,19 @@
 # abe-yells-at
 
+## 1.2.2
+
+### Patch Changes
+
+- [`73255c6`](https://github.com/gek0z/abe-yells-at/commit/73255c6a663dc2054b34b9b2acff94972d351596) Thanks [@gek0z](https://github.com/gek0z)! - Fix Windows path resolution, add input validation, and optimize frame assets
+
+  - Fix `fileURLToPath` usage for correct Windows path handling
+  - Validate logo dimensions to prevent division-by-zero on corrupt images
+  - Add bounds check in WebP RIFF chunk parser for malformed inputs
+  - Validate logo input type with clear error for unsupported types
+  - Align Node WebP encoding quality with browser output (quality 100)
+  - Optimize bundled frame PNGs (~70% smaller, 102 KB → 28 KB each)
+  - Add integration tests for createSticker (GIF, PNG, WebP, all presets)
+
 ## 1.2.1
 
 ### Patch Changes
