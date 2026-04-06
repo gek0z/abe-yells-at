@@ -40,14 +40,15 @@ export function CookieBar() {
 		<div className={`cookie-bar${visible ? " visible" : ""}`}>
 			<div className="cookie-bar-content">
 				<p>
-					We use cookies to understand how you use our site. <a href="/privacy">Learn more</a>
+					Old man yells at cookies! We use them to understand how you use our site.{" "}
+					<a href="/privacy">Learn more</a>
 				</p>
 				<div className="cookie-bar-actions">
 					<button className="cookie-bar-reject" onClick={handleReject} type="button">
-						Reject
+						Get off my lawn!
 					</button>
 					<button className="cookie-bar-accept" onClick={handleAccept} type="button">
-						Accept
+						Fine, whatever
 					</button>
 				</div>
 			</div>
