@@ -24,7 +24,11 @@ export function NotFoundPage() {
 
 			<div className="abe-frame unselectable">
 				<span className="not-found-404 unselectable">404</span>
-				<img className="abe-landing" src="/abe.gif" alt="Grandpa Abe Simpson yelling" />
+				<img
+					className="abe-landing unselectable"
+					src="/abe.svg"
+					alt="Grandpa Abe Simpson yelling"
+				/>
 			</div>
 		</div>
 	);

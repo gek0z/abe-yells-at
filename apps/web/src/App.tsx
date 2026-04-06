@@ -204,7 +204,11 @@ function StickerApp() {
 
 					<div className="abe-frame unselectable">
 						<LogoShowcase onLogoChange={setShowcaseName} />
-						<img className="abe-landing" src="/abe.gif" alt="Grandpa Abe Simpson yelling" />
+						<img
+							className="abe-landing unselectable"
+							src="/abe.svg"
+							alt="Grandpa Abe Simpson yelling"
+						/>
 					</div>
 
 					{/* Drag overlay */}

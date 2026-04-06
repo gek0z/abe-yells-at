@@ -134,8 +134,14 @@ export function LogoShowcase({ onLogoChange }: { onLogoChange?: (name: string) =
 		return () => clearInterval(timer);
 	}, [advance]);
 
+	useEffect(() => {
+		for (let i = 1; i <= 3; i++) {
+			const img = new Image();
+			img.src = logos[(currentIndex + i) % logos.length].url;
+		}
+	}, [currentIndex, logos]);
+
 	const logo = logos[currentIndex];
-	const nextLogo = logos[(currentIndex + 1) % logos.length];
 
 	return (
 		<div className="logo-showcase" aria-live="polite" aria-atomic="true">
@@ -153,12 +159,6 @@ export function LogoShowcase({ onLogoChange }: { onLogoChange?: (name: string) =
 				/>
 				<span className="sr-only">Abe yells at {logo.title}</span>
 			</div>
-			<img
-				src={nextLogo.url}
-				alt=""
-				aria-hidden="true"
-				style={{ position: "absolute", width: 0, height: 0, overflow: "hidden", opacity: 0 }}
-			/>
 		</div>
 	);
 }
