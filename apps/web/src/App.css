@@ -833,6 +833,42 @@ body {
 	opacity: 1;
 }
 
+.generation-error {
+	color: #ff6b6b;
+	font-size: 0.95rem;
+	text-align: center;
+	margin-top: 0.5rem;
+}
+
+.error-boundary {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 100vh;
+	gap: 1rem;
+	text-align: center;
+	font-family: "Bangers", cursive;
+	background: var(--dark);
+	color: var(--text);
+}
+
+.error-boundary h1 {
+	font-size: 2.5rem;
+	color: var(--yellow);
+}
+
+.error-boundary button {
+	padding: 0.8rem 2rem;
+	border: none;
+	border-radius: 999px;
+	background: var(--yellow);
+	color: var(--text-dark);
+	font-family: "Bangers", cursive;
+	font-size: 1.2rem;
+	cursor: pointer;
+}
+
 /* Reset/Start Over button */
 .reset-btn {
 	padding: 0.9rem 2rem;
@@ -1435,6 +1471,24 @@ body {
 	overflow: hidden;
 	clip: rect(0, 0, 0, 0);
 	border: 0;
+}
+
+.skip-to-content {
+	position: absolute;
+	left: -9999px;
+	top: 0;
+	z-index: 9999;
+	padding: 0.8rem 1.5rem;
+	background: var(--yellow);
+	color: var(--text-dark);
+	font-family: "Bangers", cursive;
+	font-size: 1.1rem;
+	text-decoration: none;
+	border-radius: 0 0 8px 0;
+}
+
+.skip-to-content:focus {
+	left: 0;
 }
 
 /* ---------------------------------------------------------------------------

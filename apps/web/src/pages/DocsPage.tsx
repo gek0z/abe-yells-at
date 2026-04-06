@@ -348,7 +348,7 @@ abe-yells-at logo.png -o ./stickers`}
 							</tbody>
 						</table>
 
-						<h3>Animation Frames</h3>
+						<h3>Animation Frames (PNG)</h3>
 						<p>The 9 individual PNG frames that make up the fist-shaking animation.</p>
 						<table className="docs-table">
 							<thead>
@@ -361,14 +361,45 @@ abe-yells-at logo.png -o ./stickers`}
 							</thead>
 							<tbody>
 								{[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
-									<tr key={`frame-${n}`}>
+									<tr key={`frame-png-${n}`}>
 										<td>
 											<code>frame-{n}.png</code>
 										</td>
 										<td>PNG</td>
-										<td className="col-hide-mobile">~98 KB</td>
+										<td className="col-hide-mobile">~28 KB</td>
 										<td>
 											<a href={`/frames/frame-${n}.png`} download>
+												Download
+											</a>
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+
+						<h3>Animation Frames (SVG)</h3>
+						<p>
+							Vector source files for the animation frames. Scale to any size without quality loss.
+						</p>
+						<table className="docs-table">
+							<thead>
+								<tr>
+									<th>File</th>
+									<th>Format</th>
+									<th className="col-hide-mobile">Size</th>
+									<th />
+								</tr>
+							</thead>
+							<tbody>
+								{[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
+									<tr key={`frame-svg-${n}`}>
+										<td>
+											<code>frame-{n}.svg</code>
+										</td>
+										<td>SVG</td>
+										<td className="col-hide-mobile">~37 KB</td>
+										<td>
+											<a href={`/svgs/frame-${n}.svg`} download>
 												Download
 											</a>
 										</td>

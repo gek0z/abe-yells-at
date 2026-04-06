@@ -154,10 +154,10 @@ abe-yells/
 │   │   │   ├── analytics.ts         # GA4 custom event tracking
 │   │   │   └── sticker-engine.ts    # thin wrapper around abe-yells-at core
 │   │   └── App.tsx         # main app shell (landing + result views)
-│   └── public/frames/      # animation frames served statically
+│   └── public/frames/      # symlink → packages/core/frames
 └── assets/                 # original source assets
-    ├── pngs/               # optimized PNG frames
-    └── svgs/               # SVG frames
+    ├── abe.gif             # demo GIF (used in README + web app via symlink)
+    └── svgs/               # source SVG frames (vector originals, PNGs exported from these)
 ```
 
 ## Tech Stack

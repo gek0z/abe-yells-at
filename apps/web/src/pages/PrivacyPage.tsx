@@ -85,7 +85,6 @@ export function PrivacyPage() {
 					</ul>
 				</section>
 
-				{/* TODO: Replace with your actual contact email */}
 				<section className="docs-section">
 					<h2>Contact</h2>
 					<p>

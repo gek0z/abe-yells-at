@@ -67,6 +67,8 @@ function stripRiffWrapper(webp: Uint8Array): Uint8Array {
 		const dataSize = readUint32LE(webp, pos + 4);
 		const paddedSize = dataSize + (dataSize % 2); // RIFF chunks are word-aligned
 
+		if (pos + 8 + paddedSize > webp.length) break; // malformed chunk, stop parsing
+
 		if (fourcc === "VP8 " || fourcc === "VP8L" || fourcc === "ALPH") {
 			kept.push(webp.subarray(pos, pos + 8 + paddedSize));
 		}

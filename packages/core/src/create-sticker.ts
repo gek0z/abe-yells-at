@@ -19,6 +19,7 @@ function isNode(): boolean {
 async function createStickerNode(options: StickerOptions): Promise<StickerResult> {
 	const { createCanvas, loadImage } = await import("@napi-rs/canvas");
 	const path = await import("node:path");
+	const { fileURLToPath } = await import("node:url");
 
 	const preset: Preset = options.preset ?? "large";
 	const format: Format = options.format ?? "gif";
@@ -27,7 +28,7 @@ async function createStickerNode(options: StickerOptions): Promise<StickerResult
 	const onProgress = options.onProgress;
 
 	// Resolve frames directory (relative to this file in the package)
-	const framesDir = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..", "frames");
+	const framesDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "frames");
 
 	// Load all 9 frame PNGs
 	const framePaths = Array.from({ length: FRAME_COUNT }, (_, i) =>
@@ -47,13 +48,21 @@ async function createStickerNode(options: StickerOptions): Promise<StickerResult
 		logoImage = await loadImage(Buffer.from(options.logo));
 	} else if (options.logo instanceof ArrayBuffer) {
 		logoImage = await loadImage(Buffer.from(options.logo));
-	} else {
-		// Blob
-		const ab = await (options.logo as Blob).arrayBuffer();
+	} else if (options.logo instanceof Blob) {
+		const ab = await options.logo.arrayBuffer();
 		logoImage = await loadImage(Buffer.from(ab));
+	} else {
+		throw new Error(
+			"Unsupported logo type. Expected a file path, Buffer, Uint8Array, ArrayBuffer, or Blob.",
+		);
 	}
 
 	onProgress?.(15);
+
+	// Validate logo dimensions
+	if (!logoImage.width || !logoImage.height) {
+		throw new Error("Invalid logo image: width and height must be greater than zero");
+	}
 
 	// Calculate logo dimensions (fit within maxWidth/maxHeight, maintain aspect ratio)
 	const logoAspect = logoImage.width / logoImage.height;
@@ -130,7 +139,7 @@ async function createStickerNode(options: StickerOptions): Promise<StickerResult
 		// Draw the Abe frame on top
 		ctx.drawImage(frameImg, 0, 0, width, height);
 
-		const buf = await canvas.encode("webp", 80);
+		const buf = await canvas.encode("webp", 100);
 		const frameData = new Uint8Array(buf.buffer, buf.byteOffset, buf.byteLength);
 		webpFrames.push({ data: frameData, width, height });
 
@@ -205,6 +214,11 @@ export function compositeFrame(
 		ctx.fillRect(0, 0, size, size);
 	}
 
+	// Validate logo dimensions
+	if (!logo.width || !logo.height) {
+		throw new Error("Invalid logo image: width and height must be greater than zero");
+	}
+
 	// Calculate logo dimensions
 	const logoAspect = logo.width / logo.height;
 	let logoW = presetConfig.logo.maxWidth;
@@ -248,7 +262,7 @@ export async function createStickerFromImages(
 
 	if (format === "png") {
 		// ── PNG path (static, frame 1 only) ───────────────────────────
-		compositeFrame(ctx as unknown as CanvasRenderingContext2D, options.frames[0], logo, width);
+		compositeFrame(ctx, options.frames[0], logo, width);
 		const blob = await canvas.convertToBlob({ type: "image/png" });
 		const data = new Uint8Array(await blob.arrayBuffer());
 		onProgress?.(100);
@@ -259,7 +273,7 @@ export async function createStickerFromImages(
 		const gifFrames: GifFrame[] = [];
 
 		for (let i = 0; i < options.frames.length; i++) {
-			compositeFrame(ctx as unknown as CanvasRenderingContext2D, options.frames[i], logo, width);
+			compositeFrame(ctx, options.frames[i], logo, width);
 
 			const imageData = ctx.getImageData(0, 0, width, height);
 			gifFrames.push({
@@ -281,7 +295,7 @@ export async function createStickerFromImages(
 	const webpFrames: WebPFrame[] = [];
 
 	for (let i = 0; i < options.frames.length; i++) {
-		compositeFrame(ctx as unknown as CanvasRenderingContext2D, options.frames[i], logo, width);
+		compositeFrame(ctx, options.frames[i], logo, width);
 
 		const imageData = ctx.getImageData(0, 0, width, height);
 		const webpBuffer = await encodeWebPFrame(imageData, {

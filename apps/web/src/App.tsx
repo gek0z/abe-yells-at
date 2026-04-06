@@ -1,4 +1,12 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+	Component,
+	type ErrorInfo,
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 import { CloudBackground } from "@/components/CloudBackground";
 import { CookieBar } from "@/components/CookieBar";
 import { FormatSelector } from "@/components/FormatSelector";
@@ -11,6 +19,33 @@ import { Preview } from "@/components/Preview";
 import { SiteNav } from "@/components/SiteNav";
 import { AnalyticsEvent, trackEvent } from "@/lib/analytics";
 import { type Format, generateSticker, PRESET_SIZES, type Preset } from "@/lib/sticker-engine";
+
+class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+	state = { hasError: false };
+
+	static getDerivedStateFromError() {
+		return { hasError: true };
+	}
+
+	componentDidCatch(error: Error, info: ErrorInfo) {
+		console.error("Uncaught error:", error, info);
+	}
+
+	render() {
+		if (this.state.hasError) {
+			return (
+				<div className="error-boundary">
+					<h1>Something went wrong</h1>
+					<p>Old man yells at bug! Try reloading the page.</p>
+					<button type="button" onClick={() => window.location.reload()}>
+						Reload
+					</button>
+				</div>
+			);
+		}
+		return this.props.children;
+	}
+}
 
 import { DocsPage } from "@/pages/DocsPage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
@@ -34,6 +69,7 @@ function StickerApp() {
 	const [generating, setGenerating] = useState(false);
 	const [progress, setProgress] = useState(0);
 	const [resultBlob, setResultBlob] = useState<Blob | null>(null);
+	const [error, setError] = useState<string | null>(null);
 
 	const handlePresetChange = useCallback((p: Preset) => {
 		setPreset(p);
@@ -92,6 +128,7 @@ function StickerApp() {
 		setGenerating(true);
 		setProgress(0);
 		setResultBlob(null);
+		setError(null);
 		trackEvent(AnalyticsEvent.STICKER_GENERATE, { preset, format });
 
 		try {
@@ -120,6 +157,7 @@ function StickerApp() {
 			URL.revokeObjectURL(url);
 		} catch (err) {
 			console.error("Sticker generation failed:", err);
+			setError("Sticker generation failed. Try a different image or format.");
 		} finally {
 			setGenerating(false);
 		}
@@ -307,6 +345,7 @@ function StickerApp() {
 									? `Download Again (${formatBytes(resultBlob.size)})`
 									: "Generate & Download"}
 						</button>
+						{error && <p className="generation-error">{error}</p>}
 					</div>
 
 					<PlatformInstructions format={format} />
@@ -327,7 +366,29 @@ function StickerApp() {
 }
 
 export default function App() {
-	const path = window.location.pathname;
+	const [path, setPath] = useState(window.location.pathname);
+
+	useEffect(() => {
+		const onPopState = () => setPath(window.location.pathname);
+		window.addEventListener("popstate", onPopState);
+		return () => window.removeEventListener("popstate", onPopState);
+	}, []);
+
+	useEffect(() => {
+		const onClick = (e: MouseEvent) => {
+			const anchor = (e.target as Element).closest("a");
+			if (!anchor) return;
+			const href = anchor.getAttribute("href");
+			if (!href?.startsWith("/") || anchor.target === "_blank") return;
+			e.preventDefault();
+			window.history.pushState(null, "", href);
+			setPath(href);
+			window.scrollTo(0, 0);
+		};
+		document.addEventListener("click", onClick);
+		return () => document.removeEventListener("click", onClick);
+	}, []);
+
 	const page =
 		path === "/" ? (
 			<StickerApp />
@@ -339,9 +400,12 @@ export default function App() {
 			<NotFoundPage />
 		);
 	return (
-		<>
-			{page}
+		<ErrorBoundary>
+			<a className="skip-to-content" href="#main-content">
+				Skip to content
+			</a>
+			<main id="main-content">{page}</main>
 			<CookieBar />
-		</>
+		</ErrorBoundary>
 	);
 }

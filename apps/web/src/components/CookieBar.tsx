@@ -20,12 +20,14 @@ export function CookieBar() {
 
 	const handleAccept = () => {
 		localStorage.setItem(STORAGE_KEY, "granted");
-		window.gtag("consent", "update", {
-			ad_storage: "denied",
-			ad_user_data: "denied",
-			ad_personalization: "denied",
-			analytics_storage: "granted",
-		});
+		if (typeof window.gtag === "function") {
+			window.gtag("consent", "update", {
+				ad_storage: "denied",
+				ad_user_data: "denied",
+				ad_personalization: "denied",
+				analytics_storage: "granted",
+			});
+		}
 		trackEvent(AnalyticsEvent.COOKIE_CONSENT, { action: "accept" });
 		setVisible(false);
 	};
