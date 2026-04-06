@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { AnalyticsEvent, trackEvent } from "@/lib/analytics";
 
 const STORAGE_KEY = "cookie-consent";
 
@@ -25,11 +26,13 @@ export function CookieBar() {
 			ad_personalization: "denied",
 			analytics_storage: "granted",
 		});
+		trackEvent(AnalyticsEvent.COOKIE_CONSENT, { action: "accept" });
 		setVisible(false);
 	};
 
 	const handleReject = () => {
 		localStorage.setItem(STORAGE_KEY, "denied");
+		trackEvent(AnalyticsEvent.COOKIE_CONSENT, { action: "reject" });
 		setVisible(false);
 	};
 

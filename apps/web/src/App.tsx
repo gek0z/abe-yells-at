@@ -8,6 +8,7 @@ import { PlatformInstructions } from "@/components/PlatformInstructions";
 import { PresetSelector } from "@/components/PresetSelector";
 import { Preview } from "@/components/Preview";
 import { SiteNav } from "@/components/SiteNav";
+import { AnalyticsEvent, trackEvent } from "@/lib/analytics";
 import { type Format, generateSticker, PRESET_SIZES, type Preset } from "@/lib/sticker-engine";
 
 import { DocsPage } from "@/pages/DocsPage";
@@ -33,28 +34,43 @@ function StickerApp() {
 	const [progress, setProgress] = useState(0);
 	const [resultBlob, setResultBlob] = useState<Blob | null>(null);
 
+	const handlePresetChange = useCallback((p: Preset) => {
+		setPreset(p);
+		trackEvent(AnalyticsEvent.PRESET_CHANGE, { preset: p });
+	}, []);
+
+	const handleFormatChange = useCallback((f: Format) => {
+		setFormat(f);
+		trackEvent(AnalyticsEvent.FORMAT_CHANGE, { format: f });
+	}, []);
+
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const [dragOver, setDragOver] = useState(false);
 	const [showcaseName, setShowcaseName] = useState("");
 
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-	const handleFile = useCallback((file: File) => {
+	const handleFile = useCallback((file: File, method: "file_input" | "drag_drop") => {
 		const url = URL.createObjectURL(file);
 		const img = new Image();
 		img.onload = () => {
 			setLogoImg(img);
 			setLogoName(file.name.replace(/\.[^.]+$/, ""));
 			setResultBlob(null);
+			trackEvent(AnalyticsEvent.LOGO_UPLOAD, { method });
 		};
 		img.src = url;
 	}, []);
 
-	const handlePickedLogo = useCallback((name: string, img: HTMLImageElement) => {
-		setLogoImg(img);
-		setLogoName(name);
-		setResultBlob(null);
-	}, []);
+	const handlePickedLogo = useCallback(
+		(name: string, img: HTMLImageElement, source: "svgl" | "logodev") => {
+			setLogoImg(img);
+			setLogoName(name);
+			setResultBlob(null);
+			trackEvent(AnalyticsEvent.LOGO_SELECT, { source });
+		},
+		[],
+	);
 
 	const handleReset = useCallback(() => {
 		setLogoImg(null);
@@ -62,6 +78,7 @@ function StickerApp() {
 		setResultBlob(null);
 		setProgress(0);
 		setGenerating(false);
+		trackEvent(AnalyticsEvent.START_OVER);
 	}, []);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: intentional reset on preset/format change
@@ -74,6 +91,7 @@ function StickerApp() {
 		setGenerating(true);
 		setProgress(0);
 		setResultBlob(null);
+		trackEvent(AnalyticsEvent.STICKER_GENERATE, { preset, format });
 
 		try {
 			const blob = await generateSticker({
@@ -83,7 +101,6 @@ function StickerApp() {
 				onProgress: setProgress,
 			});
 			setResultBlob(blob);
-
 			const ext = format === "gif" ? "gif" : format === "png" ? "png" : "webp";
 			const slug =
 				logoName
@@ -139,7 +156,7 @@ function StickerApp() {
 			e.stopPropagation();
 			setDragOver(false);
 			const file = e.dataTransfer.files[0];
-			if (file?.type.startsWith("image/")) handleFile(file);
+			if (file?.type.startsWith("image/")) handleFile(file, "drag_drop");
 		},
 		[handleFile],
 	);
@@ -147,7 +164,7 @@ function StickerApp() {
 	const handleFileInputChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
 			const file = e.target.files?.[0];
-			if (file) handleFile(file);
+			if (file) handleFile(file, "file_input");
 		},
 		[handleFile],
 	);
@@ -188,7 +205,14 @@ function StickerApp() {
 								<UploadIcon />
 								Upload Your Own Logo
 							</button>
-							<button className="search-btn" onClick={() => setDrawerOpen(true)} type="button">
+							<button
+								className="search-btn"
+								onClick={() => {
+									setDrawerOpen(true);
+									trackEvent(AnalyticsEvent.LOGO_DRAWER_OPEN);
+								}}
+								type="button"
+							>
 								Search Brand Logos
 							</button>
 							<input
@@ -264,8 +288,8 @@ function StickerApp() {
 
 					<div className="result-controls unselectable">
 						<div className="result-controls-row">
-							<PresetSelector value={preset} onChange={setPreset} />
-							<FormatSelector value={format} onChange={setFormat} />
+							<PresetSelector value={preset} onChange={handlePresetChange} />
+							<FormatSelector value={format} onChange={handleFormatChange} />
 						</div>
 
 						<button

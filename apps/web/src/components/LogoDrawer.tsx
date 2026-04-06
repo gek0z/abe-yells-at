@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 // Types
 // ---------------------------------------------------------------------------
 
+import { AnalyticsEvent, trackEvent } from "@/lib/analytics";
+
 interface SvglLogo {
 	id: number;
 	title: string;
@@ -89,7 +91,7 @@ export function LogoDrawer({
 }: {
 	open: boolean;
 	onClose: () => void;
-	onSelect: (name: string, img: HTMLImageElement) => void;
+	onSelect: (name: string, img: HTMLImageElement, source: "svgl" | "logodev") => void;
 }) {
 	const [query, setQuery] = useState("");
 	const [results, setResults] = useState<LogoResult[]>([]);
@@ -111,6 +113,7 @@ export function LogoDrawer({
 		debounceRef.current = setTimeout(async () => {
 			setLoading(true);
 			setSearched(true);
+			trackEvent(AnalyticsEvent.LOGO_SEARCH, { query: query.trim() });
 			try {
 				const [svglResults, logoDevResult] = await Promise.allSettled([
 					searchSvgl(query),
@@ -190,7 +193,7 @@ export function LogoDrawer({
 
 				const img = new Image();
 				img.onload = () => {
-					onSelect(result.title, img);
+					onSelect(result.title, img, result.source);
 					onClose();
 				};
 				img.onerror = () => URL.revokeObjectURL(blobUrl);
@@ -199,7 +202,7 @@ export function LogoDrawer({
 				// Direct fallback
 				const img = new Image();
 				img.onload = () => {
-					onSelect(result.title, img);
+					onSelect(result.title, img, result.source);
 					onClose();
 				};
 				img.src = result.imgUrl;
