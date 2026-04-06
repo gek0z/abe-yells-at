@@ -84,13 +84,16 @@ body {
 	padding-top: 3rem;
 }
 
-/* Cartoon clouds */
+/* Cartoon clouds — sized via --cloud-w custom property */
 .cloud {
 	position: absolute;
+	left: 0;
 	background: #ffffff;
 	border-radius: 100px;
 	z-index: 0;
 	pointer-events: none;
+	width: var(--cloud-w, 200px);
+	height: calc(var(--cloud-w, 200px) * 0.25);
 }
 
 .cloud::before,
@@ -101,103 +104,23 @@ body {
 	border-radius: 50%;
 }
 
-.cloud-1 {
-	width: 200px;
-	height: 50px;
-	top: 8%;
-	left: -60px;
-	opacity: 0.5;
-	animation: floatCloud 28s linear infinite;
+.cloud::before {
+	width: calc(var(--cloud-w, 200px) * 0.4);
+	height: calc(var(--cloud-w, 200px) * 0.4);
+	top: calc(var(--cloud-w, 200px) * -0.2);
+	left: calc(var(--cloud-w, 200px) * 0.15);
 }
 
-.cloud-1::before {
-	width: 80px;
-	height: 80px;
-	top: -40px;
-	left: 30px;
-}
-
-.cloud-1::after {
-	width: 60px;
-	height: 60px;
-	top: -25px;
-	left: 100px;
-}
-
-.cloud-2 {
-	width: 160px;
-	height: 40px;
-	top: 18%;
-	right: -80px;
-	opacity: 0.3;
-	animation: floatCloudReverse 35s linear infinite;
-}
-
-.cloud-2::before {
-	width: 60px;
-	height: 60px;
-	top: -30px;
-	left: 20px;
-}
-
-.cloud-2::after {
-	width: 50px;
-	height: 50px;
-	top: -20px;
-	left: 80px;
-}
-
-.cloud-3 {
-	width: 240px;
-	height: 55px;
-	top: 30%;
-	left: 10%;
-	opacity: 0.2;
-	animation: floatCloud 40s linear infinite;
-	animation-delay: -10s;
-}
-
-.cloud-3::before {
-	width: 90px;
-	height: 90px;
-	top: -45px;
-	left: 40px;
-}
-
-.cloud-3::after {
-	width: 70px;
-	height: 70px;
-	top: -30px;
-	left: 130px;
-}
-
-.cloud-4 {
-	width: 140px;
-	height: 35px;
-	top: 12%;
-	left: 55%;
-	opacity: 0.35;
-	animation: floatCloudReverse 32s linear infinite;
-	animation-delay: -5s;
-}
-
-.cloud-4::before {
-	width: 50px;
-	height: 50px;
-	top: -25px;
-	left: 20px;
-}
-
-.cloud-4::after {
-	width: 40px;
-	height: 40px;
-	top: -15px;
-	left: 70px;
+.cloud::after {
+	width: calc(var(--cloud-w, 200px) * 0.3);
+	height: calc(var(--cloud-w, 200px) * 0.3);
+	top: calc(var(--cloud-w, 200px) * -0.12);
+	left: calc(var(--cloud-w, 200px) * 0.5);
 }
 
 @keyframes floatCloud {
 	from {
-		transform: translateX(-120%);
+		transform: translateX(-100%);
 	}
 	to {
 		transform: translateX(100vw);
@@ -209,7 +132,7 @@ body {
 		transform: translateX(100vw);
 	}
 	to {
-		transform: translateX(-120%);
+		transform: translateX(-100%);
 	}
 }
 
@@ -1168,8 +1091,7 @@ body {
 		flex-wrap: wrap;
 	}
 
-	.cloud-3,
-	.cloud-4 {
+	.cloud-desktop {
 		display: none;
 	}
 }

@@ -10,9 +10,9 @@ interface ShowcaseLogo {
 const SHOWCASE_LOGOS: ShowcaseLogo[] = [
 	{ title: "Codex", url: "https://svgl.app/library/codex_light.svg" },
 	{ title: "OpenClaw", url: "https://svgl.app/library/openclaw.svg" },
-	{ title: "Microsoft Office", url: "https://svgl.app/library/microsoft-office.svg" },
+	{ title: "Office", url: "https://svgl.app/library/microsoft-office.svg" },
 	{ title: "Google Sheets", url: "https://svgl.app/library/google-sheets.svg" },
-	{ title: "Google Calendar", url: "https://svgl.app/library/google-calendar.svg" },
+	{ title: "Google Cal", url: "https://svgl.app/library/google-calendar.svg" },
 	{ title: "Cursor", url: "https://svgl.app/library/cursor_light.svg" },
 	{ title: "Google Maps", url: "https://svgl.app/library/googleMaps.svg" },
 	{ title: "Google Cloud", url: "https://svgl.app/library/google-cloud.svg" },
@@ -42,8 +42,8 @@ const SHOWCASE_LOGOS: ShowcaseLogo[] = [
 	{ title: "Messenger", url: "https://svgl.app/library/messenger.svg" },
 	{ title: "Python", url: "https://svgl.app/library/python.svg" },
 	{ title: "Disney+", url: "https://svgl.app/library/disneyplus.svg" },
-	{ title: "Microsoft Word", url: "https://svgl.app/library/microsoft-word.svg" },
-	{ title: "Microsoft Excel", url: "https://svgl.app/library/microsoft-excel.svg" },
+	{ title: "Word", url: "https://svgl.app/library/microsoft-word.svg" },
+	{ title: "Excel", url: "https://svgl.app/library/microsoft-excel.svg" },
 	{ title: "Bun", url: "https://svgl.app/library/bun.svg" },
 	{ title: "JavaScript", url: "https://svgl.app/library/javascript.svg" },
 	{ title: "TypeScript", url: "https://svgl.app/library/typescript.svg" },
@@ -113,21 +113,17 @@ export function LogoShowcase({ onLogoChange }: { onLogoChange?: (name: string) =
 	const [visible, setVisible] = useState(true);
 
 	useEffect(() => {
-		onLogoChange?.(logos[0].title);
-	}, [logos, onLogoChange]);
+		onLogoChange?.(logos[currentIndex].title);
+	}, [currentIndex, logos, onLogoChange]);
 
 	const advance = useCallback(() => {
 		setVisible(false);
 		// Wait for fade-out (300ms CSS) + buffer before swapping
 		setTimeout(() => {
-			setCurrentIndex((prev) => {
-				const next = (prev + 1) % logos.length;
-				onLogoChange?.(logos[next].title);
-				return next;
-			});
+			setCurrentIndex((prev) => (prev + 1) % logos.length);
 			setVisible(true);
 		}, 350);
-	}, [logos, onLogoChange]);
+	}, [logos]);
 
 	useEffect(() => {
 		const timer = setInterval(advance, 2500);

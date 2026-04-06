@@ -1,15 +1,11 @@
+import { CloudBackground } from "@/components/CloudBackground";
 import { SiteNav } from "@/components/SiteNav";
 
 export function NotFoundPage() {
 	return (
 		<div className="landing not-found-page">
 			<SiteNav />
-
-			{/* Clouds */}
-			<div className="cloud cloud-1" />
-			<div className="cloud cloud-2" />
-			<div className="cloud cloud-3" />
-			<div className="cloud cloud-4" />
+			<CloudBackground />
 
 			<div className="landing-content not-found-content">
 				<h1 className="landing-title">

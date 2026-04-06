@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { CloudBackground } from "@/components/CloudBackground";
 import { CookieBar } from "@/components/CookieBar";
 import { FormatSelector } from "@/components/FormatSelector";
 import { UploadIcon } from "@/components/icons";
@@ -181,12 +182,7 @@ function StickerApp() {
 					onDrop={handleDrop}
 				>
 					<SiteNav />
-
-					{/* Clouds */}
-					<div className="cloud cloud-1" />
-					<div className="cloud cloud-2" />
-					<div className="cloud cloud-3" />
-					<div className="cloud cloud-4" />
+					<CloudBackground />
 
 					<div className="landing-content">
 						<h1 className="landing-title unselectable">
