@@ -1,5 +1,11 @@
 # abe-yells-at
 
+## 1.3.0
+
+### Minor Changes
+
+- [#17](https://github.com/gek0z/abe-yells-at/pull/17) [`af31959`](https://github.com/gek0z/abe-yells-at/commit/af31959bf0d719680a0091075d4d124d64130e5c) Thanks [@gek0z](https://github.com/gek0z)! - Update @napi-rs/canvas to v1
+
 ## 1.2.2
 
 ### Patch Changes
