@@ -32,19 +32,20 @@ jobs:
           VITE_LOGO_DEV_TOKEN: ${{ secrets.VITE_LOGO_DEV_TOKEN }}
           VITE_GTM_ID: ${{ secrets.VITE_GTM_ID }}
 
-      # Wrangler v4 requires Node >= 22. The project builds with bun, but bun's
-      # node-compat reports v20.x, which wrangler v4 rejects. Provide real Node 22
-      # and tell the action to run wrangler via npm (Node) rather than bun.
+      # Wrangler v4 requires Node >= 22 (bun's node-compat reports v20.x and is
+      # rejected). wrangler-action installs wrangler into the repo, but npm can't
+      # resolve bun's `workspace:*` deps (EUNSUPPORTEDPROTOCOL). So install
+      # wrangler globally under real Node 22 and invoke it directly.
       - uses: actions/setup-node@v5
         with:
           node-version: 22
 
-      - uses: cloudflare/wrangler-action@v4
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy apps/web/dist --project-name=abe-yells-at
-          packageManager: npm
+      - run: npm install -g wrangler@4
+
+      - run: wrangler pages deploy apps/web/dist --project-name=abe-yells-at
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       - name: Wait for deploy propagation
         run: sleep 30
