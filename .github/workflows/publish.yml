@@ -25,6 +25,9 @@ jobs:
           node-version: 22
           registry-url: "https://registry.npmjs.org"
 
+      # OIDC trusted publishing needs npm >= 11.5.1; Node 22 bundles npm 10.x.
+      - run: npm install -g npm@latest
+
       - run: bun install --frozen-lockfile
 
       - run: bun test --cwd packages/core
@@ -38,5 +41,7 @@ jobs:
           title: "chore: version packages"
           commit: "chore: version packages"
         env:
+          # No NODE_AUTH_TOKEN: auth comes from OIDC trusted publishing
+          # (configured for this repo + publish.yml on npmjs.com). npm also
+          # attaches provenance automatically when publishing via OIDC.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
