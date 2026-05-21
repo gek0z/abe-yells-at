@@ -1,0 +1,3 @@
+# Default owner for everything in the repo.
+# Automatically requested for review on all pull requests, including Dependabot.
+* @gek0z
