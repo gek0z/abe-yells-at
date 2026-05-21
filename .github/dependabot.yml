@@ -4,6 +4,11 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    # Published library: the default widen_ranges strategy only edits
+    # package.json when latest falls outside the declared range, so in-range
+    # caret bumps yield no PR. "increase" bumps the declared range itself
+    # (e.g. ^2.4.10 -> ^2.4.15). bun.lock is refreshed by dependabot-lockfile.yml.
+    versioning-strategy: increase
     commit-message:
       prefix: "chore(deps):"
     groups:

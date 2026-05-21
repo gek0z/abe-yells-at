@@ -1,0 +1,41 @@
+name: Dependabot lockfile
+
+# Dependabot does not manage bun.lock. With versioning-strategy: increase it
+# edits package.json ranges, leaving bun.lock stale, which breaks every CI job
+# that runs `bun install --frozen-lockfile`. This workflow refreshes bun.lock on
+# Dependabot PRs and commits it back so the lockfile matches package.json.
+#
+# Note: pushing with the default GITHUB_TOKEN does NOT re-trigger CI. To get CI
+# to re-run on the lockfile commit, add a PAT (repo scope) as the DEPENDABOT_PAT
+# secret; this workflow falls back to GITHUB_TOKEN (lockfile still fixed, but
+# you may need to re-run CI manually) when the secret is absent.
+
+on:
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh-lockfile:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.DEPENDABOT_PAT || secrets.GITHUB_TOKEN }}
+      - uses: oven-sh/setup-bun@v2
+      - name: Refresh bun.lock
+        run: bun install --lockfile-only
+      - name: Commit refreshed lockfile
+        run: |
+          if git diff --quiet -- bun.lock; then
+            echo "bun.lock already in sync — nothing to commit."
+            exit 0
+          fi
+          git config user.name "dependabot[bot]"
+          git config user.email "49699333+dependabot[bot]@users.noreply.github.com"
+          git add bun.lock
+          git commit -m "chore(deps): refresh bun.lock"
+          git push
