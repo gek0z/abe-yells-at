@@ -4,8 +4,6 @@ updates:
     directory: /
     schedule:
       interval: monthly
-    reviewers:
-      - gek0z
     commit-message:
       prefix: "chore(deps):"
     groups:
@@ -15,8 +13,6 @@ updates:
     directory: /
     schedule:
       interval: monthly
-    reviewers:
-      - gek0z
     commit-message:
       prefix: "chore(ci):"
     groups:
