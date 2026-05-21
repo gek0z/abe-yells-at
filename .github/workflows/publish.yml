@@ -6,6 +6,10 @@ on:
     paths:
       - "packages/core/**"
       - ".changeset/**"
+  # Allow manual runs (e.g. to publish a version already bumped on main when a
+  # prior publish run failed). changeset publish only publishes versions newer
+  # than what's on npm, so re-running is safe.
+  workflow_dispatch:
 
 jobs:
   release:
@@ -20,13 +24,12 @@ jobs:
 
       - uses: oven-sh/setup-bun@v2
 
+      # Node 24 bundles npm >= 11.5.1, required for OIDC trusted publishing.
+      # (Node 22 ships npm 10.x; upgrading npm in place is fragile, so use 24.)
       - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
           registry-url: "https://registry.npmjs.org"
-
-      # OIDC trusted publishing needs npm >= 11.5.1; Node 22 bundles npm 10.x.
-      - run: npm install -g npm@latest
 
       - run: bun install --frozen-lockfile
 
