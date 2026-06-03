@@ -17,6 +17,6 @@
     "@changesets/changelog-github": "^0.7.0",
     "@changesets/cli": "^2.31.0",
     "@typescript/native-preview": "^7.0.0-dev",
-    "lefthook": "^2.1.4"
+    "lefthook": "^2.1.9"
   }
 }
