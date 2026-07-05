@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
-      - run: bunx tsgo --noEmit -p packages/core/tsconfig.json
+      - run: bunx tsgo --noEmit -p packages/core/tsconfig.test.json
       - run: bun run --cwd packages/core build
       - run: bunx tsgo --noEmit -p apps/web/tsconfig.json
 
