@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/abe-yells-at?color=yellow&label=npm)](https://www.npmjs.com/package/abe-yells-at)
 [![npm downloads](https://img.shields.io/npm/dm/abe-yells-at?color=yellow)](https://www.npmjs.com/package/abe-yells-at)
-[![license](https://img.shields.io/github/license/gek0z/abe-yells-at)](https://github.com/gek0z/abe-yells-at/blob/main/LICENSE)
+[![license](https://img.shields.io/badge/license-MIT-yellow)](https://github.com/gek0z/abe-yells-at/blob/main/LICENSE)
 
 Create animated stickers of Grandpa Abe Simpson yelling at your logo. Export as GIF, WebP, or static PNG.
 
