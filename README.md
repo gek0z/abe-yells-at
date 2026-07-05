@@ -17,7 +17,7 @@
   <a href="https://www.npmjs.com/package/abe-yells-at"><img src="https://img.shields.io/npm/v/abe-yells-at?color=yellow&label=npm" alt="npm version" /></a>
   <a href="https://www.npmjs.com/package/abe-yells-at"><img src="https://img.shields.io/npm/dm/abe-yells-at?color=yellow" alt="npm downloads" /></a>
   <a href="https://github.com/gek0z/abe-yells-at/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/gek0z/abe-yells-at/ci.yml?branch=main&label=CI" alt="CI" /></a>
-  <a href="https://github.com/gek0z/abe-yells-at/blob/main/LICENSE"><img src="https://img.shields.io/github/license/gek0z/abe-yells-at" alt="license" /></a>
+  <a href="https://github.com/gek0z/abe-yells-at/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow" alt="license" /></a>
 </p>
 
 ## What's in the box
