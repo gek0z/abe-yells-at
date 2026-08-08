@@ -43,7 +43,9 @@ export function CookieBar() {
 			<div className="cookie-bar-content">
 				<p>
 					Old man yells at cookies! We use them to understand how you use our site.{" "}
-					<a href="/privacy">Learn more</a>
+					<a aria-label="Learn more about our cookie policy" href="/privacy">
+						Learn more
+					</a>
 				</p>
 				<div className="cookie-bar-actions">
 					<button className="cookie-bar-reject" onClick={handleReject} type="button">
