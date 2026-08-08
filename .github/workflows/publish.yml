@@ -26,7 +26,7 @@ jobs:
 
       # Node 24 bundles npm >= 11.5.1, required for OIDC trusted publishing.
       # (Node 22 ships npm 10.x; upgrading npm in place is fragile, so use 24.)
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           registry-url: "https://registry.npmjs.org"
