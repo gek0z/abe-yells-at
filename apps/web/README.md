@@ -26,7 +26,7 @@ VITE_GTM_ID=...
 | `bun run dev` | Start Vite dev server |
 | `bun run build` | Production build |
 | `bun run preview` | Preview production build locally |
-| `bun run typecheck` | Type check with tsgo |
+| `bun run typecheck` | Type check with tsc |
 | `bun run lint` | Lint with Biome |
 | `bun run format` | Format with Biome |
 

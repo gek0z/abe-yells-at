@@ -8,7 +8,7 @@
     "check": "biome check --write .",
     "ci": "biome ci .",
     "test": "bun test --cwd packages/core",
-    "typecheck": "tsgo --build",
+    "typecheck": "tsc --build",
     "build": "bun run --filter '*' build",
     "prepare": "lefthook install"
   },
@@ -16,7 +16,7 @@
     "@biomejs/biome": "^2.5.6",
     "@changesets/changelog-github": "^0.7.0",
     "@changesets/cli": "^2.31.1",
-    "@typescript/native-preview": "^7.0.0-dev.20260707.2",
-    "lefthook": "^2.1.10"
+    "lefthook": "^2.1.10",
+    "typescript": "^7.0.2"
   }
 }

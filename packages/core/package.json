@@ -25,8 +25,8 @@
     "frames/"
   ],
   "scripts": {
-    "build": "bun build src/index.ts --outdir dist --format esm --target node --external @napi-rs/canvas && bun build src/index.ts --outfile dist/index.cjs --format cjs --target node --external @napi-rs/canvas && bun build src/cli.ts --outfile dist/cli.js --format esm --target node --external @napi-rs/canvas && bun build src/browser.ts --outfile dist/browser.js --format esm --target browser --external @jsquash/webp --external @napi-rs/canvas && tsgo --emitDeclarationOnly",
-    "typecheck": "tsgo --noEmit",
+    "build": "bun build src/index.ts --outdir dist --format esm --target node --external @napi-rs/canvas && bun build src/index.ts --outfile dist/index.cjs --format cjs --target node --external @napi-rs/canvas && bun build src/cli.ts --outfile dist/cli.js --format esm --target node --external @napi-rs/canvas && bun build src/browser.ts --outfile dist/browser.js --format esm --target browser --external @jsquash/webp --external @napi-rs/canvas && tsc --emitDeclarationOnly",
+    "typecheck": "tsc --noEmit",
     "test": "bun test",
     "lint": "biome check src/",
     "format": "biome format --write src/"

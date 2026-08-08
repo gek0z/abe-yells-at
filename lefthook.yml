@@ -6,7 +6,7 @@ pre-commit:
       run: npx biome check --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
 
     - name: typecheck
-      run: npx tsgo --noEmit -p packages/core/tsconfig.json && npx tsgo --noEmit -p apps/web/tsconfig.json
+      run: npx tsc --noEmit -p packages/core/tsconfig.json && npx tsc --noEmit -p apps/web/tsconfig.json
 
     - name: test
       run: bun test --cwd packages/core
