@@ -115,7 +115,7 @@ bun run build
 # Lint & format
 bun run check
 
-# Type check (uses tsgo)
+# Type check (uses tsc)
 bun run typecheck
 
 # Run tests
@@ -163,7 +163,7 @@ abe-yells/
 ## Tech Stack
 
 - **Runtime & package manager**: [Bun](https://bun.sh) workspaces
-- **Type checking**: [tsgo](https://github.com/microsoft/typescript-go) (`@typescript/native-preview`)
+- **Type checking**: [TypeScript 7](https://github.com/microsoft/typescript-go) (`tsc`, the native Go compiler)
 - **Linting & formatting**: [Biome](https://biomejs.dev)
 - **Git hooks**: [Lefthook](https://github.com/evilmartians/lefthook)
 - **Web app**: [Vite](https://vite.dev) + [React](https://react.dev)
