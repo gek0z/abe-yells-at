@@ -38,13 +38,16 @@ jobs:
       - run: bun run --cwd packages/core build
 
       - name: Create release PR or publish
-        uses: changesets/action@v1
+        uses: changesets/action@v2
         with:
-          publish: npx changeset publish
-          title: "chore: version packages"
-          commit: "chore: version packages"
+          publish-script: npx changeset publish
+          pr-title: "chore: version packages"
+          commit-message: "chore: version packages"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
         env:
           # No NODE_AUTH_TOKEN: auth comes from OIDC trusted publishing
           # (configured for this repo + publish.yml on npmjs.com). npm also
           # attaches provenance automatically when publishing via OIDC.
+          # changesets/action v2 takes its token via `github-token` above; this
+          # env var is still read by @changesets/changelog-github.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
