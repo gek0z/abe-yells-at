@@ -1,5 +1,16 @@
 # abe-yells-at
 
+## 1.4.0
+
+### Minor Changes
+
+- [#44](https://github.com/gek0z/abe-yells-at/pull/44) [`f6875d6`](https://github.com/gek0z/abe-yells-at/commit/f6875d6cdc60eeda98d7141364501fcec4cdff70) Thanks [@gek0z](https://github.com/gek0z)! - Fix GIF flicker, invalid animated WebP, and the CLI running on import
+  
+  - GIF frames share one palette, so static areas no longer flicker between frames
+  - Animated WebP sets the VP8X alpha flag, which libwebp-based decoders required to open the file
+  - Animated WebP is lossy and steps quality down to fit each preset's platform limit (WhatsApp 500KB, Discord 256KB, Slack 128KB), exposed as `PresetConfig.maxBytes`
+  - Importing the package no longer runs the CLI against the host process's arguments
+
 ## 1.3.0
 
 ### Minor Changes
