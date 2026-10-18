@@ -3,7 +3,7 @@ import { AnalyticsEvent, trackEvent } from "@/lib/analytics";
 
 const STORAGE_KEY = "cookie-consent";
 
-export function CookieBar() {
+export function ConsentBar() {
 	const [visible, setVisible] = useState(false);
 
 	useEffect(() => {

@@ -8,7 +8,7 @@ import {
 	useState,
 } from "react";
 import { CloudBackground } from "@/components/CloudBackground";
-import { CookieBar } from "@/components/CookieBar";
+import { ConsentBar } from "@/components/ConsentBar";
 import { FormatSelector } from "@/components/FormatSelector";
 import { UploadIcon } from "@/components/icons";
 import { LogoDrawer } from "@/components/LogoDrawer";
@@ -417,7 +417,7 @@ export default function App() {
 				Skip to content
 			</a>
 			<main id="main-content">{page}</main>
-			<CookieBar />
+			<ConsentBar />
 		</ErrorBoundary>
 	);
 }
