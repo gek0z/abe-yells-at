@@ -39,19 +39,19 @@ export function ConsentBar() {
 	};
 
 	return (
-		<div className={`cookie-bar${visible ? " visible" : ""}`}>
-			<div className="cookie-bar-content">
+		<div className={`consent-bar${visible ? " visible" : ""}`}>
+			<div className="consent-bar-content">
 				<p>
 					Old man yells at cookies! We use them to understand how you use our site.{" "}
 					<a aria-label="Learn more about our cookie policy" href="/privacy">
 						Learn more
 					</a>
 				</p>
-				<div className="cookie-bar-actions">
-					<button className="cookie-bar-reject" onClick={handleReject} type="button">
+				<div className="consent-bar-actions">
+					<button className="consent-bar-reject" onClick={handleReject} type="button">
 						Get off my lawn!
 					</button>
-					<button className="cookie-bar-accept" onClick={handleAccept} type="button">
+					<button className="consent-bar-accept" onClick={handleAccept} type="button">
 						Fine, whatever
 					</button>
 				</div>

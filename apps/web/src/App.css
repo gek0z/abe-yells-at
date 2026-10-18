@@ -1564,7 +1564,7 @@ body {
 /* ---------------------------------------------------------------------------
    Cookie consent bar
 --------------------------------------------------------------------------- */
-.cookie-bar {
+.consent-bar {
 	position: fixed;
 	bottom: 0;
 	left: 0;
@@ -1575,11 +1575,11 @@ body {
 	transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.cookie-bar.visible {
+.consent-bar.visible {
 	transform: translateY(0);
 }
 
-.cookie-bar-content {
+.consent-bar-content {
 	max-width: var(--max-w);
 	margin: 0 auto;
 	display: flex;
@@ -1593,7 +1593,7 @@ body {
 	box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.25);
 }
 
-.cookie-bar-content p {
+.consent-bar-content p {
 	font-size: 0.85rem;
 	color: var(--text-muted);
 	line-height: 1.5;
@@ -1601,19 +1601,19 @@ body {
 	margin: 0;
 }
 
-.cookie-bar-content a {
+.consent-bar-content a {
 	color: var(--yellow);
 	text-decoration: underline;
 	text-underline-offset: 2px;
 }
 
-.cookie-bar-actions {
+.consent-bar-actions {
 	display: flex;
 	gap: 0.5rem;
 	flex-shrink: 0;
 }
 
-.cookie-bar-reject {
+.consent-bar-reject {
 	background: transparent;
 	border: 1px solid var(--border);
 	color: var(--text-muted);
@@ -1625,12 +1625,12 @@ body {
 	transition: all var(--transition);
 }
 
-.cookie-bar-reject:hover {
+.consent-bar-reject:hover {
 	border-color: var(--text-muted);
 	color: var(--text);
 }
 
-.cookie-bar-accept {
+.consent-bar-accept {
 	background: var(--yellow);
 	border: none;
 	color: var(--text-dark);
@@ -1642,27 +1642,27 @@ body {
 	transition: all var(--transition);
 }
 
-.cookie-bar-accept:hover {
+.consent-bar-accept:hover {
 	background: var(--yellow-hover);
 }
 
 @media (max-width: 500px) {
-	.cookie-bar {
+	.consent-bar {
 		padding: 0.75rem;
 	}
 
-	.cookie-bar-content {
+	.consent-bar-content {
 		flex-direction: column;
 		text-align: center;
 		padding: 1rem;
 	}
 
-	.cookie-bar-actions {
+	.consent-bar-actions {
 		width: 100%;
 	}
 
-	.cookie-bar-reject,
-	.cookie-bar-accept {
+	.consent-bar-reject,
+	.consent-bar-accept {
 		flex: 1;
 	}
 }
