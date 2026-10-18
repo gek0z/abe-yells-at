@@ -140,6 +140,15 @@ export function LogoDrawer({
 		};
 	}, [query]);
 
+	// logo.dev results hold blob URLs, free them once the results are replaced
+	useEffect(() => {
+		return () => {
+			for (const r of results) {
+				if (r.source === "logodev") URL.revokeObjectURL(r.imgUrl);
+			}
+		};
+	}, [results]);
+
 	// Focus + keyboard handling
 	useEffect(() => {
 		if (!open) return;
@@ -193,10 +202,14 @@ export function LogoDrawer({
 
 				const img = new Image();
 				img.onload = () => {
+					// The decoded image stays usable; logo.dev URLs are freed with the results
+					if (result.source === "svgl") URL.revokeObjectURL(blobUrl);
 					onSelect(result.title, img, result.source);
 					onClose();
 				};
-				img.onerror = () => URL.revokeObjectURL(blobUrl);
+				img.onerror = () => {
+					if (result.source === "svgl") URL.revokeObjectURL(blobUrl);
+				};
 				img.src = blobUrl;
 			} catch {
 				// Direct fallback

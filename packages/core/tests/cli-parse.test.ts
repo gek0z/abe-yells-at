@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { CliParseError, parseArgs } from "@/cli";
+import { CliParseError, parseArgs } from "@/cli-args";
 
 // parseArgs expects argv like process.argv: [node, script, ...args]
 const argv = (...args: string[]) => ["node", "cli.js", ...args];

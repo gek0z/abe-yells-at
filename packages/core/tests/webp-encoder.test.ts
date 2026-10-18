@@ -62,6 +62,8 @@ describe("encodeAnimatedWebP", () => {
 
 		// Animation flag is bit 1 of the flags byte (offset 20)
 		expect(webp[20] & 0x02).toBe(0x02);
+		// Alpha flag is bit 4; libwebp rejects frames with alpha when it is missing
+		expect(webp[20] & 0x10).toBe(0x10);
 	});
 
 	test("contains ANIM chunk", () => {

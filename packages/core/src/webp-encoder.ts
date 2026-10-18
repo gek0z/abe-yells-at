@@ -147,8 +147,9 @@ export function encodeAnimatedWebP(frames: WebPFrame[], delay = 100): Uint8Array
 	writeUint32LE(buf, offset, 10); // chunk data size
 	offset += 4;
 
-	// Flags byte: bit 1 = animation
-	const flags = 0x02; // animation flag
+	// Flags byte: bit 1 = animation, bit 4 = alpha. Frames always carry alpha
+	// (transparent background), and strict decoders reject alpha data without it.
+	const flags = 0x12;
 	writeUint32LE(buf, offset, flags);
 	offset += 4;
 
@@ -195,8 +196,8 @@ export function encodeAnimatedWebP(frames: WebPFrame[], delay = 100): Uint8Array
 		// Frame duration in ms (24-bit LE)
 		writeUint24LE(buf, offset, delay);
 		offset += 3;
-		// Flags: bit 0 = dispose (1 = dispose to bg), bit 1 = blend (0 = no blend)
-		buf[offset] = 0x01; // dispose=1, blend=0
+		// Flags: bit 0 = dispose (1 = dispose to bg), bit 1 = blend (0 = alpha-blend, 1 = no blend)
+		buf[offset] = 0x01; // dispose to background, alpha-blend onto the cleared canvas
 		offset += 1;
 
 		// Frame bitstream data

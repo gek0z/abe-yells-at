@@ -91,10 +91,16 @@ function StickerApp() {
 		const url = URL.createObjectURL(file);
 		const img = new Image();
 		img.onload = () => {
+			URL.revokeObjectURL(url);
+			setError(null);
 			setLogoImg(img);
 			setLogoName(file.name.replace(/\.[^.]+$/, ""));
 			setResultBlob(null);
 			trackEvent(AnalyticsEvent.LOGO_UPLOAD, { method });
+		};
+		img.onerror = () => {
+			URL.revokeObjectURL(url);
+			setError("Couldn't read that image. Try a PNG, JPG, SVG, or WebP.");
 		};
 		img.src = url;
 	}, []);
@@ -115,6 +121,7 @@ function StickerApp() {
 		setResultBlob(null);
 		setProgress(0);
 		setGenerating(false);
+		setError(null);
 		trackEvent(AnalyticsEvent.START_OVER);
 	}, []);
 
@@ -258,6 +265,11 @@ function StickerApp() {
 								aria-label="Upload logo"
 							/>
 						</div>
+						{error && (
+							<p className="generation-error" role="alert">
+								{error}
+							</p>
+						)}
 					</div>
 
 					<div className="abe-frame unselectable">

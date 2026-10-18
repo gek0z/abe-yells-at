@@ -74,4 +74,56 @@ describe("encodeGif", () => {
 		expect(gif[0]).toBe(0x47);
 		expect(gif[gif.length - 1]).toBe(0x3b);
 	});
+
+	test("shares one palette across frames and always marks transparency", () => {
+		// More than 256 colors per frame, so per-frame palettes would differ
+		const frames = [0, 1, 2].map((shift) => {
+			const frame = makeFrame(32, 32, 0, 0, 0);
+			for (let i = 0; i < 32 * 32; i++) {
+				frame.data[i * 4] = i % 256;
+				frame.data[i * 4 + 1] = (i * 7 + shift * 40) % 256;
+				frame.data[i * 4 + 2] = (i >> 2) % 256;
+			}
+			frame.data[3] = 0; // one transparent pixel
+			return frame;
+		});
+		const gif = encodeGif(frames);
+
+		const descriptors = gifBlocks(gif);
+		expect(descriptors).toHaveLength(3);
+		for (const { localColorTable, transparent } of descriptors) {
+			expect(localColorTable).toBe(false);
+			expect(transparent).toBe(true);
+		}
+	});
 });
+
+/** Walk the GIF block structure and report each frame's palette and transparency flags. */
+function gifBlocks(gif: Uint8Array): { localColorTable: boolean; transparent: boolean }[] {
+	const frames: { localColorTable: boolean; transparent: boolean }[] = [];
+	let p = 13;
+	if (gif[10] & 0x80) p += 3 * (2 << (gif[10] & 7));
+	let transparent = false;
+	const skipSubBlocks = () => {
+		while (gif[p]) p += gif[p] + 1;
+		p++;
+	};
+	while (p < gif.length && gif[p] !== 0x3b) {
+		const block = gif[p++];
+		if (block === 0x21) {
+			if (gif[p] === 0xf9) transparent = (gif[p + 2] & 1) === 1;
+			p++;
+			skipSubBlocks();
+		} else if (block === 0x2c) {
+			const flags = gif[p + 8];
+			frames.push({ localColorTable: (flags & 0x80) !== 0, transparent });
+			p += 9;
+			if (flags & 0x80) p += 3 * (2 << (flags & 7));
+			p++; // LZW minimum code size
+			skipSubBlocks();
+		} else {
+			throw new Error(`Unexpected GIF block 0x${block.toString(16)}`);
+		}
+	}
+	return frames;
+}

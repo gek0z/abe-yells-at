@@ -1,5 +1,5 @@
-export type { CliArgs } from "@/cli";
-export { CliParseError, parseArgs } from "@/cli";
+export type { CliArgs } from "@/cli-args";
+export { CliParseError, parseArgs } from "@/cli-args";
 export type { BrowserStickerOptions } from "@/create-sticker";
 export {
 	compositeFrame,

@@ -61,6 +61,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: [lint, typecheck, test, build]
     steps:
+      # Without the label every job skips, which would otherwise pass this required check untested
+      - if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'run-ci')
+        run: |
+          echo "Add the run-ci label to run CI on this PR"
+          exit 1
       - run: |
           results="${{ needs.lint.result }} ${{ needs.typecheck.result }} ${{ needs.test.result }} ${{ needs.build.result }}"
           for r in $results; do

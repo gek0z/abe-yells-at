@@ -6,6 +6,28 @@ import { encodeAnimatedWebP, type WebPFrame } from "@/webp-encoder";
 const FRAME_COUNT = 9;
 const FRAME_DELAY_MS = 50; // 20 fps
 
+// Lossless frames put even a plain logo over WhatsApp's 500KB limit at 512px,
+// so WebP is lossy, stepping quality down until it fits the preset's budget.
+const WEBP_QUALITIES = [90, 80, 70, 60];
+
+/**
+ * Encode frames at decreasing quality until the animated WebP fits `maxBytes`.
+ * Returns the lowest-quality attempt if none fit.
+ */
+async function encodeWebPWithinBudget(
+	encodeFrames: (quality: number) => Promise<WebPFrame[]>,
+	maxBytes: number,
+	onProgress?: OnProgress,
+): Promise<Uint8Array> {
+	let data: Uint8Array = new Uint8Array();
+	for (let i = 0; i < WEBP_QUALITIES.length; i++) {
+		data = encodeAnimatedWebP(await encodeFrames(WEBP_QUALITIES[i]), FRAME_DELAY_MS);
+		if (data.byteLength <= maxBytes) break;
+		onProgress?.(20 + Math.round(((i + 1) / WEBP_QUALITIES.length) * 70));
+	}
+	return data;
+}
+
 // ── Environment detection ────────────────────────────────────────────
 
 function isNode(): boolean {
@@ -126,10 +148,7 @@ async function createStickerNode(options: StickerOptions): Promise<StickerResult
 	}
 
 	// ── WebP path ─────────────────────────────────────────────────
-	const webpFrames: WebPFrame[] = [];
-
-	for (let i = 0; i < frameImages.length; i++) {
-		const frameImg = frameImages[i];
+	const canvases = frameImages.map((frameImg) => {
 		const canvas = createCanvas(width, height);
 		const ctx = canvas.getContext("2d");
 
@@ -138,15 +157,22 @@ async function createStickerNode(options: StickerOptions): Promise<StickerResult
 
 		// Draw the Abe frame on top
 		ctx.drawImage(frameImg, 0, 0, width, height);
+		return canvas;
+	});
+	onProgress?.(20);
 
-		const buf = await canvas.encode("webp", 100);
-		const frameData = new Uint8Array(buf.buffer, buf.byteOffset, buf.byteLength);
-		webpFrames.push({ data: frameData, width, height });
-
-		onProgress?.(20 + Math.round((i / frameImages.length) * 70));
-	}
-
-	const data = encodeAnimatedWebP(webpFrames, FRAME_DELAY_MS);
+	const data = await encodeWebPWithinBudget(
+		async (quality) =>
+			Promise.all(
+				canvases.map(async (canvas) => {
+					const buf = await canvas.encode("webp", quality);
+					const frameData = new Uint8Array(buf.buffer, buf.byteOffset, buf.byteLength);
+					return { data: frameData, width, height };
+				}),
+			),
+		config.maxBytes,
+		onProgress,
+	);
 	onProgress?.(100);
 	return { data, format: "webp", width, height, preset };
 }
@@ -292,24 +318,28 @@ export async function createStickerFromImages(
 
 	// ── WebP path (using @jsquash/webp) ──────────────────────────
 	const { encode: encodeWebPFrame } = await import("@jsquash/webp");
-	const webpFrames: WebPFrame[] = [];
+	const imageDatas = options.frames.map((frame) => {
+		compositeFrame(ctx, frame, logo, width);
+		return ctx.getImageData(0, 0, width, height);
+	});
+	onProgress?.(20);
 
-	for (let i = 0; i < options.frames.length; i++) {
-		compositeFrame(ctx, options.frames[i], logo, width);
-
-		const imageData = ctx.getImageData(0, 0, width, height);
-		const webpBuffer = await encodeWebPFrame(imageData, {
-			lossless: 1,
-			alpha_compression: 1,
-			alpha_quality: 100,
-		});
-		webpFrames.push({ data: new Uint8Array(webpBuffer), width, height });
-
-		onProgress?.(20 + Math.round((i / options.frames.length) * 65));
-	}
-
-	onProgress?.(90);
-	const data = encodeAnimatedWebP(webpFrames, FRAME_DELAY_MS);
+	const data = await encodeWebPWithinBudget(
+		async (quality) => {
+			const webpFrames: WebPFrame[] = [];
+			for (const imageData of imageDatas) {
+				const webpBuffer = await encodeWebPFrame(imageData, {
+					quality,
+					alpha_compression: 1,
+					alpha_quality: 100,
+				});
+				webpFrames.push({ data: new Uint8Array(webpBuffer), width, height });
+			}
+			return webpFrames;
+		},
+		config.maxBytes,
+		onProgress,
+	);
 	onProgress?.(100);
 	return { data, format: "webp", width, height, preset };
 }
