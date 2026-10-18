@@ -5,6 +5,8 @@ export interface PresetConfig {
 	width: number;
 	/** Canvas height in pixels */
 	height: number;
+	/** Animated WebP size budget in bytes, from the target platform's upload limit */
+	maxBytes: number;
 	/** Logo placement config */
 	logo: {
 		/** X offset from left edge (pixels) */
@@ -18,12 +20,13 @@ export interface PresetConfig {
 	};
 }
 
-function createPresetConfig(size: number): PresetConfig {
+function createPresetConfig(size: number, maxBytes: number): PresetConfig {
 	const padding = Math.round(size * 0.05);
 	const logoSize = Math.round(size * 0.45);
 	return {
 		width: size,
 		height: size,
+		maxBytes,
 		logo: {
 			x: padding,
 			y: padding,
@@ -34,7 +37,7 @@ function createPresetConfig(size: number): PresetConfig {
 }
 
 export const presets: Record<Preset, PresetConfig> = {
-	large: createPresetConfig(512),
-	medium: createPresetConfig(320),
-	small: createPresetConfig(128),
+	large: createPresetConfig(512, 500 * 1024), // WhatsApp animated sticker limit
+	medium: createPresetConfig(320, 256 * 1024), // Discord emoji limit
+	small: createPresetConfig(128, 128 * 1024), // Slack emoji limit
 };
